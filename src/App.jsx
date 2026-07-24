@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Grid,
-  Chip,
   Divider,
   IconButton,
   ThemeProvider,
@@ -53,34 +52,12 @@ const theme = createTheme({
 
 // --- Components ---
 
-// 1. Shark Loading Screen (Animated Shark on Load)
+// 1. Redesigned Aesthetic Loading Screen
 const SharkLoading = ({ onComplete }) => {
   useEffect(() => {
-    const timer = setTimeout(onComplete, 2500); // Animation duration
+    const timer = setTimeout(onComplete, 3500); // Animation duration
     return () => clearTimeout(timer);
   }, [onComplete]);
-
-  // Stylized Shark SVG (with visible teeth)
-  const SharkSVG = () => (
-    <svg width="200" height="100" viewBox="0 0 200 100">
-      <motion.path
-        d="M20,50 Q60,20 100,50 Q140,80 180,50 Q140,20 100,50 Q60,80 20,50"
-        fill="rgba(0, 229, 255, 0.2)"
-        stroke="#00E5FF"
-        strokeWidth="2"
-      />
-      <motion.path
-        d="M70,50 L85,45 L100,50 L85,55 Z" // Stylized shark mouth
-        fill="#FFA2B7"
-      />
-      <motion.path
-        d="M75,50 L78,48 L81,50 L84,48 L87,50 L90,48 L93,50 L96,48 L99,50" // Shark teeth
-        fill="none"
-        stroke="#FFF"
-        strokeWidth="1"
-      />
-    </svg>
-  );
 
   return (
     <Box
@@ -99,24 +76,115 @@ const SharkLoading = ({ onComplete }) => {
         gap: 4,
       }}
     >
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0, 1, 0],
-          x: ["-50vw", "50vw", "100vw"],
+      <Box
+        sx={{
+          position: "relative",
+          width: 150,
+          height: 150,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        transition={{ duration: 2.5, ease: "easeInOut" }}
-        style={{ color: "#FFF" }}
       >
-        <SharkSVG />
+        {/* Pulsing ripples */}
+        <motion.div
+          animate={{ scale: [1, 1.5, 2.2], opacity: [0.6, 0, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            border: "2px solid rgba(0, 229, 255, 0.4)",
+            borderRadius: "50%",
+          }}
+        />
+        <motion.div
+          animate={{ scale: [1, 1.3, 1.9], opacity: [0.4, 0, 0] }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "easeOut",
+            delay: 1.25,
+          }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            border: "2px solid rgba(255, 162, 183, 0.4)",
+            borderRadius: "50%",
+          }}
+        />
+
+        {/* Animated Elegant Shark Fin & Waves */}
+        <svg
+          viewBox="0 0 100 100"
+          width="100"
+          height="100"
+          style={{ zIndex: 1 }}
+        >
+          <defs>
+            <linearGradient id="finGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FFA2B7" />
+              <stop offset="100%" stopColor="#00E5FF" />
+            </linearGradient>
+          </defs>
+          <motion.path
+            d="M50 20 Q 65 60 85 80 Q 50 75 15 80 Q 35 60 50 20 Z"
+            fill="url(#finGrad)"
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.8, ease: "easeOut" }}
+          />
+          <motion.path
+            d="M5 80 Q 25 70 50 80 T 95 80"
+            fill="none"
+            stroke="#00E5FF"
+            strokeWidth="3"
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.6, ease: "easeInOut" }}
+          />
+          <motion.path
+            d="M15 90 Q 35 85 50 90 T 85 90"
+            fill="none"
+            stroke="#FFA2B7"
+            strokeWidth="2"
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 1.5, delay: 1, ease: "easeInOut" }}
+          />
+        </svg>
+      </Box>
+
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.5, delay: 1.2 }}
+        style={{ textAlign: "center" }}
+      >
+        <Typography
+          variant="body1"
+          sx={{ color: "#00E5FF", letterSpacing: 3, mb: 1, opacity: 0.8 }}
+        >
+          กำลังดำดิ่งสู่โลกของ...
+        </Typography>
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#FFA2B7",
+            fontWeight: 600,
+            textShadow: "0 0 15px rgba(255,162,183,0.6)",
+          }}
+        >
+          ฮิซาเมะ เคียวระ
+        </Typography>
       </motion.div>
-      <Typography variant="h5" sx={{ color: "#00E5FF", opacity: 0.8 }}>
-        กำลังดำดิ่งสู่โลกของฮิซาเมะ เคียวระ...
-      </Typography>
     </Box>
   );
 };
-
+ 
 // 2. Enhanced Ocean Background (Bubbles & Swimming Fish)
 const OceanBackground = () => {
   const bubbles = useMemo(
@@ -206,7 +274,8 @@ const OceanBackground = () => {
             width: f.width,
             height: f.width * 0.4,
             opacity: 0.15,
-            transform: f.fromLeft ? "scaleX(-1)" : "none", // simple face-flip logic
+            // แก้ไขตรงนี้: ใช้ scaleX ของ Framer Motion โดยตรง จะไม่โดนทับ
+            scaleX: f.fromLeft ? -1 : 1, 
           }}
         >
           {/* Simple stylized fish shape */}
@@ -253,6 +322,14 @@ const DecorativeHeading = ({ icon, text }) => (
   </Box>
 );
 
+// Framer Motion variant for scrolling reveals
+const scrollRevealConfig = {
+  initial: { opacity: 0, y: 50 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.1 },
+  transition: { duration: 0.8, ease: "easeOut" },
+};
+
 export default function KyoraProfile() {
   const [loadingComplete, setLoadingComplete] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -268,21 +345,20 @@ export default function KyoraProfile() {
     setIsPlaying(!isPlaying);
   };
 
-  // Content Structure inspired by the Google Doc image
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AnimatePresence>
         {!loadingComplete && (
-          <SharkLoading onComplete={() => setLoadingComplete(true)} />
+          <motion.div exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
+            <SharkLoading onComplete={() => setLoadingComplete(true)} />
+          </motion.div>
         )}
       </AnimatePresence>
       {loadingComplete && <OceanBackground />}
 
-      {/* Audio Element (ซ่อนไว้) - เปลี่ยน src เป็นลิงก์เพลงของคุณ */}
       <audio ref={audioRef} src="YOUR_MUSIC_FILE.mp3" loop />
 
-      {/* Floating Music Button (Refined style) */}
       {loadingComplete && (
         <IconButton
           onClick={toggleMusic}
@@ -300,9 +376,7 @@ export default function KyoraProfile() {
           }}
         >
           <motion.div
-            animate={{
-              scale: isPlaying ? [1, 1.1, 1] : 1,
-            }}
+            animate={{ scale: isPlaying ? [1, 1.1, 1] : 1 }}
             transition={{
               duration: isPlaying ? 1 : 0,
               repeat: isPlaying ? Infinity : 0,
@@ -329,8 +403,10 @@ export default function KyoraProfile() {
             mx: "auto",
           }}
         >
-          {/* Header & Character Info (Inspired by image layout) */}
+          {/* Header & Character Info */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={8}
             sx={{
               p: 4,
@@ -364,7 +440,10 @@ export default function KyoraProfile() {
               >
                 氷雨 響羅 Hisame Kyōra
               </Typography>
-              <Typography variant="h4" sx={{ color: "grey.400", fontWeight: 300 }}>
+              <Typography
+                variant="h4"
+                sx={{ color: "grey.400", fontWeight: 300 }}
+              >
                 ฮิซาเมะ เคียวระ
               </Typography>
             </Box>
@@ -380,7 +459,7 @@ export default function KyoraProfile() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1 }}
+                  transition={{ duration: 1.5, delay: 0.3 }}
                   style={{ position: "relative" }}
                 >
                   <Box
@@ -397,7 +476,7 @@ export default function KyoraProfile() {
                     }}
                   />
                   <Avatar
-                    src="YOUR_KYORA_IMAGE_URL.jpg" // Change to your Kyōra image link
+                    src="YOUR_KYORA_IMAGE_URL.jpg"
                     alt="Hisame Kyōra"
                     variant="rounded"
                     sx={{
@@ -411,10 +490,7 @@ export default function KyoraProfile() {
                         "linear-gradient(180deg, #0A0F1A 0%, #020308 100%)",
                     }}
                   >
-                    <Typography
-                      variant="h1"
-                      color="rgba(255,162,183,0.4)"
-                    >
+                    <Typography variant="h1" color="rgba(255,162,183,0.4)">
                       氷
                     </Typography>
                   </Avatar>
@@ -474,9 +550,7 @@ export default function KyoraProfile() {
                         <Typography variant="body2" sx={{ color: "#00E5FF" }}>
                           น้ำหนัก/ส่วนสูง:
                         </Typography>
-                        <Typography sx={{ color: "#FFF" }}>
-                          72/184
-                        </Typography>
+                        <Typography sx={{ color: "#FFF" }}>72/184</Typography>
                       </Grid>
                       <Grid item xs={6}>
                         <Typography variant="body2" sx={{ color: "#00E5FF" }}>
@@ -494,9 +568,7 @@ export default function KyoraProfile() {
                         <Typography variant="body2" sx={{ color: "#00E5FF" }}>
                           หอพัก:
                         </Typography>
-                        <Typography sx={{ color: "#FFF" }}>
-                          ฤดูหนาว
-                        </Typography>
+                        <Typography sx={{ color: "#FFF" }}>ฤดูหนาว</Typography>
                       </Grid>
                       <Grid item xs={6}>
                         <Typography variant="body2" sx={{ color: "#00E5FF" }}>
@@ -510,9 +582,7 @@ export default function KyoraProfile() {
                         <Typography variant="body2" sx={{ color: "#00E5FF" }}>
                           เลขประจำตัว:
                         </Typography>
-                        <Typography
-                          sx={{ color: "#FFA2B7", letterSpacing: 2 }}
-                        >
+                        <Typography sx={{ color: "#FFA2B7", letterSpacing: 2 }}>
                           00000
                         </Typography>
                       </Grid>
@@ -528,7 +598,7 @@ export default function KyoraProfile() {
                   </CardContent>
                 </Card>
 
-                {/* Flippable ID Card (Inspired by image layout and improved aesthetics) */}
+                {/* Flippable ID Card */}
                 <Box
                   sx={{
                     perspective: 1000,
@@ -585,18 +655,13 @@ export default function KyoraProfile() {
                         >
                           STUDENT ID CARD
                         </Typography>
-                        <Typography
-                          sx={{ color: "#FFA2B7", letterSpacing: 2 }}
-                        >
+                        <Typography sx={{ color: "#FFA2B7", letterSpacing: 2 }}>
                           00000
                         </Typography>
                       </Box>
                       <Grid container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={6}>
-                          <Typography
-                            variant="caption"
-                            color="grey.500"
-                          >
+                          <Typography variant="caption" color="grey.500">
                             ชั้นปี/ห้อง
                           </Typography>
                           <Typography sx={{ color: "#FFF" }}>
@@ -604,10 +669,7 @@ export default function KyoraProfile() {
                           </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                          <Typography
-                            variant="caption"
-                            color="grey.500"
-                          >
+                          <Typography variant="caption" color="grey.500">
                             หอพัก
                           </Typography>
                           <Typography sx={{ color: "#FFF" }}>
@@ -615,10 +677,7 @@ export default function KyoraProfile() {
                           </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                          <Typography
-                            variant="caption"
-                            color="grey.500"
-                          >
+                          <Typography variant="caption" color="grey.500">
                             ชมรม
                           </Typography>
                           <Typography sx={{ color: "#FFF" }}>
@@ -626,15 +685,10 @@ export default function KyoraProfile() {
                           </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                          <Typography
-                            variant="caption"
-                            color="grey.500"
-                          >
+                          <Typography variant="caption" color="grey.500">
                             วันเกิด
                           </Typography>
-                          <Typography sx={{ color: "#FFF" }}>
-                            12/06
-                          </Typography>
+                          <Typography sx={{ color: "#FFF" }}>12/06</Typography>
                         </Grid>
                       </Grid>
                       <Typography
@@ -650,7 +704,7 @@ export default function KyoraProfile() {
                       </Typography>
                     </Card>
 
-                    {/* Back of Card (More intricate design) */}
+                    {/* Back of Card */}
                     <Card
                       sx={{
                         position: "absolute",
@@ -670,9 +724,7 @@ export default function KyoraProfile() {
                     >
                       <Box sx={{ textAlign: "center" }}>
                         <motion.div
-                          animate={{
-                            rotate: isFlipped ? 360 : 0,
-                          }}
+                          animate={{ rotate: isFlipped ? 360 : 0 }}
                           transition={{
                             duration: 2,
                             ease: "easeInOut",
@@ -707,7 +759,7 @@ export default function KyoraProfile() {
                             mt: 1.5,
                             opacity: 0.6,
                           }}
-                         />
+                        />
                         <Typography
                           variant="caption"
                           sx={{ color: "#FFF", mt: 1, display: "block" }}
@@ -722,10 +774,10 @@ export default function KyoraProfile() {
             </Grid>
           </Paper>
 
-          {/* Main Content Sections Flow */}
-
           {/* Anomalies & Health */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={6}
             sx={{
               p: 4,
@@ -756,9 +808,13 @@ export default function KyoraProfile() {
                     "ร่างกาย แผ่ไอเย็นจาง ๆ ตลอดเวลา",
                     "ใบหูเริ่มเปลี่ยนรูป",
                     "หางปลาขนาดใหญ่ งอกจากกระดูกก้นกบ",
-                    "มี คครีบยาวบาง งอกจากแผ่นหลัง",
+                    "มี ครีบยาวบาง งอกจากแผ่นหลัง",
                   ].map((item, i) => (
-                    <Typography key={i} variant="body2" sx={{ color: "grey.300" }}>
+                    <Typography
+                      key={i}
+                      variant="body2"
+                      sx={{ color: "grey.300" }}
+                    >
                       • {item}
                     </Typography>
                   ))}
@@ -785,7 +841,8 @@ export default function KyoraProfile() {
                     variant="body2"
                     sx={{ color: "grey.400", lineHeight: 1.8 }}
                   >
-                    ไม่ใช่แค่เรื่องสภาพร่างกาย แต่เป็นผลรวมของความเครียดทางจิตใจ และสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
+                    ไม่ใช่แค่เรื่องสภาพร่างกาย แต่เป็นผลรวมของความเครียดทางจิตใจ
+                    และสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
                   </Typography>
                 </Box>
               </Grid>
@@ -794,6 +851,8 @@ export default function KyoraProfile() {
 
           {/* History */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={6}
             sx={{
               p: 4,
@@ -840,6 +899,8 @@ export default function KyoraProfile() {
 
           {/* School Life & Dorm Life */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={6}
             sx={{
               p: 4,
@@ -857,33 +918,29 @@ export default function KyoraProfile() {
                 />
                 <Typography
                   paragraph
-                  sx={{
-                    color: "grey.400",
-                    lineHeight: 1.9,
-                    textIndent: "2em",
-                  }}
+                  sx={{ color: "grey.400", lineHeight: 1.9, textIndent: "2em" }}
                 >
-                  ในช่วงแรกๆ หวาดระแวงร่างกายของตนเองมาก พยายามสวมเสื้อแขนยาวและแต่งตัวมิดชิดเพื่อปกปิด กลัวคนอื่นเห็นมองเป็นตัวประหลาด
+                  ในช่วงแรกๆ หวาดระแวงร่างกายของตนเองมาก
+                  พยายามสวมเสื้อแขนยาวและแต่งตัวมิดชิดเพื่อปกปิด
+                  กลัวคนอื่นเห็นมองเป็นตัวประหลาด
                 </Typography>
                 <Typography
                   paragraph
-                  sx={{
-                    color: "grey.400",
-                    lineHeight: 1.9,
-                    textIndent: "2em",
-                  }}
+                  sx={{ color: "grey.400", lineHeight: 1.9, textIndent: "2em" }}
                 >
-                  แต่เมื่อเวลาผ่านไป ตระหนักว่าโรงเรียนแห่งนี้เต็มไปด้วยนักเรียนที่มี ความผิดปกติ ความผิดปกติของเขาจึงไม่ได้แปลกแยกอย่างที่เคยคิด จึงค่อยๆ เลิกหมกมุ่นปกปิดร่างกาย แม้จะยังแผ่ไอเย็นแต่สำหรับคนที่คุ้นเคยก็กลายเป็นเพียงลักษณะเฉพาะตัว
+                  แต่เมื่อเวลาผ่านไป
+                  ตระหนักว่าโรงเรียนแห่งนี้เต็มไปด้วยนักเรียนที่มี ความผิดปกติ
+                  ความผิดปกติของเขาจึงไม่ได้แปลกแยกอย่างที่เคยคิด จึงค่อยๆ
+                  เลิกหมกมุ่นปกปิดร่างกาย
+                  แม้จะยังแผ่ไอเย็นแต่สำหรับคนที่คุ้นเคยก็กลายเป็นเพียงลักษณะเฉพาะตัว
                 </Typography>
                 <Typography
                   paragraph
-                  sx={{
-                    color: "grey.400",
-                    lineHeight: 1.9,
-                    textIndent: "2em",
-                  }}
+                  sx={{ color: "grey.400", lineHeight: 1.9, textIndent: "2em" }}
                 >
-                  ยังคงได้รับเงินสนับสนุนจากตระกูลเพราะเขาโกหกที่บ้านเรื่องการรักษา ครอบครัวเข้าใจว่าเงินที่ส่งมาเป็นค่ารักษาและค่าครองชีพที่ต้องเก็บเป็นความลับ แม้มีเงินใช้ไม่ขาดมือแต่ก็ไม่ใช่คนใช้จ่ายฟุ่มเฟือยด้วยนิสัยเจ้าระเบียบ
+                  ยังคงได้รับเงินสนับสนุนจากตระกูลเพราะเขาโกหกที่บ้านเรื่องการรักษา
+                  ครอบครัวเข้าใจว่าเงินที่ส่งมาเป็นค่ารักษาและค่าครองชีพที่ต้องเก็บเป็นความลับ
+                  แม้มีเงินใช้ไม่ขาดมือแต่ก็ไม่ใช่คนใช้จ่ายฟุ่มเฟือยด้วยนิสัยเจ้าระเบียบ
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -893,33 +950,30 @@ export default function KyoraProfile() {
                 />
                 <Typography
                   paragraph
-                  sx={{
-                    color: "grey.400",
-                    lineHeight: 1.9,
-                    textIndent: "2em",
-                  }}
+                  sx={{ color: "grey.400", lineHeight: 1.9, textIndent: "2em" }}
                 >
-                  ไม่ใช่เรื่องง่ายเพราะเขาเจ้าระเบียบมากและยึดติดกับความสมบูรณ์แบบพอสมควร หากรูมเมทมีนิสัยไม่เป็นระเบียบ เขาจะรู้สึกหงุดหงิดแต่เพราะไม่ชอบการเผชิญหน้าจึงไม่พูดตรงๆ
+                  ไม่ใช่เรื่องง่ายเพราะเขาเจ้าระเบียบมากและยึดติดกับความสมบูรณ์แบบพอสมควร
+                  หากรูมเมทมีนิสัยไม่เป็นระเบียบ
+                  เขาจะรู้สึกหงุดหงิดแต่เพราะไม่ชอบการเผชิญหน้าจึงไม่พูดตรงๆ
                 </Typography>
                 <Typography
                   paragraph
-                  sx={{
-                    color: "grey.400",
-                    lineHeight: 1.9,
-                    textIndent: "2em",
-                  }}
+                  sx={{ color: "grey.400", lineHeight: 1.9, textIndent: "2em" }}
                 >
-                  วิธีที่เขาใช้คือการ แบ่งเขตพื้นที่ ของตัวเองอย่างชัดเจน ฝั่งของเขาจะสะอาดและเป็นระเบียบเสมอ หากรูมเมทล้ำเข้ามา เขาจะดันของกลับไปจัดใหม่เงียบๆ มีปัญหาเรื่องการนอนไม่หลับ ทำให้ตื่นในช่วงกลางคืน
+                  วิธีที่เขาใช้คือการ แบ่งเขตพื้นที่ ของตัวเองอย่างชัดเจน
+                  ฝั่งของเขาจะสะอาดและเป็นระเบียบเสมอ หากรูมเมทล้ำเข้ามา
+                  เขาจะดันของกลับไปจัดใหม่เงียบๆ มีปัญหาเรื่องการนอนไม่หลับ
+                  ทำให้ตื่นในช่วงกลางคืน
                 </Typography>
                 <Typography
                   paragraph
-                  sx={{
-                    color: "grey.400",
-                    lineHeight: 1.9,
-                    textIndent: "2em",
-                  }}
+                  sx={{ color: "grey.400", lineHeight: 1.9, textIndent: "2em" }}
                 >
-                  หลังจากรูมเมทหลับสนิท เขาจะเปิดโคมไฟสลัวๆ แล้วนั่งพับกระดาษหรือวาดรูปเงียบๆ หากรูมเมทเริ่มขยับตัวจะรีบเก็บของทันที บางคืนจะออกไปแอบเล่นเปียโนที่ห้องชมรมดนตรีในความมืด เป็นหนึ่งในไม่กี่ช่วงเวลาที่รู้สึกว่าตัวเองได้หายใจอย่างเป็นอิสระ
+                  หลังจากรูมเมทหลับสนิท เขาจะเปิดโคมไฟสลัวๆ
+                  แล้วนั่งพับกระดาษหรือวาดรูปเงียบๆ
+                  หากรูมเมทเริ่มขยับตัวจะรีบเก็บของทันที
+                  บางคืนจะออกไปแอบเล่นเปียโนที่ห้องชมรมดนตรีในความมืด
+                  เป็นหนึ่งในไม่กี่ช่วงเวลาที่รู้สึกว่าตัวเองได้หายใจอย่างเป็นอิสระ
                 </Typography>
               </Grid>
             </Grid>
@@ -927,6 +981,8 @@ export default function KyoraProfile() {
 
           {/* Magic */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={6}
             sx={{
               p: 4,
@@ -940,51 +996,92 @@ export default function KyoraProfile() {
               icon={<AutoAwesomeIcon sx={{ color: "#00E5FF" }} />}
               text="เวทมนตร์ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」"
             />
-
             <Typography variant="h6" sx={{ color: "#00E5FF", mb: 2, pl: 2 }}>
               วิถี ความมืด
             </Typography>
             <Grid container spacing={3}>
               {[
-                { n: "สรรค์สร้างเงา", d: "สร้างเงาเป็นของแข็งรูปร่างชั่วคราว (อาวุธ, ลิ่ม, มีด, ร่ม, มือยักษ์)" },
-                { n: "เคลื่อนที่ผ่านเงา", d: "จมหายเข้าเงาและปรากฏออกจากอีกเงา (ระยะ 3-6 เมตร)" },
-                { n: "เย็บเงา", d: "สร้างเข็มลิ่มเงาปักบนเงาเป้าหมาย ตรึงร่างไว้คล้ายผีอำ" },
-                { n: "เงาเลียนแบบ", d: "สร้างร่างเงาช่วยงานบ้าน (สูงสุด 3 ร่าง)" },
-                { n: "หนามเงา", d: "ควบแน่นเงาแทงเป้าหมาย รบกวนพลังเวท ทำให้ชาชั่วคราว" },
-                { n: "อาณาเขตเงา", d: "ขยายเงาเป็นอาณาเขต ดูดกลืนเสียง สำหรับอ่านหนังสือ" },
-                { n: "โล่กลืนมนตรา", d: "บิดเงาขึ้นเป็นกำแพงป้องกัน กลืนพลังเวทที่โจมตีเข้ามา" },
+                {
+                  n: "สรรค์สร้างเงา",
+                  d: "สร้างเงาเป็นของแข็งรูปร่างชั่วคราว (อาวุธ, ลิ่ม, มีด, ร่ม, มือยักษ์)",
+                },
+                {
+                  n: "เคลื่อนที่ผ่านเงา",
+                  d: "จมหายเข้าเงาและปรากฏออกจากอีกเงา (ระยะ 3-6 เมตร)",
+                },
+                {
+                  n: "เย็บเงา",
+                  d: "สร้างเข็มลิ่มเงาปักบนเงาเป้าหมาย ตรึงร่างไว้คล้ายผีอำ",
+                },
+                {
+                  n: "เงาเลียนแบบ",
+                  d: "สร้างร่างเงาช่วยงานบ้าน (สูงสุด 3 ร่าง)",
+                },
+                {
+                  n: "หนามเงา",
+                  d: "ควบแน่นเงาแทงเป้าหมาย รบกวนพลังเวท ทำให้ชาชั่วคราว",
+                },
+                {
+                  n: "อาณาเขตเงา",
+                  d: "ขยายเงาเป็นอาณาเขต ดูดกลืนเสียง สำหรับอ่านหนังสือ",
+                },
+                {
+                  n: "โล่กลืนมนตรา",
+                  d: "บิดเงาขึ้นเป็นกำแพงป้องกัน กลืนพลังเวทที่โจมตีเข้ามา",
+                },
               ].map((magic, i) => (
                 <Grid item xs={12} sm={6} key={i}>
-                  <Box sx={{ p: 2, bgcolor: "rgba(0,0,0,0.5)", borderLeft: "3px solid #00E5FF", borderRadius: 1.5 }}>
-                    <Typography sx={{ color: "#FFF", fontWeight: "bold" }}>{magic.n}</Typography>
-                    <Typography variant="body2" sx={{ color: "grey.400", mt: 0.5 }}>{magic.d}</Typography>
+                  <Box
+                    sx={{
+                      p: 2,
+                      bgcolor: "rgba(0,0,0,0.5)",
+                      borderLeft: "3px solid #00E5FF",
+                      borderRadius: 1.5,
+                    }}
+                  >
+                    <Typography sx={{ color: "#FFF", fontWeight: "bold" }}>
+                      {magic.n}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "grey.400", mt: 0.5 }}
+                    >
+                      {magic.d}
+                    </Typography>
                   </Box>
                 </Grid>
               ))}
             </Grid>
             <Divider sx={{ my: 4, borderColor: "rgba(255,162,183,0.2)" }} />
-
             <Typography variant="h6" sx={{ color: "#FFA2B7", mb: 2, pl: 2 }}>
               พลังซ่อนเร้น (ไม่ค่อยใช้)
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
                 <Typography sx={{ color: "#FFF" }}>ดึงเงา</Typography>
-                <Typography variant="caption" sx={{ color: "grey.500" }}>ดึงพลังจากสิ่งมีชีวิตมาฟื้นฟูตัวเอง</Typography>
+                <Typography variant="caption" sx={{ color: "grey.500" }}>
+                  ดึงพลังจากสิ่งมีชีวิตมาฟื้นฟูตัวเอง
+                </Typography>
               </Grid>
               <Grid item xs={12} md={4}>
                 <Typography sx={{ color: "#FFF" }}>กินเงา</Typography>
-                <Typography variant="caption" sx={{ color: "grey.500" }}>กลืนกินความเจ็บปวด/เหนื่อยล้าของผู้อื่นเพื่อบรรเทา</Typography>
+                <Typography variant="caption" sx={{ color: "grey.500" }}>
+                  กลืนกินความเจ็บปวด/เหนื่อยล้าของผู้อื่นเพื่อบรรเทา
+                </Typography>
               </Grid>
               <Grid item xs={12} md={4}>
                 <Typography sx={{ color: "#FFF" }}>ฝนเขี้ยวเงา</Typography>
-                <Typography variant="caption" sx={{ color: "grey.500" }}>โจมตีวงกว้างด้วยฝนหนามเงาสีดำจำนวนมาก</Typography>
+                <Typography variant="caption" sx={{ color: "grey.500" }}>
+                  โจมตีวงกว้างด้วยฝนหนามเงาสีดำจำนวนมาก
+                </Typography>
               </Grid>
             </Grid>
           </Paper>
 
-          {/* Personality & Extra (Combined with image layout points) */}
+          {/* Personality & Extra */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={6}
             sx={{
               p: 4,
@@ -1010,7 +1107,16 @@ export default function KyoraProfile() {
                   "ชอบตัดสินคนอื่น (Judgemental, มองคนที่ดูไร้ระเบียบด้วยสายตาเย็นชา)",
                   "อคติทางเพศและโฮโมโฟบ (ต้านความหลากหลายทางเพศ, รังเกียจความสัมพันธ์ระหว่างเพศเดียวกัน)",
                 ].map((item, i) => (
-                  <Typography key={i} variant="body2" sx={{ color: "grey.300", mb: 1, pl: 2, borderLeft: "2px solid rgba(255,162,183,0.3)" }}>
+                  <Typography
+                    key={i}
+                    variant="body2"
+                    sx={{
+                      color: "grey.300",
+                      mb: 1,
+                      pl: 2,
+                      borderLeft: "2px solid rgba(255,162,183,0.3)",
+                    }}
+                  >
                     • {item}
                   </Typography>
                 ))}
@@ -1022,7 +1128,13 @@ export default function KyoraProfile() {
                       icon={<ThumbsUpDownIcon sx={{ color: "#00E5FF" }} />}
                       text="สิ่งที่ชอบ"
                     />
-                    <Box sx={{ p: 2, bgcolor: "rgba(10,25,30,0.5)", borderRadius: 2 }}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        bgcolor: "rgba(10,25,30,0.5)",
+                        borderRadius: 2,
+                      }}
+                    >
                       {[
                         "เสียงฝนตกหนัก",
                         "พื้นที่สลัว / ร่มเงา",
@@ -1033,7 +1145,11 @@ export default function KyoraProfile() {
                         "ของน่ารัก",
                         "อุซากี้ เป็นเพียงการ์ตูนในโลกมนุษย์",
                       ].map((t, i) => (
-                        <Typography key={i} variant="caption" sx={{ color: "grey.400", display: "block" }}>
+                        <Typography
+                          key={i}
+                          variant="caption"
+                          sx={{ color: "grey.400", display: "block" }}
+                        >
                           - {t}
                         </Typography>
                       ))}
@@ -1044,26 +1160,46 @@ export default function KyoraProfile() {
                       icon={<MoodBadIcon sx={{ color: "#F44336" }} />}
                       text="ไม่ชอบ / กลัว"
                     />
-                    <Box sx={{ p: 2, bgcolor: "rgba(30,10,10,0.5)", borderRadius: 2 }}>
-                      <Typography sx={{ color: "#FFF", mb: 1 }}>ไม่ชอบ</Typography>
+                    <Box
+                      sx={{
+                        p: 2,
+                        bgcolor: "rgba(30,10,10,0.5)",
+                        borderRadius: 2,
+                      }}
+                    >
+                      <Typography sx={{ color: "#FFF", mb: 1 }}>
+                        ไม่ชอบ
+                      </Typography>
                       {[
                         "การเป็นจุดสนใจ",
                         "คนที่ทำตัวตามใจชอบ ไร้ระเบียบ",
                         "การถูกสัมผัสตัวอย่างกะทันหัน",
                         "ความหลากหลายทางเพศ",
                       ].map((t, i) => (
-                        <Typography key={i} variant="caption" sx={{ color: "grey.400", display: "block" }}>
+                        <Typography
+                          key={i}
+                          variant="caption"
+                          sx={{ color: "grey.400", display: "block" }}
+                        >
                           - {t}
                         </Typography>
                       ))}
-                      <Divider sx={{ my: 1, borderColor: "rgba(255,255,255,0.1)" }} />
-                      <Typography sx={{ color: "#FFF", mb: 1 }}>กลัว</Typography>
+                      <Divider
+                        sx={{ my: 1, borderColor: "rgba(255,255,255,0.1)" }}
+                      />
+                      <Typography sx={{ color: "#FFF", mb: 1 }}>
+                        กลัว
+                      </Typography>
                       {[
                         "การถูกครอบครัวจับได้",
                         "การถูกมองว่าเป็นความผิดพลาด",
                         "การสูญเสียการควบคุม",
                       ].map((t, i) => (
-                        <Typography key={i} variant="caption" sx={{ color: "grey.400", display: "block" }}>
+                        <Typography
+                          key={i}
+                          variant="caption"
+                          sx={{ color: "grey.400", display: "block" }}
+                        >
                           - {t}
                         </Typography>
                       ))}
@@ -1076,6 +1212,8 @@ export default function KyoraProfile() {
 
           {/* Misc */}
           <Paper
+            component={motion.div}
+            {...scrollRevealConfig}
             elevation={4}
             sx={{
               p: 4,
@@ -1102,7 +1240,11 @@ export default function KyoraProfile() {
                   "เมื่อใช้ความคิดหนัก มักกัดริมฝีปากตัวเอง จนริมฝีปากเขามีแผลเลือดซึม",
                   "ชอบแต่งตัวเรียบร้อยและถูกระเบียบเสมอ",
                 ].map((item, i) => (
-                  <Typography key={i} variant="caption" sx={{ color: "grey.400", display: "block", mb: 1 }}>
+                  <Typography
+                    key={i}
+                    variant="caption"
+                    sx={{ color: "grey.400", display: "block", mb: 1 }}
+                  >
                     • {item}
                   </Typography>
                 ))}
@@ -1118,7 +1260,11 @@ export default function KyoraProfile() {
                   "เมื่อเจอของน่ารัก ดวงตาจะเบิกกว้างเปล่งประกาย ก่อนจะรีบทำหน้าตาย",
                   "เมื่อถูกจับได้ว่าใช้ของน่ารัก จะตีหน้านิ่งหาข้ออ้างด้วยน้ำเสียงจริงจัง แต่ใบหูและหลังคอจะเปลี่ยนเป็นสีแดงจัด",
                 ].map((item, i) => (
-                  <Typography key={i} variant="caption" sx={{ color: "grey.400", display: "block", mb: 1 }}>
+                  <Typography
+                    key={i}
+                    variant="caption"
+                    sx={{ color: "grey.400", display: "block", mb: 1 }}
+                  >
                     • {item}
                   </Typography>
                 ))}
