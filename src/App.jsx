@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -10,14 +10,12 @@ import {
   createTheme,
   CssBaseline,
   Avatar,
-  Collapse,
-  Button,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   GlobalStyles,
 } from "@mui/material";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import MusicOffIcon from "@mui/icons-material/MusicOff";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
@@ -30,14 +28,13 @@ import WarningIcon from "@mui/icons-material/Warning";
 import InfoIcon from "@mui/icons-material/Info";
 import HealingIcon from "@mui/icons-material/Healing";
 import NightlightIcon from "@mui/icons-material/Nightlight";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 
-// --- Custom Fish Cursors (Pink Theme) ---
+// --- Custom Cursors ---
 const normalFishCursor = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'><path d='M6.5 4.5C9 3 13 4 16.5 7.5C20 11 21 15 19.5 17.5C18 20 14 18.5 11.5 15.5C9 12.5 4 8 6.5 4.5Z' fill='%23FFD1DC' stroke='%23FFA2B7' stroke-width='1'/><path d='M6.5 4.5L1.5 1L4 7Z' fill='%23FFA2B7'/></svg>") 4 4, auto`;
 const pointerFishCursor = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'><path d='M6.5 4.5C9 3 13 4 16.5 7.5C20 11 21 15 19.5 17.5C18 20 14 18.5 11.5 15.5C9 12.5 4 8 6.5 4.5Z' fill='%23FFA2B7' stroke='%23FF6B8B' stroke-width='1'/><path d='M6.5 4.5L1.5 1L4 7Z' fill='%23FF6B8B'/></svg>") 4 4, pointer`;
 
-// --- Theme Setup (Obsidian & Rose Diamond) ---
+// --- Theme Setup ---
 const theme = createTheme({
   typography: {
     fontFamily: "'Prompt', sans-serif",
@@ -45,13 +42,18 @@ const theme = createTheme({
     h2: { fontFamily: "'Cinzel', 'Playfair Display', serif", fontWeight: 700 },
     h3: { fontFamily: "'Playfair Display', serif", fontWeight: 600 },
     h4: { fontFamily: "'Playfair Display', serif", fontStyle: "italic" },
+    h5: { fontFamily: "'Prompt', sans-serif", fontWeight: 600 },
     h6: {
-      fontFamily: "'Cinzel', 'Playfair Display', serif",
+      fontFamily: "'Prompt', sans-serif",
       fontWeight: 600,
-      letterSpacing: 1.5,
+      letterSpacing: 1,
     },
     body1: { fontFamily: "'Prompt', sans-serif", fontWeight: 400 },
-    body2: { fontFamily: "'Prompt', sans-serif", fontWeight: 300 },
+    body2: {
+      fontFamily: "'Prompt', sans-serif",
+      fontWeight: 300,
+      fontSize: "1rem",
+    },
     overline: {
       fontFamily: "'Cinzel', 'Playfair Display', serif",
       letterSpacing: 3,
@@ -59,61 +61,296 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
-    background: { default: "#050103" }, // สีดำสนิทอมชมพูเข้ม
-    primary: { main: "#FFA2B7" }, // สีชมพูหลักของคุณ
-    secondary: { main: "#FFD1DC" }, // สีชมพูอ่อนแชมเปญ
-    info: { main: "#E5A9B4" }, // สีโรสโกลด์หม่น
-    error: { main: "#C2185B" }, // สีแดงอมม่วงเข้ม (สำหรับเวทซ่อนเร้น)
-    text: { primary: "#FFF0F5", secondary: "#D3C4C9" }, // ข้อความสีขาวอมชมพู เพื่อไม่ให้จืด
+    background: { default: "#030102" },
+    primary: { main: "#FFA2B7" },
+    secondary: { main: "#FFD1DC" },
+    info: { main: "#E5A9B4" },
+    error: { main: "#C2185B" },
+    text: { primary: "#FFF0F5", secondary: "#E8D8DE" },
   },
   components: {
     MuiAccordion: {
       styleOverrides: {
         root: {
-          backgroundColor: "rgba(25, 10, 15, 0.4)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 162, 183, 0.15)",
-          borderRadius: "16px !important",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
-          marginBottom: "12px",
+          backgroundColor: "transparent",
+          boxShadow: "none",
+          marginBottom: "8px",
           "&:before": { display: "none" },
-          "&:hover": { borderColor: "rgba(255, 162, 183, 0.5)" },
         },
       },
     },
     MuiAccordionSummary: {
       styleOverrides: {
-        root: { padding: "0 24px", minHeight: "64px" },
-        content: { margin: "16px 0" },
+        root: {
+          backgroundColor: "rgba(255, 162, 183, 0.05)",
+          borderRadius: "12px",
+          padding: "0 20px",
+          minHeight: "56px",
+          border: "1px solid rgba(255, 162, 183, 0.1)",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            backgroundColor: "rgba(255, 162, 183, 0.1)",
+            borderColor: "rgba(255, 162, 183, 0.3)",
+          },
+          "&.Mui-expanded": {
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            borderBottom: "1px solid transparent",
+          },
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(15, 5, 8, 0.6)",
+          border: "1px solid rgba(255, 162, 183, 0.1)",
+          borderTop: "none",
+          borderBottomLeftRadius: "12px",
+          borderBottomRightRadius: "12px",
+          padding: "24px",
+        },
       },
     },
   },
 });
 
-// --- Components ---
+// --- Preloader Shark Component ---
+const TopDownShark = ({ glowColor, delay = 0 }) => (
+  <motion.div
+    animate={{ y: [0, -5, 0, 5, 0] }} // เอฟเฟกต์ว่ายน้ำขึ้นลงเบาๆ
+    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay }}
+    style={{ width: "100%", height: "100%" }}
+  >
+    <svg
+      viewBox="0 0 100 130"
+      width="100%"
+      height="100%"
+      style={{ filter: `drop-shadow(0 0 12px ${glowColor}90)` }}
+    >
+      {/* ลำตัว */}
+      <path
+        d="M50 10 C55 20 62 40 60 70 C58 90 53 105 50 115 C47 105 42 90 40 70 C38 40 45 20 50 10 Z"
+        fill="url(#bodyGrad)"
+      />
+      {/* ครีบข้าง */}
+      <path
+        d="M43 40 C20 45 5 60 5 65 C15 60 30 55 40 55 Z"
+        fill="url(#finGrad)"
+      />
+      <path
+        d="M57 40 C80 45 95 60 95 65 C85 60 70 55 60 55 Z"
+        fill="url(#finGrad)"
+      />
+      {/* ครีบหลัง (Dorsal Fin) */}
+      <path d="M49 35 C51 45 53 60 50 65 C48 60 48 45 49 35 Z" fill="#030102" />
+      {/* หาง */}
+      <path
+        d="M48 105 C30 110 15 120 15 125 C25 120 40 115 50 115 Z"
+        fill="url(#finGrad)"
+      />
+      <path
+        d="M52 105 C70 110 85 120 85 125 C75 120 60 115 50 115 Z"
+        fill="url(#finGrad)"
+      />
+      <defs>
+        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="30%" stopColor={glowColor} />
+          <stop offset="100%" stopColor="#030102" />
+        </linearGradient>
+        <linearGradient id="finGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor={glowColor} />
+          <stop offset="100%" stopColor="#030102" />
+        </linearGradient>
+      </defs>
+    </svg>
+  </motion.div>
+);
 
-// 1. Dual Particle System (Pink Rain)
+// 1. Shark Preloader Screen
+const LoadingScreen = ({ onComplete }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => onComplete(), 5000); // แสดงอนิเมชั่น 5 วินาที
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        inset: 0,
+        bgcolor: "#02040A",
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      {/* แสงใต้น้ำลึก */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.4, 0.1] }}
+        transition={{ duration: 4.8, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          width: "100vw",
+          height: "100vh",
+          background:
+            "radial-gradient(circle at center, #1A2A3A 0%, #02040A 70%)",
+        }}
+      />
+
+      {/* อนิเมชั่นฉลามคู่ว่ายวน (Yin-Yang Sharks) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: [0, 1, 1, 0], scale: [0.8, 1, 1, 0.5] }}
+        transition={{
+          duration: 4.8,
+          times: [0, 0.2, 0.8, 1],
+          ease: "easeInOut",
+        }}
+        style={{ position: "absolute", width: 250, height: 250 }}
+      >
+        {/* วงน้ำกระจาย (Ripples) */}
+        {[1, 2, 3].map((i) => (
+          <motion.div
+            key={i}
+            initial={{ scale: 0, opacity: 0.5 }}
+            animate={{ scale: 1.5, opacity: 0 }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 1,
+              ease: "easeOut",
+            }}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: 150,
+              height: 150,
+              marginLeft: -75,
+              marginTop: -75,
+              borderRadius: "50%",
+              border: "1px solid #4A6FA5",
+            }}
+          />
+        ))}
+
+        {/* ตู้หมุนฉลาม */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          style={{ width: "100%", height: "100%", position: "relative" }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: -30,
+              left: "50%",
+              width: 70,
+              height: 90,
+              transform: "translateX(-50%) rotate(90deg)",
+            }}
+          >
+            <TopDownShark glowColor="#B0C4DE" delay={0} /> {/* ฉลามสีเงิน */}
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: -30,
+              left: "50%",
+              width: 70,
+              height: 90,
+              transform: "translateX(-50%) rotate(-90deg)",
+            }}
+          >
+            <TopDownShark glowColor="#5C7A99" delay={1} />{" "}
+            {/* ฉลามสีน้ำเงินเข้ม */}
+          </Box>
+        </motion.div>
+      </motion.div>
+
+      {/* คำโปรยกลางวงน้ำ */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: [0, 1, 1, 0], y: [20, 0, 0, -20] }}
+        transition={{
+          duration: 4.8,
+          times: [0, 0.2, 0.8, 1],
+          ease: "easeInOut",
+        }}
+        style={{ textAlign: "center", zIndex: 10, pointerEvents: "none" }}
+      >
+        <Typography
+          variant="h2"
+          sx={{
+            color: "#E0E6ED",
+            mb: 2,
+            textShadow: "0 0 20px #5C7A99",
+            fontFamily: "'Cinzel', serif",
+          }}
+        >
+          氷雨 響羅
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            color: "#A9BCD0",
+            fontStyle: "italic",
+            opacity: 0.8,
+            letterSpacing: 2,
+          }}
+        >
+          "แหวกว่ายอย่างโดดเดี่ยว... ในห้วงลึกที่แสงสว่างส่องไม่ถึง"
+        </Typography>
+      </motion.div>
+    </Box>
+  );
+};
+
+// 2. Realistic Crystal Rain & Mist Atmosphere
 const AbyssalAtmosphere = () => {
+  // ฝนสีเงิน (Crystal Rain)
   const rainDrops = useMemo(
     () =>
-      Array.from({ length: 40 }).map((_, i) => ({
+      Array.from({ length: 70 }).map((_, i) => ({
         id: `rain-${i}`,
         left: `${Math.random() * 100}vw`,
-        duration: Math.random() * 1.5 + 1.5,
+        duration: Math.random() * 0.5 + 0.6,
         delay: Math.random() * 2,
         opacity: Math.random() * 0.4 + 0.1,
+        height: `${Math.random() * 15 + 10}vh`,
+        width: Math.random() > 0.8 ? "1.5px" : "1px",
       })),
     [],
   );
-  const bubbles = useMemo(
+
+  // วงน้ำกระทบพื้น (Floor Ripples)
+  const ripples = useMemo(
+    () =>
+      Array.from({ length: 15 }).map((_, i) => ({
+        id: `ripple-${i}`,
+        left: `${Math.random() * 100}vw`,
+        top: `${Math.random() * 100}vh`,
+        delay: Math.random() * 5,
+        duration: Math.random() * 2 + 2,
+      })),
+    [],
+  );
+
+  // ประกายน้ำส่องแสง (Water Sparkles)
+  const sparkles = useMemo(
     () =>
       Array.from({ length: 25 }).map((_, i) => ({
-        id: `bubble-${i}`,
+        id: `sparkle-${i}`,
         left: `${Math.random() * 100}vw`,
-        duration: Math.random() * 8 + 6,
+        bottom: `${Math.random() * 30}vh`,
+        duration: Math.random() * 3 + 2,
         delay: Math.random() * 5,
-        size: Math.random() * 4 + 2,
-        isPink: Math.random() > 0.5,
+        size: Math.random() * 2.5 + 1,
       })),
     [],
   );
@@ -122,47 +359,49 @@ const AbyssalAtmosphere = () => {
     <Box
       sx={{
         position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
+        inset: 0,
         pointerEvents: "none",
         zIndex: 0,
-        background: "radial-gradient(ellipse at top, #14050A 0%, #030102 80%)",
         overflow: "hidden",
+        background: "#030102",
       }}
     >
-      <Box
-        sx={{
+      {/* หมอกสลัวยามค่ำคืน (Moonlit Mist) */}
+      <motion.div
+        animate={{ x: ["-5%", "5%", "-5%"], opacity: [0.05, 0.15, 0.05] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+        style={{
           position: "absolute",
-          top: "10%",
-          left: "20%",
-          width: "40vw",
-          height: "40vw",
+          top: "5%",
+          left: "-10%",
+          width: "120vw",
+          height: "40vh",
           background:
-            "radial-gradient(circle, rgba(255, 162, 183, 0.05) 0%, transparent 70%)",
-          borderRadius: "50%",
+            "radial-gradient(ellipse at center, rgba(176, 196, 222, 0.1) 0%, transparent 60%)",
           filter: "blur(60px)",
         }}
       />
-      <Box
-        sx={{
+      <motion.div
+        animate={{ x: ["5%", "-5%", "5%"], opacity: [0.03, 0.1, 0.03] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+        style={{
           position: "absolute",
           bottom: "10%",
-          right: "10%",
-          width: "50vw",
-          height: "50vw",
+          right: "-10%",
+          width: "100vw",
+          height: "50vh",
           background:
-            "radial-gradient(circle, rgba(255, 107, 139, 0.03) 0%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(60px)",
+            "radial-gradient(ellipse at center, rgba(255, 255, 255, 0.08) 0%, transparent 60%)",
+          filter: "blur(70px)",
         }}
       />
+
+      {/* สายฝนสีเงิน */}
       {rainDrops.map((drop) => (
         <motion.div
           key={drop.id}
-          initial={{ y: "-10vh" }}
-          animate={{ y: "110vh" }}
+          initial={{ y: "-20vh" }}
+          animate={{ y: "120vh" }}
           transition={{
             duration: drop.duration,
             delay: drop.delay,
@@ -172,39 +411,65 @@ const AbyssalAtmosphere = () => {
           style={{
             position: "absolute",
             left: drop.left,
-            width: "1px",
-            height: "12vh",
-            background: `linear-gradient(to bottom, transparent, rgba(255, 162, 183, ${drop.opacity}))`,
+            width: drop.width,
+            height: drop.height,
+            background: `linear-gradient(to bottom, transparent, rgba(240, 248, 255, ${drop.opacity}))`,
+            borderRadius: "4px",
           }}
         />
       ))}
-      {bubbles.map((bubble) => (
+
+      {/* วงน้ำเมื่อฝนกระทบพื้น */}
+      {ripples.map((ripple) => (
         <motion.div
-          key={bubble.id}
-          initial={{ y: "110vh", x: 0, opacity: 0 }}
+          key={ripple.id}
+          initial={{ scale: 0, opacity: 0.5 }}
+          animate={{ scale: [0, 1.5, 2], opacity: [0.5, 0.2, 0] }}
+          transition={{
+            duration: ripple.duration,
+            delay: ripple.delay,
+            repeat: Infinity,
+            ease: "easeOut",
+          }}
+          style={{
+            position: "absolute",
+            left: ripple.left,
+            top: ripple.top,
+            width: "50px",
+            height: "25px",
+            borderRadius: "50%",
+            border: "1px solid rgba(240, 248, 255, 0.2)",
+            transform: "rotateX(60deg)",
+          }}
+        />
+      ))}
+
+      {/* ประกายละอองน้ำลอยขึ้น */}
+      {sparkles.map((sparkle) => (
+        <motion.div
+          key={sparkle.id}
+          initial={{ y: 0, opacity: 0, scale: 0 }}
           animate={{
-            y: "-10vh",
-            x: [0, -20, 20, -10, 10, 0],
-            opacity: [0, 0.6, 0.8, 0],
+            y: "-15vh",
+            x: [0, 10, -10, 0],
+            opacity: [0, 0.8, 0],
+            scale: [0, 1.2, 0],
           }}
           transition={{
-            duration: bubble.duration,
-            delay: bubble.delay,
+            duration: sparkle.duration,
+            delay: sparkle.delay,
             repeat: Infinity,
             ease: "easeInOut",
           }}
           style={{
             position: "absolute",
-            left: bubble.left,
-            width: bubble.size,
-            height: bubble.size,
+            left: sparkle.left,
+            bottom: sparkle.bottom,
+            width: sparkle.size,
+            height: sparkle.size,
             borderRadius: "50%",
-            background: bubble.isPink
-              ? "rgba(255, 162, 183, 0.6)"
-              : "rgba(255, 209, 220, 0.4)",
-            boxShadow: bubble.isPink
-              ? "0 0 10px rgba(255, 162, 183, 0.8)"
-              : "0 0 10px rgba(255, 209, 220, 0.5)",
+            backgroundColor: "#FFFFFF",
+            boxShadow: "0 0 8px rgba(255, 255, 255, 0.8)",
           }}
         />
       ))}
@@ -212,41 +477,41 @@ const AbyssalAtmosphere = () => {
   );
 };
 
-// 2. Luxury Gradient Obsidian Card (Pink Tone)
+// 3. Luxury Card Wrapper
 const LuxuryCard = ({ children, sx }) => (
   <Box
     sx={{
       position: "relative",
       borderRadius: "24px",
-      background: "linear-gradient(145deg, rgba(255, 162, 183, 0.15) 0%, rgba(25, 10, 15, 0.5) 100%)",
-      padding: "1px", // Thin elegant border
-      boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
-      transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-      "&:hover": { transform: "translateY(-4px)" },
+      background:
+        "linear-gradient(145deg, rgba(255, 162, 183, 0.2) 0%, rgba(25, 10, 15, 0.6) 100%)",
+      padding: "1px",
+      boxShadow: "0 10px 40px rgba(0,0,0,0.8)",
       ...sx,
     }}
   >
     <Box
       sx={{
-        background: "linear-gradient(145deg, rgba(15, 5, 8, 0.85) 0%, rgba(5, 2, 3, 0.95) 100%)",
-        backdropFilter: "blur(24px)", // เบลอเยอะขึ้นให้ดูแพง
+        background:
+          "linear-gradient(145deg, rgba(12, 4, 7, 0.95) 0%, rgba(5, 2, 3, 0.98) 100%)",
+        backdropFilter: "blur(20px)",
         borderRadius: "23px",
         height: "100%",
-        boxShadow: "inset 0 1px 0 rgba(255, 209, 220, 0.1)", // ไฮไลท์ขอบบนนิดๆ
+        boxShadow: "inset 0 1px 0 rgba(255, 209, 220, 0.05)",
         overflow: "hidden",
         position: "relative",
         zIndex: 1,
       }}
     >
-      {/* Subtle Glow at top */}
       <Box
         sx={{
           position: "absolute",
           top: 0,
-          left: "20%",
-          width: "60%",
+          left: "10%",
+          width: "80%",
           height: "1px",
-          background: "linear-gradient(90deg, transparent 0%, rgba(255,162,183,0.5) 50%, transparent 100%)",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(255,162,183,0.3) 50%, transparent 100%)",
         }}
       />
       {children}
@@ -254,7 +519,6 @@ const LuxuryCard = ({ children, sx }) => (
   </Box>
 );
 
-// 3. Glowing Gradient Text (Pink Gold)
 const GradientText = ({ children, sx, variant = "h6" }) => (
   <Typography
     variant={variant}
@@ -263,7 +527,7 @@ const GradientText = ({ children, sx, variant = "h6" }) => (
         "linear-gradient(90deg, #FFD1DC 0%, #FFA2B7 50%, #FF6B8B 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
-      textShadow: "0 2px 10px rgba(255, 162, 183, 0.3)",
+      textShadow: "0 2px 10px rgba(255, 162, 183, 0.2)",
       ...sx,
     }}
   >
@@ -271,7 +535,7 @@ const GradientText = ({ children, sx, variant = "h6" }) => (
   </Typography>
 );
 
-// --- Data Preparation for Accordions ---
+// --- Data ---
 const historyAccordions = [
   {
     title: "ปฐมบทแห่งความอัปยศ",
@@ -369,759 +633,810 @@ const personalityDetails = [
     n: "ชอบตัดสินคนอื่น",
     d: "เผลอตัดสินคนที่ไร้ระเบียบ ร่าเริงเกินไป ด้วยสายตาเย็นชา ลึกๆ มาจากความอิจฉาอิสระที่ตนไม่เคยมี",
   },
-  {
-    n: "อคติทางเพศ",
-    d: "ผลจากการปลูกฝังของตระกูล ทำให้มองความหลากหลายทางเพศว่าผิดธรรมชาติ ลึกๆ เกิดจากการเกลียด 'ความผิดปกติ' ของตนเอง",
-  },
 ];
 
 // --- Main Page Component ---
 export default function KyoraProfile() {
+  const [loading, setLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
+  // -----------------------------------------------------
+  // 1. เพิ่มโค้ดชุดนี้เข้าไป เพื่อสั่งให้เล่นเพลงอัตโนมัติหลังโหลดเสร็จ
+  // -----------------------------------------------------
+  useEffect(() => {
+    if (!loading && audioRef.current) {
+      audioRef.current.play()
+        .then(() => {
+          // ถ้าเบราว์เซอร์อนุญาตให้เล่นอัตโนมัติ (เช่น ผู้ใช้เคยคลิกจอแล้ว)
+          setIsPlaying(true); 
+        })
+        .catch((error) => {
+          // ถ้าเบราว์เซอร์บล็อก (ติด Autoplay Policy)
+          console.log("Autoplay prevented. User interaction required.", error);
+          setIsPlaying(false);
+        });
+    }
+  }, [loading]);
+  // -----------------------------------------------------
+
   const toggleMusic = () => {
-    if (isPlaying) audioRef.current.pause();
-    else audioRef.current.play();
+    if (isPlaying) audioRef.current?.pause();
+    else audioRef.current?.play();
     setIsPlaying(!isPlaying);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
-      {/* Global Style overrides for Custom Cursor & Scrollbar */}
       <GlobalStyles
         styles={{
-          "body, html": { cursor: normalFishCursor },
+          "body, html": {
+            cursor: normalFishCursor,
+            backgroundColor: "#030102",
+          },
           "a, button, [role='button'], .MuiAccordionSummary-root": {
             cursor: pointerFishCursor,
           },
-          "::-webkit-scrollbar": { width: "8px" },
-          "::-webkit-scrollbar-track": { background: "#050103" },
+          "::-webkit-scrollbar": { width: "6px" },
+          "::-webkit-scrollbar-track": { background: "transparent" },
           "::-webkit-scrollbar-thumb": {
-            background:
-              "linear-gradient(180deg, #FFA2B7 0%, #FFD1DC 50%, #FF6B8B 100%)",
+            background: "rgba(255, 162, 183, 0.3)",
             borderRadius: "10px",
-            border: "2px solid #050103",
           },
-          "::-webkit-scrollbar-thumb:hover": { background: "#FF6B8B" },
+          "::-webkit-scrollbar-thumb:hover": {
+            background: "rgba(255, 162, 183, 0.6)",
+          },
         }}
       />
 
-      <AbyssalAtmosphere />
-      <audio ref={audioRef} src="YOUR_MUSIC_FILE.mp3" loop />
+      <AnimatePresence>
+        {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
 
-      {/* Floating Music Button */}
-      <IconButton
-        onClick={toggleMusic}
-        sx={{
-          position: "fixed",
-          bottom: 40,
-          right: 40,
-          background:
-            "linear-gradient(135deg, rgba(25,10,15,0.8) 0%, rgba(5,2,4,0.9) 100%)",
-          border: "1px solid",
-          borderColor: isPlaying ? "primary.main" : "rgba(255, 162, 183, 0.3)",
-          color: "primary.main",
-          backdropFilter: "blur(15px)",
-          boxShadow: isPlaying
-            ? "0 0 25px rgba(255, 162, 183, 0.6)"
-            : "0 5px 15px rgba(0,0,0,0.8)",
-          zIndex: 999,
-          p: 2,
-          transition: "all 0.4s ease",
-          "&:hover": {
-            transform: "rotate(15deg) scale(1.1)",
-            borderColor: "secondary.main",
-            color: "secondary.main",
-          },
-        }}
-      >
+      {!loading && (
         <motion.div
-          animate={{ scale: isPlaying ? [1, 1.2, 1] : 1 }}
-          transition={{ duration: 2, repeat: isPlaying ? Infinity : 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
         >
-          {isPlaying ? <MusicNoteIcon /> : <MusicOffIcon />}
-        </motion.div>
-      </IconButton>
+          <AbyssalAtmosphere />
+          <audio ref={audioRef} src="/Song.mp3" loop />
 
-      <Box
-        sx={{
-          minHeight: "100vh",
-          position: "relative",
-          zIndex: 1,
-          py: { xs: 6, md: 10 },
-          px: { xs: 2, md: 4, lg: 8 },
-          maxWidth: 1400,
-          mx: "auto",
-        }}
-      >
-        {/* Profile Hero Header */}
-        <Box sx={{ mb: 6 }}>
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1 }}
+          <IconButton
+            onClick={toggleMusic}
+            sx={{
+              position: "fixed",
+              bottom: 30,
+              right: 30,
+              background:
+                "linear-gradient(135deg, rgba(25,10,15,0.9) 0%, rgba(5,2,4,0.95) 100%)",
+              border: "1px solid",
+              borderColor: isPlaying
+                ? "primary.main"
+                : "rgba(255, 162, 183, 0.2)",
+              color: "primary.main",
+              backdropFilter: "blur(10px)",
+              boxShadow: isPlaying
+                ? "0 0 20px rgba(255, 162, 183, 0.4)"
+                : "0 5px 15px rgba(0,0,0,0.5)",
+              zIndex: 999,
+              p: 2,
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "scale(1.1)",
+                borderColor: "secondary.main",
+                color: "secondary.main",
+              },
+            }}
           >
-            <LuxuryCard>
-              <Box
-                sx={{
-                  p: { xs: 4, md: 6 },
-                  display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
-                  gap: { xs: 4, md: 8 },
-                  alignItems: "center",
-                }}
-              >
-                {/* Avatar with Aristocratic Glow */}
-<Box sx={{ position: "relative", display: "inline-flex", padding: 2 }}>
-  {/* Outer Ring - Slow Rotation */}
-  <Box
-    sx={{
-      position: "absolute",
-      inset: 0,
-      borderRadius: "50%",
-      border: "1px solid rgba(255, 162, 183, 0.2)",
-      borderTop: "2px solid #FFA2B7",
-      borderBottom: "2px solid #FFD1DC",
-      animation: "spin 30s linear infinite", // หมุนช้าลงให้ดูสง่างาม
-      "@keyframes spin": { "100%": { transform: "rotate(360deg)" } },
-    }}
-  />
-  {/* Inner Ring - Static Elegant Border */}
-  <Box
-    sx={{
-      position: "absolute",
-      inset: 8,
-      borderRadius: "50%",
-      border: "1px dashed rgba(255, 209, 220, 0.4)",
-    }}
-  />
-  <Avatar
-    src="YOUR_KYORA_IMAGE_URL.jpg"
-    alt="Hisame Kyōra"
-    sx={{
-      width: { xs: 200, md: 260 },
-      height: { xs: 200, md: 260 },
-      border: "4px solid #14050A", // สีขอบดำสนิทตัดกับภาพ
-      boxShadow: "0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5)",
-      position: "relative",
-      zIndex: 2,
-    }}
-  />
-</Box>
+            <motion.div
+              animate={{ scale: isPlaying ? [1, 1.1, 1] : 1 }}
+              transition={{ duration: 2, repeat: isPlaying ? Infinity : 0 }}
+            >
+              {isPlaying ? <MusicNoteIcon /> : <MusicOffIcon />}
+            </motion.div>
+          </IconButton>
 
-                {/* Info Text */}
+          <Box
+            sx={{
+              position: "relative",
+              zIndex: 1,
+              py: { xs: 6, md: 8 },
+              px: { xs: 2, md: 4, lg: 6 },
+              maxWidth: 1200,
+              mx: "auto",
+            }}
+          >
+            {/* Header Hero */}
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              <LuxuryCard sx={{ mb: 5 }}>
                 <Box
                   sx={{
-                    flex: 1,
-                    textAlign: { xs: "center", md: "left" },
-                    position: "relative",
-                    zIndex: 2,
+                    p: { xs: 4, md: 6 },
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    gap: { xs: 4, md: 6 },
+                    alignItems: "center",
                   }}
                 >
-                  <Typography
-                    variant="overline"
+                  <Box
                     sx={{
-                      color: "primary.main",
-                      display: "block",
-                      mb: 0.5,
-                      textShadow: "0 0 15px rgba(255,162,183,0.6)",
+                      position: "relative",
+                      display: "inline-flex",
+                      padding: 2,
                     }}
                   >
-                    ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 ✦
-                  </Typography>
-                  <GradientText
-                    variant="h2"
-                    sx={{ mb: 1, fontSize: { xs: "2.5rem", md: "3.8rem" } }}
-                  >
-                    氷雨 響羅
-                  </GradientText>
-                  <Typography
-                    variant="h4"
-                    sx={{ color: "secondary.main", mb: 4, opacity: 0.9 }}
-                  >
-                    ฮิซาเมะ เคียวระ (Hisame Kyōra)
-                  </Typography>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        inset: 0,
+                        borderRadius: "50%",
+                        border: "1px solid rgba(255, 162, 183, 0.1)",
+                        borderTop: "2px solid #FFA2B7",
+                        borderBottom: "2px solid #FFD1DC",
+                        animation: "spin 20s linear infinite",
+                        "@keyframes spin": {
+                          "100%": { transform: "rotate(360deg)" },
+                        },
+                      }}
+                    />
+                    <Avatar
+                      src="YOUR_KYORA_IMAGE_URL.jpg"
+                      alt="Hisame Kyōra"
+                      sx={{
+                        width: { xs: 180, md: 240 },
+                        height: { xs: 180, md: 240 },
+                        border: "4px solid #030102",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
+                      }}
+                    />
+                  </Box>
 
-                  <Grid container spacing={3}>
-                    {[
-                      { label: "AGE", val: "18" },
-                      { label: "BIRTHDAY", val: "12 / 06" },
-                      { label: "GENDER", val: "ชาย" },
-                      { label: "BLOOD TYPE", val: "A" },
-                      { label: "NATIONALITY", val: "ญี่ปุ่น" },
-                      { label: "W / H", val: "72 kg / 184 cm" },
-                      { label: "CLASS", val: "มังไก / 3-B" },
-                      { label: "STUDENT ID", val: "00000" },
-                      { label: "DORM", val: "ฤดูหนาว" },
-                      { label: "CLUB", val: "ดนตรีและประสานเสียง" },
-                    ].map((info, idx) => (
-                      <Grid item xs={6} sm={4} lg={3} key={idx}>
+                  <Box
+                    sx={{ flex: 1, textAlign: { xs: "center", md: "left" } }}
+                  >
+                    <Typography
+                      variant="overline"
+                      sx={{
+                        color: "primary.main",
+                        display: "block",
+                        mb: 1,
+                        opacity: 0.8,
+                      }}
+                    >
+                      ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 ✦
+                    </Typography>
+                    <GradientText
+                      variant="h2"
+                      sx={{ mb: 1, fontSize: { xs: "2.5rem", md: "3.5rem" } }}
+                    >
+                      氷雨 響羅
+                    </GradientText>
+                    <Typography
+                      variant="h4"
+                      sx={{ color: "secondary.main", mb: 4, opacity: 0.9 }}
+                    >
+                      ฮิซาเมะ เคียวระ (Hisame Kyōra)
+                    </Typography>
+
+                    <Grid container spacing={2.5}>
+                      {[
+                        { label: "AGE", val: "18" },
+                        { label: "BIRTHDAY", val: "12 / 06" },
+                        { label: "GENDER", val: "ชาย" },
+                        { label: "BLOOD TYPE", val: "A" },
+                        { label: "W / H", val: "72 kg / 184 cm" },
+                        { label: "CLASS", val: "มังไก / 3-B" },
+                        { label: "DORM", val: "ฤดูหนาว" },
+                        { label: "CLUB", val: "ดนตรีและประสานเสียง" },
+                      ].map((info, idx) => (
+                        <Grid item xs={6} sm={4} lg={3} key={idx}>
+                          <Box
+                            sx={{
+                              pl: 1.5,
+                              borderLeft: "2px solid rgba(255, 162, 183, 0.4)",
+                            }}
+                          >
+                            <Typography
+                              variant="caption"
+                              sx={{
+                                color: "text.secondary",
+                                letterSpacing: 1,
+                                fontFamily: "'Cinzel', serif",
+                              }}
+                            >
+                              {info.label}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "primary.main", fontWeight: 400 }}
+                            >
+                              {info.val}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      ))}
+                      <Grid item xs={12}>
                         <Box
                           sx={{
-                            position: "relative",
                             pl: 1.5,
-                            "&::before": {
-                              content: '""',
-                              position: "absolute",
-                              left: 0,
-                              top: "10%",
-                              height: "80%",
-                              width: "2px",
-                              background:
-                                "linear-gradient(180deg, #FFA2B7 0%, transparent 100%)",
-                            },
+                            borderLeft: "2px solid rgba(255, 209, 220, 0.4)",
                           }}
                         >
                           <Typography
                             variant="caption"
                             sx={{
                               color: "text.secondary",
-                              letterSpacing: 1.5,
+                              letterSpacing: 1,
                               fontFamily: "'Cinzel', serif",
                             }}
                           >
-                            {info.label}
+                            ROOMMATES
                           </Typography>
                           <Typography
                             variant="body2"
-                            sx={{ color: "primary.main", fontWeight: 500 }}
+                            sx={{ color: "secondary.main", fontWeight: 400 }}
                           >
-                            {info.val}
+                            ฮิเมะมิยะ โคยูคิ / คากามิ ริคุ
                           </Typography>
                         </Box>
                       </Grid>
-                    ))}
-                    <Grid item xs={12}>
-                      <Box
-                        sx={{
-                          position: "relative",
-                          pl: 1.5,
-                          "&::before": {
-                            content: '""',
-                            position: "absolute",
-                            left: 0,
-                            top: "10%",
-                            height: "80%",
-                            width: "2px",
-                            background:
-                              "linear-gradient(180deg, #FFD1DC 0%, transparent 100%)",
-                          },
-                        }}
-                      >
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: "text.secondary",
-                            letterSpacing: 1.5,
-                            fontFamily: "'Cinzel', serif",
-                          }}
-                        >
-                          ROOMMATES
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "secondary.main", fontWeight: 500 }}
-                        >
-                          ฮิเมะมิยะ โคยูคิ / คากามิ ริคุ
-                        </Typography>
-                      </Box>
                     </Grid>
-                  </Grid>
+                  </Box>
                 </Box>
-              </Box>
-            </LuxuryCard>
-          </motion.div>
-        </Box>
+              </LuxuryCard>
+            </motion.div>
 
-        <Grid container spacing={4}>
-          {/* ================= LEFT COLUMN ================= */}
-          <Grid item xs={12} lg={7}>
-            {/* History Accordions */}
-            <LuxuryCard sx={{ mb: 4 }}>
-              <Box sx={{ p: { xs: 3, md: 5 } }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}
+            <Grid container spacing={4}>
+              <Grid item xs={12} lg={7}>
+                <motion.div
+                  initial={{ y: 30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
                 >
-                  <MenuBookIcon sx={{ color: "primary.main", fontSize: 28 }} />
-                  <GradientText variant="h5">
-                    ประวัติความเป็นมา (Biography)
-                  </GradientText>
-                </Box>
-                {historyAccordions.map((item, index) => (
-                  <Accordion key={index} disableGutters>
-                    <AccordionSummary
-                      expandIcon={<AddIcon sx={{ color: "primary.main" }} />}
-                    >
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ color: "primary.main", fontWeight: 600 }}
-                      >
-                        {item.title}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails
-                      sx={{
-                        borderTop: "1px solid rgba(255,162,183,0.1)",
-                        pt: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "text.secondary",
-                          lineHeight: 2.2,
-                          textIndent: "2em",
-                        }}
-                      >
-                        {item.content}
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </Box>
-            </LuxuryCard>
-
-            {/* School Life Accordions */}
-            <LuxuryCard sx={{ mb: 4 }}>
-              <Box sx={{ p: { xs: 3, md: 5 } }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}
-                >
-                  <NightlightIcon
-                    sx={{ color: "secondary.main", fontSize: 28 }}
-                  />
-                  <GradientText variant="h5">
-                    ชีวิตในโรงเรียน (School Life)
-                  </GradientText>
-                </Box>
-                {schoolAccordions.map((item, index) => (
-                  <Accordion key={index} disableGutters>
-                    <AccordionSummary
-                      expandIcon={<AddIcon sx={{ color: "secondary.main" }} />}
-                    >
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ color: "secondary.main", fontWeight: 600 }}
-                      >
-                        {item.title}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails
-                      sx={{
-                        borderTop: "1px solid rgba(255,162,183,0.1)",
-                        pt: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "text.secondary",
-                          lineHeight: 2.2,
-                          textIndent: "2em",
-                        }}
-                      >
-                        {item.content}
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </Box>
-            </LuxuryCard>
-
-            {/* Magic Grid */}
-            <LuxuryCard sx={{ mb: 4 }}>
-              <Box sx={{ p: { xs: 3, md: 5 } }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}
-                >
-                  <AutoAwesomeIcon
-                    sx={{ color: "primary.main", fontSize: 28 }}
-                  />
-                  <GradientText variant="h5">
-                    เวทมนตร์วิถีความมืด (Darkness Path)
-                  </GradientText>
-                </Box>
-                <Grid container spacing={3}>
-                  {normalMagic.map((magic, i) => (
-                    <Grid item xs={12} sm={6} key={i}>
+                  <LuxuryCard sx={{ mb: 4 }}>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
                       <Box
                         sx={{
-                          p: 3,
-                          height: "100%",
-                          background:
-                            "linear-gradient(135deg, rgba(255,162,183,0.05) 0%, rgba(0,0,0,0.4) 100%)",
-                          border: "1px solid rgba(255, 162, 183, 0.2)",
-                          borderRadius: "16px",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            borderColor: "primary.main",
-                            boxShadow: "0 10px 30px rgba(255, 162, 183, 0.15)",
-                            transform: "translateY(-4px)",
-                          },
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
                         }}
                       >
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "primary.main", mb: 1, fontWeight: 600 }}
-                        >
-                          {magic.n}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "text.secondary", lineHeight: 1.8 }}
-                        >
-                          {magic.d}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-
-                <Divider
-                  sx={{ my: 4, borderColor: "rgba(255, 162, 183, 0.15)" }}
-                />
-
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
-                >
-                  <WarningIcon sx={{ color: "error.main", fontSize: 26 }} />
-                  <Typography variant="h6" sx={{ color: "error.main" }}>
-                    พลังซ่อนเร้น (Hidden Abilities)
-                  </Typography>
-                </Box>
-                <Grid container spacing={3}>
-                  {[
-                    {
-                      n: "ดึงเงา",
-                      d: "ดึงเงาจากสิ่งมีชีวิตมาฟื้นฟูพลัง ลดความเหนื่อยล้า เป้าหมายจะรู้สึกหนาววูบ อ่อนแรง",
-                    },
-                    {
-                      n: "กินเงา",
-                      d: "กัดกินความเจ็บปวดจากผู้อื่น โดยกลืนกินเงานั้นเข้าไปบรรเทาอาการ แต่ผู้ใช้จะรับภาระแทน",
-                    },
-                    {
-                      n: "ฝนเขี้ยวเงา",
-                      d: "ควบแน่นเงาแตกตัวเป็นเขี้ยวหนามสีดำพุ่งลงมาราวกับฝน โจมตีวงกว้าง สร้างบาดแผลจริง",
-                    },
-                  ].map((magic, i) => (
-                    <Grid item xs={12} key={i}>
-                      <Box
-                        sx={{
-                          p: 2.5,
-                          background:
-                            "linear-gradient(90deg, rgba(194, 24, 91, 0.15) 0%, transparent 100%)",
-                          borderLeft: "3px solid",
-                          borderColor: "error.main",
-                          borderRadius: "0 16px 16px 0",
-                        }}
-                      >
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "#FFF", mb: 0.5, fontWeight: 600 }}
-                        >
-                          {magic.n}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "text.secondary", lineHeight: 1.7 }}
-                        >
-                          {magic.d}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            </LuxuryCard>
-          </Grid>
-
-          {/* ================= RIGHT COLUMN ================= */}
-          <Grid item xs={12} lg={5}>
-            {/* Personality (Accordions) */}
-            <LuxuryCard sx={{ mb: 4 }}>
-              <Box sx={{ p: { xs: 3, md: 4 } }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <DiamondIcon sx={{ color: "primary.main", fontSize: 26 }} />
-                  <GradientText variant="h6">
-                    ลักษณะนิสัย (Personality)
-                  </GradientText>
-                </Box>
-                {personalityDetails.map((trait, index) => (
-                  <Accordion
-                    key={index}
-                    disableGutters
-                    sx={{ backgroundColor: "rgba(255,162,183,0.03)" }}
-                  >
-                    <AccordionSummary
-                      expandIcon={
-                        <ExpandMoreIcon sx={{ color: "primary.main" }} />
-                      }
-                    >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ color: "primary.main", fontWeight: 600 }}
-                      >
-                        {trait.n}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ pt: 0 }}>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "text.secondary", lineHeight: 1.8 }}
-                      >
-                        {trait.d}
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </Box>
-            </LuxuryCard>
-
-            {/* Anomalies & Disease */}
-            <LuxuryCard sx={{ mb: 4 }}>
-              <Box sx={{ p: { xs: 3, md: 4 } }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <WaterDropIcon sx={{ color: "info.main", fontSize: 26 }} />
-                  <Typography variant="h6" sx={{ color: "info.main" }}>
-                    ความผิดปกติ (Anomalies)
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    mb: 4,
-                  }}
-                >
-                  {[
-                    "ผิวหนังคอและเอวพัฒนาเป็นเหงือกปลา",
-                    "ปากมีฟันแหลมคมหลายซี่แบบฉลาม",
-                    "ร่างกายแผ่ไอเย็นจางๆ ตลอดเวลา",
-                    "มีหางปลาขนาดใหญ่และครีบยาวบาง",
-                  ].map((item, i) => (
-                    <Box
-                      key={i}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        p: 1.5,
-                        background: "rgba(229,169,180,0.05)",
-                        borderRadius: "12px",
-                        border: "1px solid rgba(229,169,180,0.1)",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          minWidth: 8,
-                          height: 8,
-                          borderRadius: "50%",
-                          bgcolor: "info.main",
-                          boxShadow: "0 0 10px #E5A9B4",
-                        }}
-                      />
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "primary.main" }}
-                      >
-                        {item}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
-                >
-                  <HealingIcon sx={{ color: "secondary.main", fontSize: 26 }} />
-                  <Typography variant="h6" sx={{ color: "secondary.main" }}>
-                    โรคประจำตัว
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    p: 2,
-                    bgcolor: "rgba(255, 209, 220, 0.05)",
-                    border: "1px solid rgba(255, 209, 220, 0.2)",
-                    borderRadius: "12px",
-                  }}
-                >
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ color: "secondary.main", mb: 1 }}
-                  >
-                    Insomnia (ภาวะนอนไม่หลับ)
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "text.secondary", lineHeight: 1.6 }}
-                  >
-                    ไม่ได้เกิดจากร่างกายเพียงอย่างเดียว
-                    แต่เป็นผลรวมของความเครียดและสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
-                  </Typography>
-                </Box>
-              </Box>
-            </LuxuryCard>
-
-            {/* Preferences (Glossy Chips) */}
-            <LuxuryCard sx={{ mb: 4 }}>
-              <Box sx={{ p: { xs: 3, md: 4 } }}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "primary.main", mb: 3, textAlign: "center" }}
-                >
-                  Preferences (รสนิยม)
-                </Typography>
-                <Grid container spacing={4}>
-                  <Grid item xs={12} sm={6} lg={12} xl={6}>
-                    <Typography
-                      variant="overline"
-                      sx={{
-                        color: "primary.main",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mb: 2,
-                      }}
-                    >
-                      <FavoriteIcon fontSize="small" /> Likes
-                    </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      {[
-                        "เสียงฝนตกหนัก",
-                        "พื้นที่สลัว",
-                        "ความเป็นระเบียบ",
-                        "ดนตรีเปียโน",
-                        "กลิ่นน้ำเค็ม",
-                        "ขนมวากาชิ",
-                        "ของน่ารัก",
-                      ].map((item, i) => (
-                        <Chip
-                          key={i}
-                          label={item}
-                          sx={{
-                            bgcolor: "rgba(255, 162, 183, 0.1)",
-                            color: "primary.main",
-                            border: "1px solid rgba(255, 162, 183, 0.3)",
-                            borderRadius: "8px",
-                            "&:hover": {
-                              bgcolor: "primary.main",
-                              color: "#000",
-                              boxShadow: "0 0 10px #FFA2B7",
-                            },
-                          }}
+                        <MenuBookIcon
+                          sx={{ color: "primary.main", fontSize: 28 }}
                         />
+                        <GradientText variant="h5">
+                          ประวัติความเป็นมา (Biography)
+                        </GradientText>
+                      </Box>
+                      {historyAccordions.map((item, index) => (
+                        <Accordion key={index}>
+                          <AccordionSummary
+                            expandIcon={
+                              <AddIcon sx={{ color: "primary.main" }} />
+                            }
+                          >
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ color: "primary.main" }}
+                            >
+                              {item.title}
+                            </Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "text.secondary",
+                                lineHeight: 2,
+                                textIndent: "2em",
+                              }}
+                            >
+                              {item.content}
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
                       ))}
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6} lg={12} xl={6}>
-                    <Typography
-                      variant="overline"
-                      sx={{
-                        color: "secondary.main",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mb: 2,
-                      }}
-                    >
-                      <MoodBadIcon fontSize="small" /> Dislikes & Fears
-                    </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      {[
-                        "การเป็นจุดสนใจ",
-                        "คนไร้ระเบียบ",
-                        "ถูกสัมผัสตัว",
-                        "สูญเสียการควบคุม",
-                        "ถูกครอบครัวจับได้",
-                      ].map((item, i) => (
-                        <Chip
-                          key={i}
-                          label={item}
-                          sx={{
-                            bgcolor: "rgba(255, 209, 220, 0.1)",
-                            color: "secondary.main",
-                            border: "1px solid rgba(255, 209, 220, 0.3)",
-                            borderRadius: "8px",
-                            "&:hover": {
-                              bgcolor: "secondary.main",
-                              color: "#000",
-                              boxShadow: "0 0 10px #FFD1DC",
-                            },
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-            </LuxuryCard>
+                  </LuxuryCard>
 
-            {/* Trivia */}
-            <LuxuryCard>
-              <Box sx={{ p: { xs: 3, md: 4 } }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <InfoIcon sx={{ color: "primary.main", fontSize: 26 }} />
-                  <GradientText variant="h6">
-                    เกร็ดเล็กเกร็ดน้อย (Trivia)
-                  </GradientText>
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {[
-                    "มีฟันฉลามแหลมคม และมักจะเผลอกัดริมฝีปากตัวเองจนเลือดซึมเวลาใช้ความคิด",
-                    "ร่างกายแผ่ไอเย็นจางๆ ในช่วงหน้าร้อนมักเป็นที่ชื่นชอบของเพื่อนๆ",
-                    "แอบกินวากาชิพรีเมียมตอนดึก บรรจงตักด้วยท่าทางสง่างามแบบคุณชาย",
-                    "เมื่อนอนไม่หลับ จะหอบผ้าห่มไปขดตัวในตู้เสื้อผ้าแล้วใช้ 'อาณาเขตเงา' คลุมตัวเองให้รู้สึกปลอดภัย",
-                    "ในที่มืด ดวงตาจะสะท้อนแสงวาววับเหมือนตาสัตว์",
-                    "หูและเหงือกปลาไวต่อความชื้น สามารถพยากรณ์ล่วงหน้าว่าฝนจะตกได้",
-                    "มีพฤติกรรมย้ำคิดย้ำทำ (OCD เล็กๆ) คอยเช็คเครื่องราง 'ฮามากุริ' ตลอดเวลา",
-                    "เมื่อเจอของน่ารัก ตาจะเปล่งประกาย ก่อนรีบทำหน้าตาย ถ้าถูกจับได้หูและคอจะแดงจัด",
-                    "เวลาดีใจมากๆ หางปลาจะเผลอกระดิกไปมาโดยไม่รู้ตัว",
-                  ].map((item, i) => (
-                    <Box
-                      key={i}
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 1.5,
-                        p: 1.5,
-                        bgcolor: "rgba(255,255,255,0.02)",
-                        borderRadius: "12px",
-                      }}
-                    >
+                  <LuxuryCard sx={{ mb: 4 }}>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
                       <Box
                         sx={{
-                          mt: 1,
-                          minWidth: 6,
-                          height: 6,
-                          borderRadius: "50%",
-                          bgcolor: "primary.main",
-                          boxShadow: "0 0 5px #FFA2B7",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
                         }}
-                      />
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "text.secondary", lineHeight: 1.6 }}
                       >
-                        {item}
-                      </Typography>
+                        <NightlightIcon
+                          sx={{ color: "secondary.main", fontSize: 28 }}
+                        />
+                        <GradientText variant="h5">
+                          ชีวิตในโรงเรียน (School Life)
+                        </GradientText>
+                      </Box>
+                      {schoolAccordions.map((item, index) => (
+                        <Accordion key={index}>
+                          <AccordionSummary
+                            expandIcon={
+                              <AddIcon sx={{ color: "secondary.main" }} />
+                            }
+                          >
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ color: "secondary.main" }}
+                            >
+                              {item.title}
+                            </Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "text.secondary",
+                                lineHeight: 2,
+                                textIndent: "2em",
+                              }}
+                            >
+                              {item.content}
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
+                      ))}
                     </Box>
-                  ))}
-                </Box>
-              </Box>
-            </LuxuryCard>
-          </Grid>
-        </Grid>
-      </Box>
+                  </LuxuryCard>
+
+                  <LuxuryCard sx={{ mb: 4 }}>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
+                        }}
+                      >
+                        <AutoAwesomeIcon
+                          sx={{ color: "primary.main", fontSize: 28 }}
+                        />
+                        <GradientText variant="h5">
+                          เวทมนตร์วิถีความมืด
+                        </GradientText>
+                      </Box>
+                      <Grid container spacing={2}>
+                        {normalMagic.map((magic, i) => (
+                          <Grid item xs={12} sm={6} key={i}>
+                            <Box
+                              sx={{
+                                p: 2.5,
+                                height: "100%",
+                                bgcolor: "rgba(255,162,183,0.03)",
+                                border: "1px solid rgba(255, 162, 183, 0.1)",
+                                borderRadius: "12px",
+                                "&:hover": {
+                                  borderColor: "primary.main",
+                                  bgcolor: "rgba(255,162,183,0.08)",
+                                  transition: "0.3s",
+                                },
+                              }}
+                            >
+                              <Typography
+                                variant="subtitle2"
+                                sx={{ color: "primary.main", mb: 1 }}
+                              >
+                                {magic.n}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "text.secondary",
+                                  lineHeight: 1.7,
+                                }}
+                              >
+                                {magic.d}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        ))}
+                      </Grid>
+
+                      <Divider
+                        sx={{ my: 4, borderColor: "rgba(255, 162, 183, 0.1)" }}
+                      />
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
+                        }}
+                      >
+                        <WarningIcon
+                          sx={{ color: "error.main", fontSize: 26 }}
+                        />
+                        <Typography variant="h6" sx={{ color: "error.main" }}>
+                          พลังซ่อนเร้น (Hidden Abilities)
+                        </Typography>
+                      </Box>
+                      <Grid container spacing={2}>
+                        {[
+                          {
+                            n: "ดึงเงา",
+                            d: "ดึงเงาจากสิ่งมีชีวิตมาฟื้นฟูพลัง ลดความเหนื่อยล้า เป้าหมายจะรู้สึกหนาววูบ อ่อนแรง",
+                          },
+                          {
+                            n: "กินเงา",
+                            d: "กัดกินความเจ็บปวดจากผู้อื่น โดยกลืนกินเงานั้นเข้าไปบรรเทาอาการ แต่ผู้ใช้จะรับภาระแทน",
+                          },
+                          {
+                            n: "ฝนเขี้ยวเงา",
+                            d: "ควบแน่นเงาแตกตัวเป็นเขี้ยวหนามสีดำพุ่งลงมาราวกับฝน โจมตีวงกว้าง สร้างบาดแผลจริง",
+                          },
+                        ].map((magic, i) => (
+                          <Grid item xs={12} key={i}>
+                            <Box
+                              sx={{
+                                p: 2,
+                                background:
+                                  "linear-gradient(90deg, rgba(194, 24, 91, 0.1) 0%, transparent 100%)",
+                                borderLeft: "3px solid",
+                                borderColor: "error.main",
+                                borderRadius: "0 12px 12px 0",
+                              }}
+                            >
+                              <Typography
+                                variant="subtitle2"
+                                sx={{ color: "#FFF", mb: 0.5 }}
+                              >
+                                {magic.n}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "text.secondary",
+                                  lineHeight: 1.7,
+                                }}
+                              >
+                                {magic.d}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
+                  </LuxuryCard>
+                </motion.div>
+              </Grid>
+
+              <Grid item xs={12} lg={5}>
+                <motion.div
+                  initial={{ y: 30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                >
+                  <LuxuryCard sx={{ mb: 4 }}>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
+                        }}
+                      >
+                        <DiamondIcon
+                          sx={{ color: "primary.main", fontSize: 26 }}
+                        />
+                        <GradientText variant="h6">
+                          ลักษณะนิสัย (Personality)
+                        </GradientText>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 2,
+                        }}
+                      >
+                        {personalityDetails.map((trait, index) => (
+                          <Box
+                            key={index}
+                            sx={{
+                              p: 2,
+                              bgcolor: "rgba(255,162,183,0.03)",
+                              borderRadius: "12px",
+                              border: "1px solid rgba(255,162,183,0.05)",
+                            }}
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              sx={{ color: "primary.main", mb: 0.5 }}
+                            >
+                              {trait.n}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "text.secondary", lineHeight: 1.7 }}
+                            >
+                              {trait.d}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </LuxuryCard>
+
+                  <LuxuryCard sx={{ mb: 4 }}>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
+                        }}
+                      >
+                        <WaterDropIcon
+                          sx={{ color: "info.main", fontSize: 26 }}
+                        />
+                        <Typography variant="h6" sx={{ color: "info.main" }}>
+                          ความผิดปกติ (Anomalies)
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1.5,
+                          mb: 4,
+                        }}
+                      >
+                        {[
+                          "ผิวหนังคอและเอวพัฒนาเป็นเหงือกปลา",
+                          "ปากมีฟันแหลมคมหลายซี่แบบฉลาม",
+                          "ร่างกายแผ่ไอเย็นจางๆ ตลอดเวลา",
+                          "มีหางปลาขนาดใหญ่และครีบยาวบาง",
+                        ].map((item, i) => (
+                          <Box
+                            key={i}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 2,
+                              p: 1.5,
+                              background: "rgba(229,169,180,0.05)",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                minWidth: 6,
+                                height: 6,
+                                borderRadius: "50%",
+                                bgcolor: "info.main",
+                              }}
+                            />
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "primary.main" }}
+                            >
+                              {item}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 2,
+                        }}
+                      >
+                        <HealingIcon
+                          sx={{ color: "secondary.main", fontSize: 26 }}
+                        />
+                        <Typography
+                          variant="h6"
+                          sx={{ color: "secondary.main" }}
+                        >
+                          โรคประจำตัว
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          p: 2,
+                          bgcolor: "rgba(255, 209, 220, 0.05)",
+                          border: "1px solid rgba(255, 209, 220, 0.2)",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ color: "secondary.main", mb: 1 }}
+                        >
+                          Insomnia (ภาวะนอนไม่หลับ)
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.secondary", lineHeight: 1.6 }}
+                        >
+                          ไม่ได้เกิดจากร่างกายเพียงอย่างเดียว
+                          แต่เป็นผลรวมของความเครียดและสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </LuxuryCard>
+
+                  <LuxuryCard sx={{ mb: 4 }}>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: "primary.main",
+                          mb: 3,
+                          textAlign: "center",
+                        }}
+                      >
+                        รสนิยม (Preferences)
+                      </Typography>
+
+                      <Typography
+                        variant="overline"
+                        sx={{
+                          color: "primary.main",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          mb: 2,
+                        }}
+                      >
+                        <FavoriteIcon fontSize="small" /> Likes
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 1,
+                          mb: 4,
+                        }}
+                      >
+                        {[
+                          "เสียงฝนตกหนัก",
+                          "พื้นที่สลัว",
+                          "ความเป็นระเบียบ",
+                          "ดนตรีเปียโน",
+                          "กลิ่นน้ำเค็ม",
+                          "ขนมวากาชิ",
+                          "ของน่ารัก",
+                        ].map((item, i) => (
+                          <Chip
+                            key={i}
+                            label={item}
+                            sx={{
+                              bgcolor: "rgba(255, 162, 183, 0.08)",
+                              color: "primary.main",
+                              border: "1px solid rgba(255, 162, 183, 0.2)",
+                            }}
+                          />
+                        ))}
+                      </Box>
+
+                      <Typography
+                        variant="overline"
+                        sx={{
+                          color: "secondary.main",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          mb: 2,
+                        }}
+                      >
+                        <MoodBadIcon fontSize="small" /> Dislikes & Fears
+                      </Typography>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {[
+                          "การเป็นจุดสนใจ",
+                          "คนไร้ระเบียบ",
+                          "ถูกสัมผัสตัว",
+                          "สูญเสียการควบคุม",
+                          "ถูกครอบครัวจับได้",
+                        ].map((item, i) => (
+                          <Chip
+                            key={i}
+                            label={item}
+                            sx={{
+                              bgcolor: "rgba(255, 209, 220, 0.08)",
+                              color: "secondary.main",
+                              border: "1px solid rgba(255, 209, 220, 0.2)",
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                  </LuxuryCard>
+
+                  <LuxuryCard>
+                    <Box sx={{ p: { xs: 3, md: 4 } }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
+                        }}
+                      >
+                        <InfoIcon
+                          sx={{ color: "primary.main", fontSize: 26 }}
+                        />
+                        <GradientText variant="h6">
+                          เกร็ดเล็กเกร็ดน้อย (Trivia)
+                        </GradientText>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1.5,
+                        }}
+                      >
+                        {[
+                          "มีฟันฉลามแหลมคม และมักจะเผลอกัดริมฝีปากตัวเองจนเลือดซึมเวลาใช้ความคิด",
+                          "ร่างกายแผ่ไอเย็นจางๆ ในช่วงหน้าร้อนมักเป็นที่ชื่นชอบของเพื่อนๆ",
+                          "แอบกินวากาชิพรีเมียมตอนดึก บรรจงตักด้วยท่าทางสง่างามแบบคุณชาย",
+                          "เมื่อนอนไม่หลับ จะหอบผ้าห่มไปขดตัวในตู้เสื้อผ้าแล้วใช้ 'อาณาเขตเงา' คลุมตัวเองให้รู้สึกปลอดภัย",
+                          "ในที่มืด ดวงตาจะสะท้อนแสงวาววับเหมือนตาสัตว์",
+                          "หูและเหงือกปลาไวต่อความชื้น สามารถพยากรณ์ล่วงหน้าว่าฝนจะตกได้",
+                          "เมื่อเจอของน่ารัก ตาจะเปล่งประกาย ก่อนรีบทำหน้าตาย ถ้าถูกจับได้หูและคอจะแดงจัด",
+                          "เวลาดีใจมากๆ หางปลาจะเผลอกระดิกไปมาโดยไม่รู้ตัว",
+                        ].map((item, i) => (
+                          <Box
+                            key={i}
+                            sx={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: 1.5,
+                              p: 1,
+                              borderBottom: "1px dashed rgba(255,162,183,0.1)",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                mt: 1,
+                                minWidth: 4,
+                                height: 4,
+                                borderRadius: "50%",
+                                bgcolor: "primary.main",
+                              }}
+                            />
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "text.secondary", lineHeight: 1.6 }}
+                            >
+                              {item}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </LuxuryCard>
+                </motion.div>
+              </Grid>
+            </Grid>
+          </Box>
+        </motion.div>
+      )}
     </ThemeProvider>
   );
 }
