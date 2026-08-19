@@ -115,55 +115,86 @@ const theme = createTheme({
   },
 });
 
-// --- Preloader Shark Component ---
+// --- Preloader Shark Component (Crystal Origami Style) ---
 const TopDownShark = ({ glowColor, delay = 0 }) => (
   <motion.div
-    animate={{ y: [0, -5, 0, 5, 0] }} // เอฟเฟกต์ว่ายน้ำขึ้นลงเบาๆ
-    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay }}
-    style={{ width: "100%", height: "100%" }}
+    animate={{
+      y: [0, -6, 0, 6, 0],
+      rotate: [-1.5, 1.5, -1.5],
+    }}
+    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay }}
+    style={{ width: "100%", height: "100%", transformOrigin: "center" }}
   >
     <svg
-      viewBox="0 0 100 130"
+      viewBox="0 0 100 150"
       width="100%"
       height="100%"
-      style={{ filter: `drop-shadow(0 0 12px ${glowColor}90)` }}
+      style={{ filter: `drop-shadow(0 0 15px ${glowColor}B0)` }}
     >
-      {/* ลำตัว */}
-      <path
-        d="M50 10 C55 20 62 40 60 70 C58 90 53 105 50 115 C47 105 42 90 40 70 C38 40 45 20 50 10 Z"
-        fill="url(#bodyGrad)"
-      />
-      {/* ครีบข้าง */}
-      <path
-        d="M43 40 C20 45 5 60 5 65 C15 60 30 55 40 55 Z"
-        fill="url(#finGrad)"
-      />
-      <path
-        d="M57 40 C80 45 95 60 95 65 C85 60 70 55 60 55 Z"
-        fill="url(#finGrad)"
-      />
-      {/* ครีบหลัง (Dorsal Fin) */}
-      <path d="M49 35 C51 45 53 60 50 65 C48 60 48 45 49 35 Z" fill="#030102" />
-      {/* หาง */}
-      <path
-        d="M48 105 C30 110 15 120 15 125 C25 120 40 115 50 115 Z"
-        fill="url(#finGrad)"
-      />
-      <path
-        d="M52 105 C70 110 85 120 85 125 C75 120 60 115 50 115 Z"
-        fill="url(#finGrad)"
-      />
       <defs>
-        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        {/* สีตัวฉลามไล่ระดับ (Gradient Body) */}
+        <linearGradient
+          id={`bodyGrad-${glowColor}`}
+          x1="0%"
+          y1="0%"
+          x2="0%"
+          y2="100%"
+        >
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="30%" stopColor={glowColor} />
+          <stop offset="35%" stopColor={glowColor} />
           <stop offset="100%" stopColor="#030102" />
         </linearGradient>
-        <linearGradient id="finGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={glowColor} />
-          <stop offset="100%" stopColor="#030102" />
+        {/* สีเส้นคริสตัล/โอริกามิ */}
+        <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.9)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0.1)" />
         </linearGradient>
       </defs>
+
+      {/* 1. ซิลลูเอทตัวฉลามทรงเพรียว (Sleek Base Silhouette) */}
+      <path
+        d="M 50,0 
+           C 58,15 62,30 62,45 
+           C 80,48 95,58 98,70 
+           C 80,68 70,62 60,65 
+           C 58,90 54,110 52,125 
+           C 70,132 85,142 90,150 
+           C 70,142 55,138 50,135 
+           C 45,138 30,142 10,150 
+           C 15,142 30,132 48,125 
+           C 46,110 42,90 40,65 
+           C 30,62 20,68 2,70 
+           C 5,58 20,48 38,45 
+           C 38,30 42,15 50,0 Z"
+        fill={`url(#bodyGrad-${glowColor})`}
+        opacity="0.85"
+      />
+
+      {/* 2. ลวดลายคริสตัลโอริกามิ (Origami/Crystal Facet Lines) */}
+      <g stroke="url(#glassGrad)" strokeWidth="1.2" fill="none" opacity="0.65">
+        <path d="M 50,0 L 50,135" /> {/* สันหลังกลาง */}
+        <path d="M 50,25 L 62,45" /> {/* รอยพับหัวขวา */}
+        <path d="M 50,25 L 38,45" /> {/* รอยพับหัวซ้าย */}
+        <path d="M 50,45 L 98,70" /> {/* เส้นเชื่อมครีบขวา */}
+        <path d="M 50,45 L 2,70" /> {/* เส้นเชื่อมครีบซ้าย */}
+        <path d="M 62,45 L 60,65 L 50,85" /> {/* รอยพับตัวขวา */}
+        <path d="M 38,45 L 40,65 L 50,85" /> {/* รอยพับตัวซ้าย */}
+        <path d="M 60,65 L 98,70" /> {/* รอยตัดครีบขวาล่าง */}
+        <path d="M 40,65 L 2,70" /> {/* รอยตัดครีบซ้ายล่าง */}
+        <path d="M 50,85 L 52,125 L 90,150" /> {/* รอยพับหางขวา */}
+        <path d="M 50,85 L 48,125 L 10,150" /> {/* รอยพับหางซ้าย */}
+        <path d="M 52,125 L 50,135 L 48,125" /> {/* รอยตัดโคนหาง */}
+      </g>
+
+      {/* 3. คอร์พลังงานเรืองแสง (Glowing Magic Core) */}
+      <circle
+        cx="50"
+        cy="55"
+        r="7"
+        fill={glowColor}
+        opacity="0.6"
+        filter="blur(3px)"
+      />
     </svg>
   </motion.div>
 );
@@ -171,16 +202,31 @@ const TopDownShark = ({ glowColor, delay = 0 }) => (
 // 1. Shark Preloader Screen
 const LoadingScreen = ({ onComplete }) => {
   useEffect(() => {
-    const timer = setTimeout(() => onComplete(), 5000); // แสดงอนิเมชั่น 5 วินาที
+    const timer = setTimeout(() => onComplete(), 5000);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
+  const loadBubbles = useMemo(
+    () =>
+      Array.from({ length: 15 }).map((_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}vw`,
+        delay: Math.random() * 2,
+        duration: Math.random() * 2 + 2,
+        size: Math.random() * 4 + 2,
+      })),
+    [],
+  );
+
   return (
-    <Box
-      sx={{
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
+      style={{
         position: "fixed",
         inset: 0,
-        bgcolor: "#02040A",
+        backgroundColor: "#02040A",
         zIndex: 9999,
         display: "flex",
         justifyContent: "center",
@@ -188,98 +234,123 @@ const LoadingScreen = ({ onComplete }) => {
         overflow: "hidden",
       }}
     >
-      {/* แสงใต้น้ำลึก */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.4, 0.1] }}
-        transition={{ duration: 4.8, ease: "easeInOut" }}
+        animate={{ opacity: [0.1, 0.3, 0.1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute",
+          top: "-20%",
+          left: "0%",
           width: "100vw",
           height: "100vh",
           background:
-            "radial-gradient(circle at center, #1A2A3A 0%, #02040A 70%)",
+            "radial-gradient(circle at 50% 0%, rgba(92, 122, 153, 0.25) 0%, transparent 70%)",
+          filter: "blur(40px)",
         }}
       />
 
-      {/* อนิเมชั่นฉลามคู่ว่ายวน (Yin-Yang Sharks) */}
+      {loadBubbles.map((bubble) => (
+        <motion.div
+          key={bubble.id}
+          initial={{ y: "110vh", opacity: 0 }}
+          animate={{ y: "-10vh", opacity: [0, 0.6, 0] }}
+          transition={{
+            duration: bubble.duration,
+            delay: bubble.delay,
+            repeat: Infinity,
+            ease: "easeIn",
+          }}
+          style={{
+            position: "absolute",
+            left: bubble.left,
+            width: bubble.size,
+            height: bubble.size,
+            backgroundColor: "rgba(176, 196, 222, 0.5)",
+            borderRadius: "50%",
+            boxShadow: "0 0 10px rgba(176, 196, 222, 0.8)",
+          }}
+        />
+      ))}
+
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: [0, 1, 1, 0], scale: [0.8, 1, 1, 0.5] }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: [0, 1, 1, 0], scale: [0.5, 1, 1, 1.2] }}
         transition={{
           duration: 4.8,
           times: [0, 0.2, 0.8, 1],
           ease: "easeInOut",
         }}
-        style={{ position: "absolute", width: 250, height: 250 }}
+        style={{ position: "absolute", width: 280, height: 280 }}
       >
-        {/* วงน้ำกระจาย (Ripples) */}
         {[1, 2, 3].map((i) => (
           <motion.div
             key={i}
-            initial={{ scale: 0, opacity: 0.5 }}
-            animate={{ scale: 1.5, opacity: 0 }}
+            initial={{ scale: 0.2, opacity: 0.6 }}
+            animate={{ scale: 1.8, opacity: 0 }}
             transition={{
-              duration: 3,
+              duration: 3.5,
               repeat: Infinity,
-              delay: i * 1,
+              delay: i * 1.1,
               ease: "easeOut",
             }}
             style={{
               position: "absolute",
               top: "50%",
               left: "50%",
-              width: 150,
-              height: 150,
-              marginLeft: -75,
-              marginTop: -75,
+              width: 160,
+              height: 160,
+              marginLeft: -80,
+              marginTop: -80,
               borderRadius: "50%",
-              border: "1px solid #4A6FA5",
+              border: "1px solid rgba(176, 196, 222, 0.4)",
+              boxShadow: "inset 0 0 20px rgba(176, 196, 222, 0.1)",
             }}
           />
         ))}
 
-        {/* ตู้หมุนฉลาม */}
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           style={{ width: "100%", height: "100%", position: "relative" }}
         >
+          {/* ปรับขนาดกล่องให้พอดีกับ viewBox ใหม่ 100x150 */}
           <Box
             sx={{
               position: "absolute",
               top: -30,
               left: "50%",
-              width: 70,
-              height: 90,
+              width: 75,
+              height: 112,
               transform: "translateX(-50%) rotate(90deg)",
             }}
           >
-            <TopDownShark glowColor="#B0C4DE" delay={0} /> {/* ฉลามสีเงิน */}
+            <TopDownShark glowColor="#B0C4DE" delay={0} />
           </Box>
           <Box
             sx={{
               position: "absolute",
               bottom: -30,
               left: "50%",
-              width: 70,
-              height: 90,
+              width: 75,
+              height: 112,
               transform: "translateX(-50%) rotate(-90deg)",
             }}
           >
-            <TopDownShark glowColor="#5C7A99" delay={1} />{" "}
-            {/* ฉลามสีน้ำเงินเข้ม */}
+            <TopDownShark glowColor="#5C7A99" delay={1.5} />
           </Box>
         </motion.div>
       </motion.div>
 
-      {/* คำโปรยกลางวงน้ำ */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: [0, 1, 1, 0], y: [20, 0, 0, -20] }}
+        initial={{ opacity: 0, y: 30, filter: "blur(15px)" }}
+        animate={{
+          opacity: [0, 1, 1, 0],
+          y: [30, 0, 0, -30],
+          filter: ["blur(15px)", "blur(0px)", "blur(0px)", "blur(15px)"],
+        }}
         transition={{
           duration: 4.8,
-          times: [0, 0.2, 0.8, 1],
+          times: [0, 0.25, 0.75, 1],
           ease: "easeInOut",
         }}
         style={{ textAlign: "center", zIndex: 10, pointerEvents: "none" }}
@@ -289,8 +360,9 @@ const LoadingScreen = ({ onComplete }) => {
           sx={{
             color: "#E0E6ED",
             mb: 2,
-            textShadow: "0 0 20px #5C7A99",
+            textShadow: "0 0 25px rgba(92, 122, 153, 0.8)",
             fontFamily: "'Cinzel', serif",
+            letterSpacing: 4,
           }}
         >
           氷雨 響羅
@@ -300,20 +372,20 @@ const LoadingScreen = ({ onComplete }) => {
           sx={{
             color: "#A9BCD0",
             fontStyle: "italic",
-            opacity: 0.8,
+            opacity: 0.9,
             letterSpacing: 2,
+            textShadow: "0 2px 4px rgba(0,0,0,0.8)",
           }}
         >
           "แหวกว่ายอย่างโดดเดี่ยว... ในห้วงลึกที่แสงสว่างส่องไม่ถึง"
         </Typography>
       </motion.div>
-    </Box>
+    </motion.div>
   );
 };
 
 // 2. Realistic Crystal Rain & Mist Atmosphere
 const AbyssalAtmosphere = () => {
-  // ฝนสีเงิน (Crystal Rain)
   const rainDrops = useMemo(
     () =>
       Array.from({ length: 70 }).map((_, i) => ({
@@ -327,8 +399,6 @@ const AbyssalAtmosphere = () => {
       })),
     [],
   );
-
-  // วงน้ำกระทบพื้น (Floor Ripples)
   const ripples = useMemo(
     () =>
       Array.from({ length: 15 }).map((_, i) => ({
@@ -340,8 +410,6 @@ const AbyssalAtmosphere = () => {
       })),
     [],
   );
-
-  // ประกายน้ำส่องแสง (Water Sparkles)
   const sparkles = useMemo(
     () =>
       Array.from({ length: 25 }).map((_, i) => ({
@@ -366,7 +434,6 @@ const AbyssalAtmosphere = () => {
         background: "#030102",
       }}
     >
-      {/* หมอกสลัวยามค่ำคืน (Moonlit Mist) */}
       <motion.div
         animate={{ x: ["-5%", "5%", "-5%"], opacity: [0.05, 0.15, 0.05] }}
         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
@@ -396,7 +463,6 @@ const AbyssalAtmosphere = () => {
         }}
       />
 
-      {/* สายฝนสีเงิน */}
       {rainDrops.map((drop) => (
         <motion.div
           key={drop.id}
@@ -418,8 +484,6 @@ const AbyssalAtmosphere = () => {
           }}
         />
       ))}
-
-      {/* วงน้ำเมื่อฝนกระทบพื้น */}
       {ripples.map((ripple) => (
         <motion.div
           key={ripple.id}
@@ -443,8 +507,6 @@ const AbyssalAtmosphere = () => {
           }}
         />
       ))}
-
-      {/* ประกายละอองน้ำลอยขึ้น */}
       {sparkles.map((sparkle) => (
         <motion.div
           key={sparkle.id}
@@ -641,24 +703,17 @@ export default function KyoraProfile() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
-  // -----------------------------------------------------
-  // 1. เพิ่มโค้ดชุดนี้เข้าไป เพื่อสั่งให้เล่นเพลงอัตโนมัติหลังโหลดเสร็จ
-  // -----------------------------------------------------
   useEffect(() => {
     if (!loading && audioRef.current) {
-      audioRef.current.play()
-        .then(() => {
-          // ถ้าเบราว์เซอร์อนุญาตให้เล่นอัตโนมัติ (เช่น ผู้ใช้เคยคลิกจอแล้ว)
-          setIsPlaying(true); 
-        })
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
         .catch((error) => {
-          // ถ้าเบราว์เซอร์บล็อก (ติด Autoplay Policy)
           console.log("Autoplay prevented. User interaction required.", error);
           setIsPlaying(false);
         });
     }
   }, [loading]);
-  // -----------------------------------------------------
 
   const toggleMusic = () => {
     if (isPlaying) audioRef.current?.pause();
@@ -698,10 +753,10 @@ export default function KyoraProfile() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.5 }}
         >
           <AbyssalAtmosphere />
-          <audio ref={audioRef} src="/Song.mp3" loop />
+          <audio ref={audioRef} src="/Song.mp3" loop autoPlay />
 
           <IconButton
             onClick={toggleMusic}
