@@ -123,7 +123,7 @@ const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
     delay,
   };
 
-const tailRight =
+  const tailRight =
     "M 50,1 C 57,2 67,18 68,40 C 78,50 84,65 82,75 C 76,70 70,62 64,60 C 64,75 64,85 64,95 C 66,98 68,101 68,105 C 64,107 64,112 66,120 C 80,130 96,140 98,148 C 84,140 74,136 68,136 C 55,136 45,142 38,148 C 45,138 52,130 56,120 C 52,112 52,107 50,105 C 52,101 54,98 52,95 C 46,85 44,75 40,60 C 32,62 24,70 18,75 C 16,65 22,50 32,40 C 33,18 43,2 50,2 Z";
 
   // พิกัดหางงอไปทางซ้าย (ปรับปลายหัวให้เรียวลงเล็กน้อยมากๆ)
@@ -166,20 +166,23 @@ const tailRight =
   );
 };
 // 1. Shark Preloader Screen
+// 1. Shark Preloader Screen (Deep Sea Edition)
 const LoadingScreen = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => onComplete(), 5000);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  const loadBubbles = useMemo(
+  // สร้างแพลงก์ตอนเรืองแสง / หิมะทะเล (Marine Snow)
+  const loadParticles = useMemo(
     () =>
-      Array.from({ length: 15 }).map((_, i) => ({
+      Array.from({ length: 40 }).map((_, i) => ({
         id: i,
         left: `${Math.random() * 100}vw`,
-        delay: Math.random() * 2,
-        duration: Math.random() * 2 + 2,
-        size: Math.random() * 4 + 2,
+        delay: Math.random() * 3,
+        duration: Math.random() * 4 + 3,
+        size: Math.random() * 3 + 1,
+        isBioluminescent: Math.random() > 0.7, // บางดวงจะเรืองแสงสีฟ้าอมเขียว
       })),
     [],
   );
@@ -187,12 +190,14 @@ const LoadingScreen = ({ onComplete }) => {
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
+      exit={{ opacity: 0, scale: 1.05, filter: "blur(15px)" }}
+      transition={{ duration: 1.8, ease: "easeInOut" }}
       style={{
         position: "fixed",
         inset: 0,
-        backgroundColor: "#02040A",
+        // ไล่สีจากระดับน้ำลึก (Navy) ไปสู่ก้นทะเลมืดมิด (Pitch Black)
+        background:
+          "linear-gradient(to bottom, #071324 0%, #02050A 50%, #000000 100%)",
         zIndex: 9999,
         display: "flex",
         justifyContent: "center",
@@ -200,46 +205,103 @@ const LoadingScreen = ({ onComplete }) => {
         overflow: "hidden",
       }}
     >
-      {/* แสงใต้น้ำ */}
+      {/* ลำแสงใต้ผิวน้ำ (God Rays) */}
       <motion.div
-        animate={{ opacity: [0.1, 0.3, 0.1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        animate={{
+          opacity: [0.15, 0.25, 0.15],
+          transform: [
+            "rotate(-15deg) translateX(-5%)",
+            "rotate(-15deg) translateX(5%)",
+            "rotate(-15deg) translateX(-5%)",
+          ],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          top: "-30%",
+          left: "-20%",
+          width: "150vw",
+          height: "100vh",
+          background:
+            "linear-gradient(180deg, rgba(64, 115, 184, 0.2) 0%, transparent 80%)",
+          filter: "blur(50px)",
+          transformOrigin: "top center",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ลำแสงที่สองเพื่อเพิ่มมิติความซ้อนทับ */}
+      <motion.div
+        animate={{ opacity: [0.1, 0.2, 0.1] }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
         style={{
           position: "absolute",
           top: "-20%",
-          left: "0%",
-          width: "100vw",
-          height: "100vh",
+          right: "-10%",
+          width: "80vw",
+          height: "90vh",
           background:
-            "radial-gradient(circle at 50% 0%, rgba(92, 122, 153, 0.25) 0%, transparent 70%)",
+            "linear-gradient(180deg, rgba(82, 142, 204, 0.15) 0%, transparent 70%)",
+          filter: "blur(60px)",
+          transform: "rotate(10deg)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* แสงสลัวๆ จากด้านล่าง (Abyssal Glow) */}
+      <motion.div
+        animate={{ opacity: [0.05, 0.1, 0.05] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          bottom: "-20%",
+          left: "50%",
+          width: "80vw",
+          height: "40vh",
+          transform: "translateX(-50%)",
+          background:
+            "radial-gradient(ellipse at center, rgba(30, 80, 110, 0.3) 0%, transparent 70%)",
           filter: "blur(40px)",
         }}
       />
 
-      {/* ฟองอากาศลอยขึ้น */}
-      {loadBubbles.map((bubble) => (
+      {/* ละออง Marine Snow ลอยขึ้น */}
+      {loadParticles.map((particle) => (
         <motion.div
-          key={bubble.id}
-          initial={{ y: "110vh", opacity: 0 }}
-          animate={{ y: "-10vh", opacity: [0, 0.6, 0] }}
+          key={particle.id}
+          initial={{ y: "110vh", x: 0, opacity: 0 }}
+          animate={{
+            y: "-10vh",
+            x: [0, Math.random() * 30 - 15, Math.random() * -30 + 15, 0], // ลอยส่ายไปมา
+            opacity: [0, particle.isBioluminescent ? 0.8 : 0.4, 0],
+          }}
           transition={{
-            duration: bubble.duration,
-            delay: bubble.delay,
+            duration: particle.duration,
+            delay: particle.delay,
             repeat: Infinity,
-            ease: "easeIn",
+            ease: "linear",
           }}
           style={{
             position: "absolute",
-            left: bubble.left,
-            width: bubble.size,
-            height: bubble.size,
-            backgroundColor: "rgba(176, 196, 222, 0.5)",
+            left: particle.left,
+            width: particle.size,
+            height: particle.size,
+            backgroundColor: particle.isBioluminescent ? "#8DF9FF" : "#B0C4DE",
             borderRadius: "50%",
-            boxShadow: "0 0 10px rgba(176, 196, 222, 0.8)",
+            boxShadow: particle.isBioluminescent
+              ? "0 0 12px 2px rgba(141, 249, 255, 0.6)"
+              : "none",
+            filter: particle.isBioluminescent ? "blur(0.5px)" : "blur(1px)",
           }}
         />
       ))}
 
+      {/* วงแหวนโหลดและฉลามตรงกลาง */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: [0, 1, 1, 0], scale: [0.5, 1, 1, 1.2] }}
@@ -253,7 +315,7 @@ const LoadingScreen = ({ onComplete }) => {
         {[1, 2, 3].map((i) => (
           <motion.div
             key={i}
-            initial={{ scale: 0.2, opacity: 0.6 }}
+            initial={{ scale: 0.2, opacity: 0.8 }}
             animate={{ scale: 1.8, opacity: 0 }}
             transition={{
               duration: 3.5,
@@ -270,8 +332,9 @@ const LoadingScreen = ({ onComplete }) => {
               marginLeft: -80,
               marginTop: -80,
               borderRadius: "50%",
-              border: "1px solid rgba(176, 196, 222, 0.4)",
-              boxShadow: "inset 0 0 20px rgba(176, 196, 222, 0.1)",
+              border: "1px solid rgba(141, 249, 255, 0.3)",
+              boxShadow:
+                "inset 0 0 30px rgba(82, 142, 204, 0.15), 0 0 20px rgba(141, 249, 255, 0.1)",
             }}
           />
         ))}
@@ -281,7 +344,7 @@ const LoadingScreen = ({ onComplete }) => {
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           style={{ width: "100%", height: "100%", position: "relative" }}
         >
-          {/* ปรับขนาดกล่องให้พอดีกับ viewBox */}
+          {/* ฉลามตัวที่ 1 */}
           <Box
             sx={{
               position: "absolute",
@@ -292,8 +355,9 @@ const LoadingScreen = ({ onComplete }) => {
               transform: "translateX(-50%) rotate(90deg)",
             }}
           >
-            <TopDownShark glowColor="#B0C4DE" delay={0} />
+            <TopDownShark glowColor="#8DF9FF" delay={0} />
           </Box>
+          {/* ฉลามตัวที่ 2 */}
           <Box
             sx={{
               position: "absolute",
@@ -304,11 +368,12 @@ const LoadingScreen = ({ onComplete }) => {
               transform: "translateX(-50%) rotate(-90deg)",
             }}
           >
-            <TopDownShark glowColor="#5C7A99" delay={1.5} />
+            <TopDownShark glowColor="#3A6D8C" delay={1.5} />
           </Box>
         </motion.div>
       </motion.div>
 
+      {/* ข้อความตรงกลาง */}
       <motion.div
         initial={{ opacity: 0, y: 30, filter: "blur(15px)" }}
         animate={{
@@ -326,11 +391,12 @@ const LoadingScreen = ({ onComplete }) => {
         <Typography
           variant="h2"
           sx={{
-            color: "#E0E6ED",
+            color: "#FFFFFF",
             mb: 2,
-            textShadow: "0 0 25px rgba(92, 122, 153, 0.8)",
+            textShadow:
+              "0 0 30px rgba(141, 249, 255, 0.7), 0 2px 10px rgba(0,0,0,0.8)",
             fontFamily: "'Cinzel', serif",
-            letterSpacing: 4,
+            letterSpacing: 6,
           }}
         >
           氷雨 響羅
@@ -342,12 +408,24 @@ const LoadingScreen = ({ onComplete }) => {
             fontStyle: "italic",
             opacity: 0.9,
             letterSpacing: 2,
-            textShadow: "0 2px 4px rgba(0,0,0,0.8)",
+            textShadow: "0 2px 5px rgba(0,0,0,0.9)",
           }}
         >
           "แหวกว่ายอย่างโดดเดี่ยว... ในห้วงลึกที่แสงสว่างส่องไม่ถึง"
         </Typography>
       </motion.div>
+
+      {/* ขอบมืด (Vignette) เพื่อเน้นความลึกและแคบของก้นทะเล */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%)",
+          pointerEvents: "none",
+          zIndex: 1,
+        }}
+      />
     </motion.div>
   );
 };
@@ -726,40 +804,61 @@ export default function KyoraProfile() {
           <AbyssalAtmosphere />
           <audio ref={audioRef} src="/Song.mp3" loop autoPlay />
 
-          <IconButton
-            onClick={toggleMusic}
-            sx={{
-              position: "fixed",
-              bottom: 30,
-              right: 30,
-              background:
-                "linear-gradient(135deg, rgba(25,10,15,0.9) 0%, rgba(5,2,4,0.95) 100%)",
-              border: "1px solid",
-              borderColor: isPlaying
-                ? "primary.main"
-                : "rgba(255, 162, 183, 0.2)",
-              color: "primary.main",
-              backdropFilter: "blur(10px)",
-              boxShadow: isPlaying
-                ? "0 0 20px rgba(255, 162, 183, 0.4)"
-                : "0 5px 15px rgba(0,0,0,0.5)",
-              zIndex: 999,
-              p: 2,
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "scale(1.1)",
-                borderColor: "secondary.main",
-                color: "secondary.main",
-              },
-            }}
-          >
-            <motion.div
-              animate={{ scale: isPlaying ? [1, 1.1, 1] : 1 }}
-              transition={{ duration: 2, repeat: isPlaying ? Infinity : 0 }}
+          <Box sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 999 }}>
+            {/* คลื่นแผ่ออกเมื่อเล่นเพลง */}
+        <AnimatePresence>
+              {isPlaying && (
+                <Box
+                  component={motion.div}
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    boxShadow: [
+                      "0 0 0px 0px rgba(255, 162, 183, 0)",
+                      "0 0 20px 10px rgba(255, 162, 183, 0.4)",
+                      "0 0 0px 0px rgba(255, 162, 183, 0)",
+                    ],
+                  }}
+                  transition={{
+                    duration: 1.2, // จังหวะเต้นค่อนข้างเร็ว
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  sx={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "50%",
+                    zIndex: -1,
+                  }}
+                />
+              )}
+            </AnimatePresence>
+
+            <IconButton
+              onClick={toggleMusic}
+              sx={{
+                background: isPlaying
+                  ? "rgba(255, 162, 183, 0.1)"
+                  : "linear-gradient(135deg, rgba(25,10,15,0.9) 0%, rgba(5,2,4,0.95) 100%)",
+                border: "1px solid",
+                borderColor: isPlaying
+                  ? "primary.main"
+                  : "rgba(255, 162, 183, 0.2)",
+                color: "primary.main",
+                backdropFilter: "blur(10px)",
+                boxShadow: isPlaying
+                  ? "0 0 20px rgba(255, 162, 183, 0.4)"
+                  : "0 5px 15px rgba(0,0,0,0.5)",
+                p: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  backgroundColor: "rgba(255, 162, 183, 0.2)",
+                },
+              }}
             >
               {isPlaying ? <MusicNoteIcon /> : <MusicOffIcon />}
-            </motion.div>
-          </IconButton>
+            </IconButton>
+          </Box>
 
           <Box
             sx={{
