@@ -806,7 +806,7 @@ export default function KyoraProfile() {
 
           <Box sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 999 }}>
             {/* คลื่นแผ่ออกเมื่อเล่นเพลง */}
-        <AnimatePresence>
+            <AnimatePresence>
               {isPlaying && (
                 <Box
                   component={motion.div}
