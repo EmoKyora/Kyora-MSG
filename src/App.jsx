@@ -115,12 +115,11 @@ const theme = createTheme({
   },
 });
 
-// --- Preloader Shark Component (Crystal Origami Style) ---
-const TopDownShark = ({ glowColor, delay = 0 }) => (
+const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => (
   <motion.div
     animate={{
-      y: [0, -6, 0, 6, 0],
-      rotate: [-1.5, 1.5, -1.5],
+      y: [0, -5, 0, 5, 0],
+      rotate: [-3, 3, -3],
     }}
     transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay }}
     style={{ width: "100%", height: "100%", transformOrigin: "center" }}
@@ -129,71 +128,38 @@ const TopDownShark = ({ glowColor, delay = 0 }) => (
       viewBox="0 0 100 150"
       width="100%"
       height="100%"
-      style={{ filter: `drop-shadow(0 0 15px ${glowColor}B0)` }}
+      style={{
+        filter: `drop-shadow(0 0 12px ${glowColor})`,
+      }}
     >
-      <defs>
-        {/* สีตัวฉลามไล่ระดับ (Gradient Body) */}
-        <linearGradient
-          id={`bodyGrad-${glowColor}`}
-          x1="0%"
-          y1="0%"
-          x2="0%"
-          y2="100%"
-        >
-          <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="35%" stopColor={glowColor} />
-          <stop offset="100%" stopColor="#030102" />
-        </linearGradient>
-        {/* สีเส้นคริสตัล/โอริกามิ */}
-        <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.9)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0.1)" />
-        </linearGradient>
-      </defs>
-
-      {/* 1. ซิลลูเอทตัวฉลามทรงเพรียว (Sleek Base Silhouette) */}
+      {/* โครงสร้างตัวฉลาม (หัวกว้าง + ครีบลู่หลัง) */}
       <path
-        d="M 50,0 
-           C 58,15 62,30 62,45 
-           C 80,48 95,58 98,70 
-           C 80,68 70,62 60,65 
-           C 58,90 54,110 52,125 
-           C 70,132 85,142 90,150 
-           C 70,142 55,138 50,135 
-           C 45,138 30,142 10,150 
-           C 15,142 30,132 48,125 
-           C 46,110 42,90 40,65 
-           C 30,62 20,68 2,70 
-           C 5,58 20,48 38,45 
-           C 38,30 42,15 50,0 Z"
-        fill={`url(#bodyGrad-${glowColor})`}
-        opacity="0.85"
+        d="M 50,4 
+           C 58,4 68,18 68,32 
+           C 84,38 96,52 96,62 
+           C 84,63 72,59 62,58 
+           C 60,75 58,88 57,96 
+           C 62,100 66,105 66,109 
+           C 58,111 55,116 53,128 
+           C 65,134 76,142 82,148 
+           C 68,141 58,137 50,137 
+           C 42,137 32,141 18,148 
+           C 24,142 35,134 47,128 
+           C 45,116 42,111 34,109 
+           C 34,105 38,100 43,96 
+           C 42,88 40,75 38,58 
+           C 28,59 16,63 4,62 
+           C 4,52 16,38 32,32 
+           C 32,18 42,4 50,4 Z"
+        fill={fillCol}
+        opacity="0.9"
       />
 
-      {/* 2. ลวดลายคริสตัลโอริกามิ (Origami/Crystal Facet Lines) */}
-      <g stroke="url(#glassGrad)" strokeWidth="1.2" fill="none" opacity="0.65">
-        <path d="M 50,0 L 50,135" /> {/* สันหลังกลาง */}
-        <path d="M 50,25 L 62,45" /> {/* รอยพับหัวขวา */}
-        <path d="M 50,25 L 38,45" /> {/* รอยพับหัวซ้าย */}
-        <path d="M 50,45 L 98,70" /> {/* เส้นเชื่อมครีบขวา */}
-        <path d="M 50,45 L 2,70" /> {/* เส้นเชื่อมครีบซ้าย */}
-        <path d="M 62,45 L 60,65 L 50,85" /> {/* รอยพับตัวขวา */}
-        <path d="M 38,45 L 40,65 L 50,85" /> {/* รอยพับตัวซ้าย */}
-        <path d="M 60,65 L 98,70" /> {/* รอยตัดครีบขวาล่าง */}
-        <path d="M 40,65 L 2,70" /> {/* รอยตัดครีบซ้ายล่าง */}
-        <path d="M 50,85 L 52,125 L 90,150" /> {/* รอยพับหางขวา */}
-        <path d="M 50,85 L 48,125 L 10,150" /> {/* รอยพับหางซ้าย */}
-        <path d="M 52,125 L 50,135 L 48,125" /> {/* รอยตัดโคนหาง */}
-      </g>
-
-      {/* 3. คอร์พลังงานเรืองแสง (Glowing Magic Core) */}
-      <circle
-        cx="50"
-        cy="55"
-        r="7"
-        fill={glowColor}
-        opacity="0.6"
-        filter="blur(3px)"
+      {/* เงาครีบหลัง (Dorsal Fin) ช่วยให้ดูเป็นฉลามจากมุมบน */}
+      <path
+        d="M 50,42 C 53,52 53,68 50,78 C 47,68 47,52 50,42 Z"
+        fill="#000000"
+        opacity="0.25"
       />
     </svg>
   </motion.div>
@@ -234,6 +200,7 @@ const LoadingScreen = ({ onComplete }) => {
         overflow: "hidden",
       }}
     >
+      {/* แสงใต้น้ำ */}
       <motion.div
         animate={{ opacity: [0.1, 0.3, 0.1] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -249,6 +216,7 @@ const LoadingScreen = ({ onComplete }) => {
         }}
       />
 
+      {/* ฟองอากาศลอยขึ้น */}
       {loadBubbles.map((bubble) => (
         <motion.div
           key={bubble.id}
@@ -313,7 +281,7 @@ const LoadingScreen = ({ onComplete }) => {
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           style={{ width: "100%", height: "100%", position: "relative" }}
         >
-          {/* ปรับขนาดกล่องให้พอดีกับ viewBox ใหม่ 100x150 */}
+          {/* ปรับขนาดกล่องให้พอดีกับ viewBox */}
           <Box
             sx={{
               position: "absolute",
