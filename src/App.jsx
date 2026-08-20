@@ -115,55 +115,60 @@ const theme = createTheme({
   },
 });
 
-const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => (
-  <motion.div
-    animate={{
-      y: [0, -5, 0, 5, 0],
-      rotate: [-3, 3, -3],
-    }}
-    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay }}
-    style={{ width: "100%", height: "100%", transformOrigin: "center" }}
-  >
-    <svg
-      viewBox="0 0 100 150"
-      width="100%"
-      height="100%"
-      style={{
-        filter: `drop-shadow(0 0 12px ${glowColor})`,
-      }}
-    >
-      {/* โครงสร้างตัวฉลาม (หัวกว้าง + ครีบลู่หลัง) */}
-      <path
-        d="M 50,4 
-           C 58,4 68,18 68,32 
-           C 84,38 96,52 96,62 
-           C 84,63 72,59 62,58 
-           C 60,75 58,88 57,96 
-           C 62,100 66,105 66,109 
-           C 58,111 55,116 53,128 
-           C 65,134 76,142 82,148 
-           C 68,141 58,137 50,137 
-           C 42,137 32,141 18,148 
-           C 24,142 35,134 47,128 
-           C 45,116 42,111 34,109 
-           C 34,105 38,100 43,96 
-           C 42,88 40,75 38,58 
-           C 28,59 16,63 4,62 
-           C 4,52 16,38 32,32 
-           C 32,18 42,4 50,4 Z"
-        fill={fillCol}
-        opacity="0.9"
-      />
+const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
+  // ตั้งค่าเวลาแอนิเมชันให้สอดคล้องกันทั้งการส่ายตัวและการสบัดหาง
+  const swimTransition = {
+    duration: 2.5,
+    repeat: Infinity,
+    ease: "easeInOut",
+    delay,
+  };
 
-      {/* เงาครีบหลัง (Dorsal Fin) ช่วยให้ดูเป็นฉลามจากมุมบน */}
-      <path
-        d="M 50,42 C 53,52 53,68 50,78 C 47,68 47,52 50,42 Z"
-        fill="#000000"
-        opacity="0.25"
-      />
-    </svg>
-  </motion.div>
-);
+  // พิกัดหางงอไปทางขวา (ปรับครีบหูเรียว, หางใหญ่, ครีบก้นเล็ก)
+  const tailRight =
+    "M 50,4 C 57,4 65,16 65,30 C 75,36 86,50 86,62 C 78,61 68,57 60,56 C 59,72 59,85 60,95 C 64,98 66,101 66,105 C 62,107 62,112 64,120 C 80,130 96,140 98,148 C 84,140 74,136 68,136 C 55,136 45,142 38,148 C 45,138 52,130 58,120 C 54,112 54,107 50,105 C 52,101 53,98 52,95 C 49,85 46,72 40,56 C 32,57 22,61 14,62 C 14,50 25,36 35,30 C 35,16 43,4 50,4 Z";
+
+  // พิกัดหางงอไปทางซ้าย (ปรับครีบหูเรียว, หางใหญ่, ครีบก้นเล็ก)
+  const tailLeft =
+    "M 50,4 C 57,4 65,16 65,30 C 75,36 86,50 86,62 C 78,61 68,57 60,56 C 54,72 51,85 48,95 C 47,98 48,101 50,105 C 46,107 46,112 42,120 C 48,130 55,138 62,148 C 55,142 45,136 32,136 C 26,136 16,140 2,148 C 4,140 20,130 36,120 C 38,112 38,107 34,105 C 34,101 36,98 40,95 C 41,85 41,72 40,56 C 32,57 22,61 14,62 C 14,50 25,36 35,30 C 35,16 43,4 50,4 Z";
+
+  return (
+    <motion.div
+      animate={{
+        y: [0, -5, 0, 5, 0],
+        rotate: [-3, 3, -3], // ลำตัวส่ายซ้าย-ขวา
+      }}
+      transition={swimTransition}
+      style={{ width: "100%", height: "100%", transformOrigin: "center" }}
+    >
+      <svg
+        viewBox="0 0 100 150"
+        width="100%"
+        height="100%"
+        style={{
+          filter: glowColor ? `drop-shadow(0 0 12px ${glowColor})` : "none",
+        }}
+      >
+        {/* ลำตัวและหางที่ขยับได้ (Morphing Paths) */}
+        <motion.path
+          animate={{
+            d: [tailRight, tailLeft, tailRight], // หางสบัดสวนทางกับการส่ายของลำตัว
+          }}
+          transition={swimTransition}
+          fill={fillCol}
+          opacity="0.9"
+        />
+
+        {/* เงาครีบหลัง (Dorsal Fin) */}
+        <path
+          d="M 50,42 C 53,52 53,68 50,78 C 47,68 47,52 50,42 Z"
+          fill="#000000"
+          opacity="0.25"
+        />
+      </svg>
+    </motion.div>
+  );
+};
 
 // 1. Shark Preloader Screen
 const LoadingScreen = ({ onComplete }) => {
