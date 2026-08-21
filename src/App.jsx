@@ -31,10 +31,12 @@ import NightlightIcon from "@mui/icons-material/Nightlight";
 import AddIcon from "@mui/icons-material/Add";
 
 // 1. เมาส์ตอนปกติ (ลายเส้นเหมือนนกกระดาษในภาพ image_fa7f2b.png สีชมพูอ่อน)
-const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23FFA2B7' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
-// 2. เมาส์ตอนชี้จุดคลิก (ปีกกระพือลงเล็กน้อย และเปลี่ยนเป็นสีชมพูเข้ม)
-const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23FF6B8B' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
-// --- Theme Setup ---
+// 1. เมาส์ตอนปกติ (ออร่าสีชมพูอ่อน ไล่สีขอบ และตัวนกโปร่งแสง)
+// 1. เมาส์ตอนปกติ (ไล่สีชมพูไปฟ้าไอซ์บลู มีความเยือกเย็น)
+const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFA2B7' /%3E%3Cstop offset='100%25' stop-color='%238DF9FF' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(141,249,255,0.1)' stroke='url(%23grad3)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 5px rgba(141,249,255,0.6))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
+
+// 2. เมาส์ตอนชี้จุดคลิก (ไล่สีชมพูเข้มไปหาน้ำเงินทะเลลึก)
+const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF6B8B' /%3E%3Cstop offset='100%25' stop-color='%233A6D8C' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(255,107,139,0.15)' stroke='url(%23grad4)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 6px rgba(255,107,139,0.8))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
 const theme = createTheme({
   typography: {
     fontFamily: "'Prompt', sans-serif",
