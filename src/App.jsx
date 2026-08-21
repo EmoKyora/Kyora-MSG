@@ -28,7 +28,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import InfoIcon from "@mui/icons-material/Info";
 import HealingIcon from "@mui/icons-material/Healing";
 import NightlightIcon from "@mui/icons-material/Nightlight";
-import AddIcon from "@mui/icons-material/Add"; 
+import AddIcon from "@mui/icons-material/Add";
 // 1. เมาส์ตอนปกติ (เขียวอ่อน -> ชมพูอ่อน / ไม่มีสีเหลือง / สบายตา)
 const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23C5FF75' /%3E%3Cstop offset='100%25' stop-color='%23FF9EE2' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(197,255,117,0.08)' stroke='url(%23grad3)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 4px rgba(197,255,117,0.4))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
 
@@ -870,150 +870,288 @@ export default function KyoraProfile() {
               mx: "auto",
             }}
           >
-            {/* Header Hero */}
+            {/* Header Hero & Biological Profile (Combined Layout) */}
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
             >
               <LuxuryCard sx={{ mb: 5 }}>
-                <Box
-                  sx={{
-                    p: { xs: 4, md: 6 },
-                    display: "flex",
-                    flexDirection: { xs: "column", md: "row" },
-                    gap: { xs: 4, md: 6 },
-                    alignItems: "center",
-                  }}
-                >
+                <Box sx={{ p: { xs: 4, md: 5, lg: 6 } }}>
+                  {/* --- ส่วนที่ 1: รูปภาพและชื่อ (Profile Header) --- */}
                   <Box
                     sx={{
-                      position: "relative",
-                      display: "inline-flex",
-                      padding: 2,
+                      display: "flex",
+                      flexDirection: { xs: "column", md: "row" },
+                      gap: { xs: 4, md: 5 },
+                      alignItems: "center",
                     }}
                   >
                     <Box
                       sx={{
-                        position: "absolute",
-                        inset: 0,
-                        borderRadius: "50%",
-                        border: "1px solid rgba(255, 162, 183, 0.1)",
-                        borderTop: "2px solid #FFA2B7",
-                        borderBottom: "2px solid #FFD1DC",
-                        animation: "spin 20s linear infinite",
-                        "@keyframes spin": {
-                          "100%": { transform: "rotate(360deg)" },
-                        },
+                        position: "relative",
+                        display: "inline-flex",
+                        padding: 2,
                       }}
-                    />
-                    <Avatar
-                      src="YOUR_KYORA_IMAGE_URL.jpg"
-                      alt="Hisame Kyōra"
-                      sx={{
-                        width: { xs: 180, md: 240 },
-                        height: { xs: 180, md: 240 },
-                        border: "4px solid #030102",
-                        boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
-                      }}
-                    />
+                    >
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          inset: 0,
+                          borderRadius: "50%",
+                          border: "1px solid rgba(255, 162, 183, 0.1)",
+                          borderTop: "2px solid #FFA2B7",
+                          borderBottom: "2px solid #FFD1DC",
+                          animation: "spin 20s linear infinite",
+                          "@keyframes spin": {
+                            "100%": { transform: "rotate(360deg)" },
+                          },
+                        }}
+                      />
+                      <Avatar
+                        src="YOUR_KYORA_IMAGE_URL.jpg"
+                        alt="Hisame Kyōra"
+                        sx={{
+                          width: { xs: 160, sm: 200, md: 220 },
+                          height: { xs: 160, sm: 200, md: 220 },
+                          border: "4px solid #030102",
+                          boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
+                        }}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{ flex: 1, textAlign: { xs: "center", md: "left" } }}
+                    >
+                      <Typography
+                        variant="overline"
+                        sx={{
+                          color: "primary.main",
+                          display: "block",
+                          mb: 1,
+                          opacity: 0.8,
+                        }}
+                      >
+                        ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 ✦
+                      </Typography>
+                      <GradientText
+                        variant="h2"
+                        sx={{ mb: 1, fontSize: { xs: "2.5rem", md: "3.2rem" } }}
+                      >
+                        氷雨 響羅
+                      </GradientText>
+                      <Typography
+                        variant="h4"
+                        sx={{ color: "secondary.main", opacity: 0.9 }}
+                      >
+                        ฮิซาเมะ เคียวระ (Hisame Kyōra)
+                      </Typography>
+                    </Box>
                   </Box>
 
-                  <Box
-                    sx={{ flex: 1, textAlign: { xs: "center", md: "left" } }}
-                  >
-                    <Typography
-                      variant="overline"
-                      sx={{
-                        color: "primary.main",
-                        display: "block",
-                        mb: 1,
-                        opacity: 0.8,
-                      }}
-                    >
-                      ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 ✦
-                    </Typography>
-                    <GradientText
-                      variant="h2"
-                      sx={{ mb: 1, fontSize: { xs: "2.5rem", md: "3.5rem" } }}
-                    >
-                      氷雨 響羅
-                    </GradientText>
-                    <Typography
-                      variant="h4"
-                      sx={{ color: "secondary.main", mb: 4, opacity: 0.9 }}
-                    >
-                      ฮิซาเมะ เคียวระ (Hisame Kyōra)
-                    </Typography>
+                  <Divider
+                    sx={{ my: 4, borderColor: "rgba(255, 162, 183, 0.15)" }}
+                  />
 
-                    <Grid container spacing={2.5}>
-                      {[
-                        { label: "AGE", val: "18" },
-                        { label: "BIRTHDAY", val: "12 / 06" },
-                        { label: "GENDER", val: "ชาย" },
-                        { label: "BLOOD TYPE", val: "A" },
-                        { label: "W / H", val: "72 kg / 184 cm" },
-                        { label: "CLASS", val: "มังไก / 3-B" },
-                        { label: "DORM", val: "ฤดูหนาว" },
-                        { label: "CLUB", val: "ดนตรีและประสานเสียง" },
-                      ].map((info, idx) => (
-                        <Grid item xs={6} sm={4} lg={3} key={idx}>
+                  {/* --- ส่วนที่ 2: ข้อมูลส่วนตัว และ ความผิดปกติทางร่างกาย (Grid Layout) --- */}
+                  <Grid container spacing={4}>
+                    {/* คอลัมน์ซ้าย: ข้อมูลพื้นฐาน & รูมเมท */}
+                    <Grid item xs={12} md={6} lg={7}>
+                      <Grid container spacing={2.5} sx={{ mb: 3 }}>
+                        {[
+                          { label: "AGE", val: "18" },
+                          { label: "BIRTHDAY", val: "12 / 06" },
+                          { label: "GENDER", val: "ชาย" },
+                          { label: "BLOOD TYPE", val: "A" },
+                          { label: "W / H", val: "72 kg / 184 cm" },
+                          { label: "CLASS", val: "มังไก / 3-B" },
+                          { label: "DORM", val: "ฤดูหนาว" },
+                          { label: "CLUB", val: "ดนตรีและประสานเสียง" },
+                        ].map((info, idx) => (
+                          <Grid item xs={6} sm={4} key={idx}>
+                            <Box
+                              sx={{
+                                pl: 1.5,
+                                borderLeft:
+                                  "2px solid rgba(255, 162, 183, 0.4)",
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  color: "text.secondary",
+                                  letterSpacing: 1,
+                                  fontFamily: "'Cinzel', serif",
+                                }}
+                              >
+                                {info.label}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{ color: "primary.main", fontWeight: 400 }}
+                              >
+                                {info.val}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        ))}
+                      </Grid>
+
+                      {/* ข้อมูลรูมเมท */}
+                      <Box
+                        sx={{
+                          pl: 1.5,
+                          borderLeft: "2px solid rgba(255, 209, 220, 0.4)",
+                          bgcolor: "rgba(255, 162, 183, 0.03)",
+                          p: 2,
+                          borderRadius: "0 8px 8px 0",
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: "text.secondary",
+                            letterSpacing: 1,
+                            fontFamily: "'Cinzel', serif",
+                          }}
+                        >
+                          ROOMMATES
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "secondary.main", fontWeight: 400 }}
+                        >
+                          ฮิเมะมิยะ โคยูคิ / คากามิ ริคุ
+                        </Typography>
+                      </Box>
+                    </Grid>
+
+                    {/* คอลัมน์ขวา: ความผิดปกติ & โรคประจำตัว */}
+                    <Grid item xs={12} md={6} lg={5}>
+                      <Box
+                        sx={{
+                          height: "100%",
+                          p: 3,
+                          bgcolor: "rgba(10, 5, 8, 0.4)",
+                          border: "1px solid rgba(229,169,180,0.1)",
+                          borderRadius: "16px",
+                        }}
+                      >
+                        {/* Section: Anomalies */}
+                        <Box sx={{ mb: 4 }}>
                           <Box
                             sx={{
-                              pl: 1.5,
-                              borderLeft: "2px solid rgba(255, 162, 183, 0.4)",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1.5,
+                              mb: 2,
+                            }}
+                          >
+                            <WaterDropIcon
+                              sx={{ color: "info.main", fontSize: 22 }}
+                            />
+                            <Typography
+                              variant="h6"
+                              sx={{ color: "info.main", fontSize: "1.1rem" }}
+                            >
+                              ความผิดปกติทางร่างกาย
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 1.2,
+                            }}
+                          >
+                            {[
+                              "ผิวหนังคอและเอวพัฒนาเป็นเหงือกปลา",
+                              "ปากมีฟันแหลมคมหลายซี่แบบฉลาม",
+                              "ร่างกายแผ่ไอเย็นจางๆ ตลอดเวลา",
+                              "มีหางปลาขนาดใหญ่และครีบยาวบาง",
+                            ].map((item, i) => (
+                              <Box
+                                key={i}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "flex-start",
+                                  gap: 1.5,
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    mt: 1,
+                                    minWidth: 5,
+                                    height: 5,
+                                    borderRadius: "50%",
+                                    bgcolor: "info.main",
+                                    boxShadow: "0 0 8px #E5A9B4",
+                                  }}
+                                />
+                                <Typography
+                                  variant="body2"
+                                  sx={{ color: "text.secondary" }}
+                                >
+                                  {item}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+
+                        {/* Section: Medical Condition */}
+                        <Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1.5,
+                              mb: 1.5,
+                            }}
+                          >
+                            <HealingIcon
+                              sx={{ color: "secondary.main", fontSize: 22 }}
+                            />
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                color: "secondary.main",
+                                fontSize: "1.1rem",
+                              }}
+                            >
+                              โรคประจำตัว
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              p: 2,
+                              bgcolor: "rgba(255, 209, 220, 0.05)",
+                              borderLeft: "3px solid",
+                              borderColor: "secondary.main",
+                              borderRadius: "0 8px 8px 0",
                             }}
                           >
                             <Typography
-                              variant="caption"
-                              sx={{
-                                color: "text.secondary",
-                                letterSpacing: 1,
-                                fontFamily: "'Cinzel', serif",
-                              }}
+                              variant="subtitle2"
+                              sx={{ color: "secondary.main", mb: 0.5 }}
                             >
-                              {info.label}
+                              Insomnia (ภาวะนอนไม่หลับ)
                             </Typography>
                             <Typography
                               variant="body2"
-                              sx={{ color: "primary.main", fontWeight: 400 }}
+                              sx={{ color: "text.secondary", lineHeight: 1.6 }}
                             >
-                              {info.val}
+                              ไม่ได้เกิดจากร่างกายเพียงอย่างเดียว
+                              แต่เป็นผลรวมของความเครียดและสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
                             </Typography>
                           </Box>
-                        </Grid>
-                      ))}
-                      <Grid item xs={12}>
-                        <Box
-                          sx={{
-                            pl: 1.5,
-                            borderLeft: "2px solid rgba(255, 209, 220, 0.4)",
-                          }}
-                        >
-                          <Typography
-                            variant="caption"
-                            sx={{
-                              color: "text.secondary",
-                              letterSpacing: 1,
-                              fontFamily: "'Cinzel', serif",
-                            }}
-                          >
-                            ROOMMATES
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "secondary.main", fontWeight: 400 }}
-                          >
-                            ฮิเมะมิยะ โคยูคิ / คากามิ ริคุ
-                          </Typography>
                         </Box>
-                      </Grid>
+                      </Box>
                     </Grid>
-                  </Box>
+                  </Grid>
                 </Box>
               </LuxuryCard>
             </motion.div>
-
             <Grid container spacing={4}>
               <Grid item xs={12} lg={7}>
                 <motion.div
@@ -1294,109 +1432,6 @@ export default function KyoraProfile() {
                             </Typography>
                           </Box>
                         ))}
-                      </Box>
-                    </Box>
-                  </LuxuryCard>
-
-                  <LuxuryCard sx={{ mb: 4 }}>
-                    <Box sx={{ p: { xs: 3, md: 4 } }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          mb: 3,
-                        }}
-                      >
-                        <WaterDropIcon
-                          sx={{ color: "info.main", fontSize: 26 }}
-                        />
-                        <Typography variant="h6" sx={{ color: "info.main" }}>
-                          ความผิดปกติ (Anomalies)
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1.5,
-                          mb: 4,
-                        }}
-                      >
-                        {[
-                          "ผิวหนังคอและเอวพัฒนาเป็นเหงือกปลา",
-                          "ปากมีฟันแหลมคมหลายซี่แบบฉลาม",
-                          "ร่างกายแผ่ไอเย็นจางๆ ตลอดเวลา",
-                          "มีหางปลาขนาดใหญ่และครีบยาวบาง",
-                        ].map((item, i) => (
-                          <Box
-                            key={i}
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 2,
-                              p: 1.5,
-                              background: "rgba(229,169,180,0.05)",
-                              borderRadius: "8px",
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                minWidth: 6,
-                                height: 6,
-                                borderRadius: "50%",
-                                bgcolor: "info.main",
-                              }}
-                            />
-                            <Typography
-                              variant="body2"
-                              sx={{ color: "primary.main" }}
-                            >
-                              {item}
-                            </Typography>
-                          </Box>
-                        ))}
-                      </Box>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          mb: 2,
-                        }}
-                      >
-                        <HealingIcon
-                          sx={{ color: "secondary.main", fontSize: 26 }}
-                        />
-                        <Typography
-                          variant="h6"
-                          sx={{ color: "secondary.main" }}
-                        >
-                          โรคประจำตัว
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          p: 2,
-                          bgcolor: "rgba(255, 209, 220, 0.05)",
-                          border: "1px solid rgba(255, 209, 220, 0.2)",
-                          borderRadius: "12px",
-                        }}
-                      >
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ color: "secondary.main", mb: 1 }}
-                        >
-                          Insomnia (ภาวะนอนไม่หลับ)
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "text.secondary", lineHeight: 1.6 }}
-                        >
-                          ไม่ได้เกิดจากร่างกายเพียงอย่างเดียว
-                          แต่เป็นผลรวมของความเครียดและสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
-                        </Typography>
                       </Box>
                     </Box>
                   </LuxuryCard>
