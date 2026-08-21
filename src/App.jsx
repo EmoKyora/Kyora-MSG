@@ -30,10 +30,10 @@ import HealingIcon from "@mui/icons-material/Healing";
 import NightlightIcon from "@mui/icons-material/Nightlight";
 import AddIcon from "@mui/icons-material/Add";
 
-// --- Custom Cursors ---
-const normalFishCursor = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'><path d='M6.5 4.5C9 3 13 4 16.5 7.5C20 11 21 15 19.5 17.5C18 20 14 18.5 11.5 15.5C9 12.5 4 8 6.5 4.5Z' fill='%23FFD1DC' stroke='%23FFA2B7' stroke-width='1'/><path d='M6.5 4.5L1.5 1L4 7Z' fill='%23FFA2B7'/></svg>") 4 4, auto`;
-const pointerFishCursor = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'><path d='M6.5 4.5C9 3 13 4 16.5 7.5C20 11 21 15 19.5 17.5C18 20 14 18.5 11.5 15.5C9 12.5 4 8 6.5 4.5Z' fill='%23FFA2B7' stroke='%23FF6B8B' stroke-width='1'/><path d='M6.5 4.5L1.5 1L4 7Z' fill='%23FF6B8B'/></svg>") 4 4, pointer`;
-
+// 1. เมาส์ตอนปกติ (ลายเส้นเหมือนนกกระดาษในภาพ image_fa7f2b.png สีชมพูอ่อน)
+const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23FFA2B7' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
+// 2. เมาส์ตอนชี้จุดคลิก (ปีกกระพือลงเล็กน้อย และเปลี่ยนเป็นสีชมพูเข้ม)
+const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23FF6B8B' stroke-width='5' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
 // --- Theme Setup ---
 const theme = createTheme({
   typography: {
@@ -773,12 +773,13 @@ export default function KyoraProfile() {
       <GlobalStyles
         styles={{
           "body, html": {
-            cursor: normalFishCursor,
+            cursor: `${normalCraneCursor} !important`,
             backgroundColor: "#030102",
           },
-          "a, button, [role='button'], .MuiAccordionSummary-root": {
-            cursor: pointerFishCursor,
-          },
+          "a, button, [role='button'], .MuiAccordionSummary-root, .MuiIconButton-root, .MuiButtonBase-root":
+            {
+              cursor: `${pointerCraneCursor} !important`, // เติม !important ตรงนี้
+            },
           "::-webkit-scrollbar": { width: "6px" },
           "::-webkit-scrollbar-track": { background: "transparent" },
           "::-webkit-scrollbar-thumb": {
