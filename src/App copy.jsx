@@ -1,78 +1,55 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   Box,
-  Typography,
-  Grid,
-  Chip,
-  Divider,
+  Typography, 
   IconButton,
   ThemeProvider,
   createTheme,
-  CssBaseline,
-  Avatar,
+  CssBaseline, 
   GlobalStyles,
-  Tabs,
+  Grid,
+  Chip,
+  Avatar,
   Tab,
+  Tabs,
   Paper,
+  Divider,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-
-// --- Icons ---
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import MusicOffIcon from "@mui/icons-material/MusicOff";
+import MusicOffIcon from "@mui/icons-material/MusicOff"; 
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import WaterDropIcon from "@mui/icons-material/WaterDrop";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import HealingIcon from "@mui/icons-material/Healing";
-import BadgeIcon from "@mui/icons-material/Badge";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import GroupsIcon from "@mui/icons-material/Groups";
-import HomeIcon from "@mui/icons-material/Home";
-import ShieldIcon from "@mui/icons-material/Shield";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import CancelIcon from "@mui/icons-material/Cancel";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import DarknessIcon from "@mui/icons-material/NightsStay";
+import ShieldIcon from "@mui/icons-material/Shield";
+import WaterIcon from "@mui/icons-material/WaterDrop";
+import BadgeIcon from "@mui/icons-material/Badge";
+import HomeIcon from "@mui/icons-material/Home";
+import GroupsIcon from "@mui/icons-material/Groups";
 import PianoIcon from "@mui/icons-material/Piano";
 
-// 1. เมาส์ตอนปกติ
+// 1. เมาส์ตอนปกติ (เขียวอ่อน -> ชมพูอ่อน / ไม่มีสีเหลือง / สบายตา)
 const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23C5FF75' /%3E%3Cstop offset='100%25' stop-color='%23FF9EE2' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(197,255,117,0.08)' stroke='url(%23grad3)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 4px rgba(197,255,117,0.4))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
 
-// 2. เมาส์ตอนชี้
+// 2. เมาส์ตอนชี้ (เขียวสด -> ชมพูเข้ม / ปีกกระพือ / แสงไม่จ้าเกินไป)
 const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%239ACD32' /%3E%3Cstop offset='100%25' stop-color='%23FF1493' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(154,205,50,0.1)' stroke='url(%23grad4)' stroke-width='4.5' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 5px rgba(154,205,50,0.45))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
 
 const theme = createTheme({
-  typography: {
-    fontFamily: "'Prompt', sans-serif",
-    h1: { fontFamily: "'Cinzel', 'Playfair Display', serif", fontWeight: 700 },
-    h2: { fontFamily: "'Cinzel', 'Playfair Display', serif", fontWeight: 700 },
-    h3: { fontFamily: "'Playfair Display', serif", fontWeight: 600 },
-    h4: { fontFamily: "'Playfair Display', serif", fontStyle: "italic" },
-    h5: { fontFamily: "'Prompt', sans-serif", fontWeight: 600 },
-    h6: {
-      fontFamily: "'Prompt', sans-serif",
-      fontWeight: 600,
-      letterSpacing: 1,
-    },
-    body1: { fontFamily: "'Prompt', sans-serif", fontWeight: 400 },
-    body2: {
-      fontFamily: "'Prompt', sans-serif",
-      fontWeight: 300,
-      fontSize: "1rem",
-    },
-    overline: {
-      fontFamily: "'Cinzel', 'Playfair Display', serif",
-      letterSpacing: 3,
-    },
-  },
   palette: {
     mode: "dark",
-    background: { default: "#030102" },
-    primary: { main: "#FFA2B7" },
-    secondary: { main: "#FFD1DC" },
-    info: { main: "#E5A9B4" },
-    error: { main: "#C2185B" },
-    text: { primary: "#FFF0F5", secondary: "#E8D8DE" },
+    primary: { main: "#8DF9FF" },
+    secondary: { main: "#FF9EE2" },
+    background: { default: "#071324", paper: "rgba(7, 19, 36, 0.7)" },
+    text: { primary: "#E2F1FF", secondary: "#A9BCD0" },
+  },
+  typography: {
+    fontFamily: "'Sarabun', 'Cinzel', sans-serif",
   },
 });
 
@@ -83,14 +60,18 @@ const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
     ease: "easeInOut",
     delay,
   };
+
   const tailRight =
     "M 50,1 C 57,2 67,18 68,40 C 78,50 84,65 82,75 C 76,70 70,62 64,60 C 64,75 64,85 64,95 C 66,98 68,101 68,105 C 64,107 64,112 66,120 C 80,130 96,140 98,148 C 84,140 74,136 68,136 C 55,136 45,142 38,148 C 45,138 52,130 56,120 C 52,112 52,107 50,105 C 52,101 54,98 52,95 C 46,85 44,75 40,60 C 32,62 24,70 18,75 C 16,65 22,50 32,40 C 33,18 43,2 50,2 Z";
+
   const tailLeft =
     "M 50,1 C 57,2 67,18 68,40 C 78,50 84,65 82,75 C 76,70 70,62 64,60 C 60,75 56,85 54,95 C 52,98 52,101 54,105 C 48,107 48,112 44,120 C 52,130 60,138 66,148 C 58,142 46,136 34,136 C 26,136 14,140 2,148 C 6,140 22,130 36,120 C 40,112 40,107 36,105 C 36,101 38,98 42,95 C 40,85 38,75 36,60 C 32,62 24,70 18,75 C 16,65 22,50 32,40 C 33,18 43,2 50,2 Z";
-
   return (
     <motion.div
-      animate={{ y: [0, -5, 0, 5, 0], rotate: [-3, 3, -3] }}
+      animate={{
+        y: [0, -5, 0, 5, 0],
+        rotate: [-3, 3, -3],
+      }}
       transition={swimTransition}
       style={{ width: "100%", height: "100%", transformOrigin: "center" }}
     >
@@ -103,7 +84,9 @@ const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
         }}
       >
         <motion.path
-          animate={{ d: [tailRight, tailLeft, tailRight] }}
+          animate={{
+            d: [tailRight, tailLeft, tailRight],
+          }}
           transition={swimTransition}
           fill={fillCol}
           opacity="0.9"
@@ -118,6 +101,7 @@ const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
   );
 };
 
+// 1. Shark Preloader Screen (Deep Sea Edition)
 const LoadingScreen = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => onComplete(), 5000);
@@ -177,6 +161,7 @@ const LoadingScreen = ({ onComplete }) => {
           pointerEvents: "none",
         }}
       />
+
       <motion.div
         animate={{ opacity: [0.1, 0.2, 0.1] }}
         transition={{
@@ -198,6 +183,7 @@ const LoadingScreen = ({ onComplete }) => {
           pointerEvents: "none",
         }}
       />
+
       <motion.div
         animate={{ opacity: [0.05, 0.1, 0.05] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -213,6 +199,7 @@ const LoadingScreen = ({ onComplete }) => {
           filter: "blur(40px)",
         }}
       />
+
       {loadParticles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -242,6 +229,7 @@ const LoadingScreen = ({ onComplete }) => {
           }}
         />
       ))}
+
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: [0, 1, 1, 0], scale: [0.5, 1, 1, 1.2] }}
@@ -278,6 +266,7 @@ const LoadingScreen = ({ onComplete }) => {
             }}
           />
         ))}
+
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
@@ -309,6 +298,7 @@ const LoadingScreen = ({ onComplete }) => {
           </Box>
         </motion.div>
       </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 30, filter: "blur(15px)" }}
         animate={{
@@ -349,6 +339,7 @@ const LoadingScreen = ({ onComplete }) => {
           "แหวกว่ายอย่างโดดเดี่ยว... ในห้วงลึกที่แสงสว่างส่องไม่ถึง"
         </Typography>
       </motion.div>
+
       <Box
         sx={{
           position: "absolute",
@@ -363,6 +354,7 @@ const LoadingScreen = ({ onComplete }) => {
   );
 };
 
+// 2. Realistic Crystal Rain & Mist Atmosphere (Updated to blend with deep sea gradient)
 const AbyssalAtmosphere = () => {
   const rainDrops = useMemo(
     () =>
@@ -409,7 +401,7 @@ const AbyssalAtmosphere = () => {
         pointerEvents: "none",
         zIndex: 0,
         overflow: "hidden",
-        background: "#030102",
+        background: "linear-gradient(to bottom, #071324 0%, #02050A 50%, #000000 100%)", // นำ Gradient จาก Loading มาใช้
       }}
     >
       <motion.div
@@ -422,7 +414,7 @@ const AbyssalAtmosphere = () => {
           width: "120vw",
           height: "40vh",
           background:
-            "radial-gradient(ellipse at center, rgba(176, 196, 222, 0.1) 0%, transparent 60%)",
+            "radial-gradient(ellipse at center, rgba(141, 249, 255, 0.08) 0%, transparent 60%)", // เปลี่ยนแสงหมอกให้เหลือบ Cyan เบาๆ
           filter: "blur(60px)",
         }}
       />
@@ -440,6 +432,7 @@ const AbyssalAtmosphere = () => {
           filter: "blur(70px)",
         }}
       />
+
       {rainDrops.map((drop) => (
         <motion.div
           key={drop.id}
@@ -479,7 +472,7 @@ const AbyssalAtmosphere = () => {
             width: "50px",
             height: "25px",
             borderRadius: "50%",
-            border: "1px solid rgba(240, 248, 255, 0.2)",
+            border: "1px solid rgba(141, 249, 255, 0.3)", // เปลี่ยนคลื่นน้ำเป็นสีฟ้า Cyan
             transform: "rotateX(60deg)",
           }}
         />
@@ -508,7 +501,7 @@ const AbyssalAtmosphere = () => {
             height: sparkle.size,
             borderRadius: "50%",
             backgroundColor: "#FFFFFF",
-            boxShadow: "0 0 8px rgba(255, 255, 255, 0.8)",
+            boxShadow: "0 0 8px rgba(141, 249, 255, 0.8)", // เปล่งแสง Cyan
           }}
         />
       ))}
@@ -516,119 +509,76 @@ const AbyssalAtmosphere = () => {
   );
 };
 
-// --- Custom Components ---
-const LuxuryCard = ({ children, sx }) => (
-  <Box
+// --- Custom Reusable Glass Card Component ---
+const GlassCard = ({ children, sx = {}, ...props }) => (
+  <Paper
+    elevation={0}
     sx={{
+      background: "rgba(11, 25, 44, 0.55)", // สีน้ำเงินเข้มโปร่งแสง กลมกลืนกับพื้นหลัง
+      backdropFilter: "blur(20px)",
+      border: "1px solid rgba(141, 249, 255, 0.15)",
+      borderRadius: "20px",
+      padding: { xs: "20px", md: "28px" },
+      boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(141, 249, 255, 0.03)", // เพิ่ม inner glow เล็กน้อย
       position: "relative",
-      borderRadius: "24px",
-      background:
-        "linear-gradient(145deg, rgba(255, 162, 183, 0.2) 0%, rgba(25, 10, 15, 0.6) 100%)",
-      padding: "1px",
-      boxShadow: "0 10px 40px rgba(0,0,0,0.8)",
+      overflow: "hidden",
+      transition: "border-color 0.4s ease, box-shadow 0.4s ease",
+      "&:hover": {
+        borderColor: "rgba(141, 249, 255, 0.4)",
+        boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(141, 249, 255, 0.08)",
+      },
       ...sx,
     }}
-  >
-    <Box
-      sx={{
-        background:
-          "linear-gradient(145deg, rgba(12, 4, 7, 0.95) 0%, rgba(5, 2, 3, 0.98) 100%)",
-        backdropFilter: "blur(20px)",
-        borderRadius: "23px",
-        height: "100%",
-        boxShadow: "inset 0 1px 0 rgba(255, 209, 220, 0.05)",
-        overflow: "hidden",
-        position: "relative",
-        zIndex: 1,
-      }}
-    >
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: "10%",
-          width: "80%",
-          height: "1px",
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(255,162,183,0.3) 50%, transparent 100%)",
-        }}
-      />
-      {children}
-    </Box>
-  </Box>
-);
-
-const GlassCard = ({ children, sx }) => (
-  <Box
-    sx={{
-      background: "rgba(15, 5, 8, 0.5)",
-      backdropFilter: "blur(16px)",
-      border: "1px solid rgba(255, 162, 183, 0.15)",
-      borderRadius: "16px",
-      p: 3,
-      boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
-      ...sx,
-    }}
+    {...props}
   >
     {children}
-  </Box>
+  </Paper>
 );
 
+// --- Custom Section Header Component ---
 const SectionHeader = ({ icon: Icon, title, subtitle }) => (
-  <Box sx={{ mb: 3 }}>
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0.5 }}>
-      <Icon sx={{ color: "primary.main", fontSize: 26 }} />
+  <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1.5 }}>
+    {Icon && (
+      <Box
+        sx={{
+          p: 1,
+          borderRadius: "12px",
+          background: "rgba(141, 249, 255, 0.1)",
+          color: "#8DF9FF",
+          display: "flex",
+          boxShadow: "0 0 15px rgba(141, 249, 255, 0.2)", // ให้ไอคอนหัวข้อเรืองแสง
+        }}
+      >
+        <Icon fontSize="medium" />
+      </Box>
+    )}
+    <Box>
       <Typography
         variant="h6"
-        sx={{ color: "#FFF", textShadow: "0 0 10px rgba(255,255,255,0.3)" }}
+        sx={{
+          fontWeight: 700,
+          color: "#FFFFFF",
+          letterSpacing: 1,
+          fontFamily: "'Cinzel', 'Sarabun', serif",
+          textShadow: "0 0 10px rgba(141, 249, 255, 0.4)",
+        }}
       >
         {title}
       </Typography>
+      {subtitle && (
+        <Typography variant="caption" sx={{ color: "#94A3B8" }}>
+          {subtitle}
+        </Typography>
+      )}
     </Box>
-    {subtitle && (
-      <Typography
-        variant="caption"
-        sx={{
-          color: "text.secondary",
-          letterSpacing: 1,
-          textTransform: "uppercase",
-          ml: 4.5,
-          display: "block",
-        }}
-      >
-        {subtitle}
-      </Typography>
-    )}
   </Box>
-);
-
-const GradientText = ({ children, sx, variant = "h6" }) => (
-  <Typography
-    variant={variant}
-    sx={{
-      background:
-        "linear-gradient(90deg, #FFD1DC 0%, #FFA2B7 50%, #FF6B8B 100%)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
-      textShadow: "0 2px 10px rgba(255, 162, 183, 0.2)",
-      ...sx,
-    }}
-  >
-    {children}
-  </Typography>
 );
 
 // --- Main Page Component ---
 export default function KyoraProfile() {
   const [loading, setLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  // เพิ่ม State จัดการการเปลี่ยนหน้า Tab
   const [activeTab, setActiveTab] = useState(0);
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
-
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -649,6 +599,10 @@ export default function KyoraProfile() {
     setIsPlaying(!isPlaying);
   };
 
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -656,20 +610,31 @@ export default function KyoraProfile() {
         styles={{
           "body, html": {
             cursor: `${normalCraneCursor} !important`,
-            backgroundColor: "#030102",
+            background: "#02050A", // เผื่อ Fallback 
+            overflowX: "hidden",
           },
-          "a, button, [role='button'], .MuiTab-root, .MuiIconButton-root, .MuiButtonBase-root":
-            { cursor: `${pointerCraneCursor} !important` },
+          "a, button, [role='button'], .MuiAccordionSummary-root, .MuiIconButton-root, .MuiButtonBase-root":
+            {
+              cursor: `${pointerCraneCursor} !important`,
+            },
           "::-webkit-scrollbar": { width: "6px" },
           "::-webkit-scrollbar-track": { background: "transparent" },
           "::-webkit-scrollbar-thumb": {
-            background: "rgba(255, 162, 183, 0.3)",
+            background: "rgba(141, 249, 255, 0.3)",
             borderRadius: "10px",
           },
           "::-webkit-scrollbar-thumb:hover": {
-            background: "rgba(255, 162, 183, 0.6)",
+            background: "rgba(141, 249, 255, 0.6)",
+            boxShadow: "0 0 10px rgba(141, 249, 255, 0.5)",
           },
         }}
+      />
+
+      {/* Background Audio Element */}
+      <audio
+        ref={audioRef}
+        loop
+        src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=rain-and-nostalgia-11234.mp3"
       />
 
       <AnimatePresence>
@@ -681,57 +646,32 @@ export default function KyoraProfile() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
+          style={{ position: "relative", zIndex: 2, minHeight: "100vh" }}
         >
           <AbyssalAtmosphere />
-          <audio ref={audioRef} src="/Song.mp3" loop autoPlay />
 
-          <Box sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 999 }}>
-            <AnimatePresence>
-              {isPlaying && (
-                <Box
-                  component={motion.div}
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    boxShadow: [
-                      "0 0 0px 0px rgba(255, 162, 183, 0)",
-                      "0 0 20px 10px rgba(255, 162, 183, 0.4)",
-                      "0 0 0px 0px rgba(255, 162, 183, 0)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  sx={{
-                    position: "absolute",
-                    inset: 0,
-                    borderRadius: "50%",
-                    zIndex: -1,
-                  }}
-                />
-              )}
-            </AnimatePresence>
+          {/* Floating Music Control Button */}
+          <Box
+            sx={{
+              position: "fixed",
+              top: 24,
+              right: 24,
+              zIndex: 1000,
+            }}
+          >
             <IconButton
               onClick={toggleMusic}
               sx={{
-                background: isPlaying
-                  ? "rgba(255, 162, 183, 0.1)"
-                  : "linear-gradient(135deg, rgba(25,10,15,0.9) 0%, rgba(5,2,4,0.95) 100%)",
-                border: "1px solid",
-                borderColor: isPlaying
-                  ? "primary.main"
-                  : "rgba(255, 162, 183, 0.2)",
-                color: "primary.main",
-                backdropFilter: "blur(10px)",
-                boxShadow: isPlaying
-                  ? "0 0 20px rgba(255, 162, 183, 0.4)"
-                  : "0 5px 15px rgba(0,0,0,0.5)",
-                p: 2,
-                transition: "all 0.3s ease",
+                background: "rgba(10, 20, 35, 0.8)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(141, 249, 255, 0.4)",
+                color: isPlaying ? "#8DF9FF" : "#FF9EE2",
+                boxShadow: "0 0 20px rgba(141, 249, 255, 0.3)",
+                p: 1.5,
                 "&:hover": {
-                  transform: "scale(1.1)",
-                  backgroundColor: "rgba(255, 162, 183, 0.2)",
+                  background: "rgba(20, 35, 60, 0.9)",
+                  transform: "scale(1.08)",
+                  boxShadow: "0 0 25px rgba(141, 249, 255, 0.5)",
                 },
               }}
             >
@@ -739,288 +679,136 @@ export default function KyoraProfile() {
             </IconButton>
           </Box>
 
+          {/* Main Layout Container */}
           <Box
             sx={{
-              position: "relative",
-              zIndex: 1,
-              py: { xs: 6, md: 8 },
-              px: { xs: 2, md: 4, lg: 6 },
-              maxWidth: 1200,
-              mx: "auto",
+              maxWidth: "1280px",
+              margin: "0 auto",
+              px: { xs: 2, sm: 4, md: 6 },
+              py: { xs: 4, md: 8 },
             }}
           >
-            {/* Header Hero & Biological Profile */}
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-            >
-              <LuxuryCard sx={{ mb: 5 }}>
-                <Box sx={{ p: { xs: 4, md: 5, lg: 6 } }}>
+            {/* HERO SECTION / PROFILE HEADER */}
+            <GlassCard sx={{ mb: 4, p: { xs: 3, md: 5 } }}>
+              <Grid container spacing={4} alignItems="center">
+                <Grid item xs={12} md={3} style={{ textAlign: "center" }}>
+                  <Box sx={{ position: "relative", display: "inline-block" }}>
+                    <Avatar
+                      sx={{
+                        width: { xs: 130, md: 170 },
+                        height: { xs: 130, md: 170 },
+                        margin: "0 auto",
+                        border: "3px solid rgba(141, 249, 255, 0.8)",
+                        boxShadow: "0 0 35px rgba(141, 249, 255, 0.5)",
+                        background:
+                          "linear-gradient(135deg, #071324 0%, #1A365D 100%)",
+                        fontSize: "3rem",
+                        color: "#8DF9FF",
+                        fontFamily: "'Cinzel', serif",
+                      }}
+                    >
+                      響
+                    </Avatar>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        right: 10,
+                        background: "rgba(3, 1, 2, 0.9)",
+                        border: "1px solid #8DF9FF",
+                        boxShadow: "0 0 10px rgba(141, 249, 255, 0.6)",
+                        borderRadius: "50%",
+                        p: 0.8,
+                        display: "flex",
+                      }}
+                    >
+                      <WaterIcon sx={{ color: "#8DF9FF", fontSize: 20 }} />
+                    </Box>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12} md={9}>
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: { xs: "column", md: "row" },
-                      gap: { xs: 4, md: 5 },
-                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 1,
+                      mb: 1.5,
                     }}
                   >
-                    <Box
+                    <Chip
+                      icon={<AcUnitIcon sx={{ color: "#8DF9FF !important" }} />}
+                      label="จิตวิญญาณแห่งธรรมชาติ: ฤดูหนาว「道」"
                       sx={{
-                        position: "relative",
-                        display: "inline-flex",
-                        padding: 2,
+                        background: "rgba(141, 249, 255, 0.15)",
+                        color: "#8DF9FF",
+                        borderColor: "rgba(141, 249, 255, 0.4)",
+                        boxShadow: "0 0 10px rgba(141, 249, 255, 0.2)",
                       }}
-                    >
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          inset: 0,
-                          borderRadius: "50%",
-                          border: "1px solid rgba(255, 162, 183, 0.1)",
-                          borderTop: "2px solid #FFA2B7",
-                          borderBottom: "2px solid #FFD1DC",
-                          animation: "spin 20s linear infinite",
-                          "@keyframes spin": {
-                            "100%": { transform: "rotate(360deg)" },
-                          },
-                        }}
-                      />
-                      <Avatar
-                        src="YOUR_KYORA_IMAGE_URL.jpg"
-                        alt="Hisame Kyōra"
-                        sx={{
-                          width: { xs: 160, sm: 200, md: 220 },
-                          height: { xs: 160, sm: 200, md: 220 },
-                          border: "4px solid #030102",
-                          boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
-                        }}
-                      />
-                    </Box>
-                    <Box
-                      sx={{ flex: 1, textAlign: { xs: "center", md: "left" } }}
-                    >
-                      <Typography
-                        variant="overline"
-                        sx={{
-                          color: "primary.main",
-                          display: "block",
-                          mb: 1,
-                          opacity: 0.8,
-                        }}
-                      >
-                        ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 ✦
-                      </Typography>
-                      <GradientText
-                        variant="h2"
-                        sx={{ mb: 1, fontSize: { xs: "2.5rem", md: "3.2rem" } }}
-                      >
-                        氷雨 響羅
-                      </GradientText>
-                      <Typography
-                        variant="h4"
-                        sx={{ color: "secondary.main", opacity: 0.9 }}
-                      >
-                        ฮิซาเมะ เคียวระ (Hisame Kyōra)
-                      </Typography>
-                    </Box>
+                      variant="outlined"
+                    />
+                    <Chip
+                      icon={<DarknessIcon sx={{ color: "#A9BCD0 !important" }} />}
+                      label="วิถี: ความมืด"
+                      sx={{
+                        background: "rgba(169, 188, 208, 0.15)",
+                        color: "#A9BCD0",
+                        borderColor: "rgba(169, 188, 208, 0.3)",
+                      }}
+                      variant="outlined"
+                    />
+                    <Chip
+                      icon={<HomeIcon sx={{ color: "#FF9EE2 !important" }} />}
+                      label="หอพักฤดูหนาว"
+                      sx={{
+                        background: "rgba(255, 158, 226, 0.15)",
+                        color: "#FF9EE2",
+                        borderColor: "rgba(255, 158, 226, 0.3)",
+                        boxShadow: "0 0 10px rgba(255, 158, 226, 0.15)",
+                      }}
+                      variant="outlined"
+                    />
                   </Box>
 
-                  <Divider
-                    sx={{ my: 4, borderColor: "rgba(255, 162, 183, 0.15)" }}
-                  />
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 800,
+                      color: "#FFFFFF",
+                      fontFamily: "'Cinzel', serif",
+                      letterSpacing: 2,
+                      fontSize: { xs: "2.2rem", md: "3rem" },
+                      textShadow: "0 0 30px rgba(141, 249, 255, 0.7), 0 2px 10px rgba(0,0,0,0.8)", // เรืองแสงแบบ Loading Screen
+                    }}
+                  >
+                    氷雨 響羅
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "#8DF9FF",
+                      mb: 2,
+                      fontStyle: "italic",
+                      fontWeight: 400,
+                      textShadow: "0 0 15px rgba(141, 249, 255, 0.4)",
+                    }}
+                  >
+                    Hisame Kyōra (ฮิซาเมะ เคียวระ)
+                  </Typography>
 
-                  <Grid container spacing={4}>
-                    <Grid item xs={12} md={6} lg={7}>
-                      <Grid container spacing={2.5} sx={{ mb: 3 }}>
-                        {[
-                          { label: "AGE", val: "18" },
-                          { label: "BIRTHDAY", val: "12 / 06" },
-                          { label: "GENDER", val: "ชาย" },
-                          { label: "BLOOD TYPE", val: "A" },
-                          { label: "W / H", val: "72 kg / 184 cm" },
-                          { label: "CLASS", val: "มังไก / 3-B" },
-                          { label: "DORM", val: "ฤดูหนาว" },
-                          { label: "CLUB", val: "ดนตรีและประสานเสียง" },
-                        ].map((info, idx) => (
-                          <Grid item xs={6} sm={4} key={idx}>
-                            <Box
-                              sx={{
-                                pl: 1.5,
-                                borderLeft:
-                                  "2px solid rgba(255, 162, 183, 0.4)",
-                              }}
-                            >
-                              <Typography
-                                variant="caption"
-                                sx={{
-                                  color: "text.secondary",
-                                  letterSpacing: 1,
-                                  fontFamily: "'Cinzel', serif",
-                                }}
-                              >
-                                {info.label}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                sx={{ color: "primary.main", fontWeight: 400 }}
-                              >
-                                {info.val}
-                              </Typography>
-                            </Box>
-                          </Grid>
-                        ))}
-                      </Grid>
-                      <Box
-                        sx={{
-                          pl: 1.5,
-                          borderLeft: "2px solid rgba(255, 209, 220, 0.4)",
-                          bgcolor: "rgba(255, 162, 183, 0.03)",
-                          p: 2,
-                          borderRadius: "0 8px 8px 0",
-                        }}
-                      >
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: "text.secondary",
-                            letterSpacing: 1,
-                            fontFamily: "'Cinzel', serif",
-                          }}
-                        >
-                          ROOMMATES
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "secondary.main", fontWeight: 400 }}
-                        >
-                          ฮิเมะมิยะ โคยูคิ / คากามิ ริคุ
-                        </Typography>
-                      </Box>
-                    </Grid>
-
-                    <Grid item xs={12} md={6} lg={5}>
-                      <Box
-                        sx={{
-                          height: "100%",
-                          p: 3,
-                          bgcolor: "rgba(10, 5, 8, 0.4)",
-                          border: "1px solid rgba(229,169,180,0.1)",
-                          borderRadius: "16px",
-                        }}
-                      >
-                        <Box sx={{ mb: 4 }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1.5,
-                              mb: 2,
-                            }}
-                          >
-                            <WaterDropIcon
-                              sx={{ color: "info.main", fontSize: 22 }}
-                            />
-                            <Typography
-                              variant="h6"
-                              sx={{ color: "info.main", fontSize: "1.1rem" }}
-                            >
-                              ความผิดปกติทางร่างกาย
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: 1.2,
-                            }}
-                          >
-                            {[
-                              "ผิวหนังคอและเอวพัฒนาเป็นเหงือกปลา",
-                              "ปากมีฟันแหลมคมหลายซี่แบบฉลาม",
-                              "ร่างกายแผ่ไอเย็นจางๆ ตลอดเวลา",
-                              "มีหางปลาขนาดใหญ่และครีบยาวบาง",
-                            ].map((item, i) => (
-                              <Box
-                                key={i}
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "flex-start",
-                                  gap: 1.5,
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    mt: 1,
-                                    minWidth: 5,
-                                    height: 5,
-                                    borderRadius: "50%",
-                                    bgcolor: "info.main",
-                                    boxShadow: "0 0 8px #E5A9B4",
-                                  }}
-                                />
-                                <Typography
-                                  variant="body2"
-                                  sx={{ color: "text.secondary" }}
-                                >
-                                  {item}
-                                </Typography>
-                              </Box>
-                            ))}
-                          </Box>
-                        </Box>
-                        <Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1.5,
-                              mb: 1.5,
-                            }}
-                          >
-                            <HealingIcon
-                              sx={{ color: "secondary.main", fontSize: 22 }}
-                            />
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                color: "secondary.main",
-                                fontSize: "1.1rem",
-                              }}
-                            >
-                              โรคประจำตัว
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              p: 2,
-                              bgcolor: "rgba(255, 209, 220, 0.05)",
-                              borderLeft: "3px solid",
-                              borderColor: "secondary.main",
-                              borderRadius: "0 8px 8px 0",
-                            }}
-                          >
-                            <Typography
-                              variant="subtitle2"
-                              sx={{ color: "secondary.main", mb: 0.5 }}
-                            >
-                              Insomnia (ภาวะนอนไม่หลับ)
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              sx={{ color: "text.secondary", lineHeight: 1.6 }}
-                            >
-                              ไม่ได้เกิดจากร่างกายเพียงอย่างเดียว
-                              แต่เป็นผลรวมของความเครียดและสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </LuxuryCard>
-            </motion.div>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#A9BCD0",
+                      lineHeight: 1.8,
+                      maxWidth: "800px",
+                    }}
+                  >
+                    นักเรียนชั้นปีมังไก ห้อง 3-B แห่งสถาบันเวทมนตร์มาโฮชิกิ ผู้แบกรับสายเลือดตระกูลใหญ่และความลับอันโดดเดี่ยวใต้เงามืดและกลิ่นไอเย็น
+                  </Typography>
+                </Grid>
+              </Grid>
+            </GlassCard>
 
             {/* TAB NAVIGATION */}
             <Box sx={{ mb: 4 }}>
@@ -1051,41 +839,210 @@ export default function KyoraProfile() {
                     },
                   },
                 }}
-              > 
-                <Tab
-                  icon={<LocalHospitalIcon />}
-                  label="ความผิดปกติ & สุขภาพ"
-                  iconPosition="start"
-                />
-                <Tab
-                  icon={<MenuBookIcon />}
-                  label="ประวัติความเป็นมา"
-                  iconPosition="start"
-                />
-                <Tab
-                  icon={<AutoAwesomeIcon />}
-                  label="เวทมนตร์ & ทักษะ"
-                  iconPosition="start"
-                />
-                <Tab
-                  icon={<PsychologyIcon />}
-                  label="ลักษณะนิสัย"
-                  iconPosition="start"
-                />
-                <Tab
-                  icon={<FavoriteIcon />}
-                  label="ความชอบ & ความกลัว"
-                  iconPosition="start"
-                />
+              >
+                <Tab icon={<BadgeIcon />} label="ข้อมูลทั่วไป & บัตร" iconPosition="start" />
+                <Tab icon={<LocalHospitalIcon />} label="ความผิดปกติ & สุขภาพ" iconPosition="start" />
+                <Tab icon={<MenuBookIcon />} label="ประวัติความเป็นมา" iconPosition="start" />
+                <Tab icon={<AutoAwesomeIcon />} label="เวทมนตร์ & ทักษะ" iconPosition="start" />
+                <Tab icon={<PsychologyIcon />} label="ลักษณะนิสัย" iconPosition="start" />
+                <Tab icon={<FavoriteIcon />} label="ความชอบ & ความกลัว" iconPosition="start" />
               </Tabs>
             </Box>
 
             {/* TAB CONTENT PANELS */}
             <AnimatePresence mode="wait">
-             
-
-              {/* TAB 0: ABNORMALITIES & MEDICAL */}
+              {/* TAB 0: GENERAL INFO & STUDENT CARD */}
               {activeTab === 0 && (
+                <motion.div
+                  key="tab0"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Grid container spacing={3}>
+                    {/* Student ID Card Graphic */}
+                    <Grid item xs={12} md={5}>
+                      <GlassCard
+                        sx={{
+                          background:
+                            "linear-gradient(145deg, rgba(15, 30, 55, 0.8) 0%, rgba(5, 12, 22, 0.9) 100%)",
+                          border: "1px solid rgba(141, 249, 255, 0.4)",
+                          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(141, 249, 255, 0.1)",
+                          position: "relative",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: 2,
+                            borderBottom: "1px solid rgba(141, 249, 255, 0.25)",
+                            pb: 1.5,
+                          }}
+                        >
+                          <Typography
+                            variant="overline"
+                            sx={{ color: "#8DF9FF", letterSpacing: 2, fontWeight: 700, textShadow: "0 0 8px rgba(141, 249, 255, 0.4)" }}
+                          >
+                            MAHOSHIKI ACADEMY CARD
+                          </Typography>
+                          <Chip
+                            label="มีบัตรนักเรียน"
+                            size="small"
+                            color="primary"
+                            variant="outlined"
+                            sx={{ boxShadow: "0 0 10px rgba(141, 249, 255, 0.2)" }}
+                          />
+                        </Box>
+
+                        <Box sx={{ display: "flex", gap: 2, mb: 3, alignItems: "center" }}>
+                          <Avatar
+                            sx={{
+                              width: 80,
+                              height: 100,
+                              borderRadius: "8px",
+                              border: "1px solid rgba(141, 249, 255, 0.5)",
+                              background: "rgba(0,0,0,0.6)",
+                              color: "#8DF9FF",
+                              fontSize: "2rem",
+                              boxShadow: "0 0 15px rgba(141, 249, 255, 0.25)",
+                            }}
+                          >
+                            響
+                          </Avatar>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: "#94A3B8" }}>
+                              เลขประจำตัว / ID
+                            </Typography>
+                            <Typography
+                              variant="h5"
+                              sx={{
+                                color: "#FFFFFF",
+                                fontFamily: "monospace",
+                                letterSpacing: 3,
+                                fontWeight: 700,
+                                textShadow: "0 0 10px rgba(255,255,255,0.4)",
+                              }}
+                            >
+                              00000
+                            </Typography>
+
+                            <Typography variant="body2" sx={{ color: "#94A3B8", mt: 1 }}>
+                              ชื่อ-นามสกุล
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#E2F1FF", fontWeight: 600 }}>
+                              ฮิซาเมะ เคียวระ
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        <Divider sx={{ borderColor: "rgba(141,249,255,0.15)", mb: 2 }} />
+
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <Typography variant="caption" sx={{ color: "#94A3B8" }}>
+                              ชั้นปี:
+                            </Typography>{" "}
+                            <Typography variant="body2" component="span" sx={{ color: "#E2F1FF" }}>
+                              มังไก
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography variant="caption" sx={{ color: "#94A3B8" }}>
+                              ห้อง:
+                            </Typography>{" "}
+                            <Typography variant="body2" component="span" sx={{ color: "#E2F1FF" }}>
+                              3-B
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Typography variant="caption" sx={{ color: "#94A3B8" }}>
+                              ชมรม:
+                            </Typography>{" "}
+                            <Typography variant="body2" component="span" sx={{ color: "#E2F1FF" }}>
+                              ชมรมดนตรีและประสานเสียง
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </GlassCard>
+                    </Grid>
+
+                    {/* Detailed Stats */}
+                    <Grid item xs={12} md={7}>
+                      <GlassCard>
+                        <SectionHeader
+                          icon={BadgeIcon}
+                          title="ข้อมูลส่วนตัวนักเรียน"
+                          subtitle="Personal Profile Data"
+                        />
+                        <Grid container spacing={2}>
+                          {[
+                            { label: "นามสกุล-ชื่อ (ภาษาญี่ปุ่น)", val: "氷雨 響羅 (Hisame Kyōra)" },
+                            { label: "นามสกุล-ชื่อ (ภาษาไทย)", val: "ฮิซาเมะ เคียวระ" },
+                            { label: "วันเกิด", val: "12 / 06" },
+                            { label: "อายุ", val: "18 ปี" },
+                            { label: "เพศ", val: "ชาย" },
+                            { label: "หมู่เลือด", val: "A" },
+                            { label: "สัญชาติ / เชื้อชาติ", val: "ญี่ปุ่น / ญี่ปุ่น" },
+                            { label: "น้ำหนัก / ส่วนสูง", val: "72 กก. / 184 ซม." },
+                          ].map((item, idx) => (
+                            <Grid item xs={12} sm={6} key={idx}>
+                              <Box
+                                sx={{
+                                  p: 1.5,
+                                  borderRadius: "10px",
+                                  background: "rgba(255, 255, 255, 0.03)",
+                                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                                  transition: "background 0.3s ease",
+                                  "&:hover": {
+                                    background: "rgba(141, 249, 255, 0.06)",
+                                    borderColor: "rgba(141, 249, 255, 0.2)",
+                                  }
+                                }}
+                              >
+                                <Typography variant="caption" sx={{ color: "#94A3B8", display: "block" }}>
+                                  {item.label}
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: "#FFFFFF", fontWeight: 600 }}>
+                                  {item.val}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          ))}
+                        </Grid>
+
+                        <Divider sx={{ my: 3, borderColor: "rgba(141,249,255,0.1)" }} />
+
+                        {/* Dorm & Roommates */}
+                        <SectionHeader
+                          icon={GroupsIcon}
+                          title="หอพัก & เพื่อนร่วมห้อง"
+                          subtitle="Dormitory & Roommates"
+                        />
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <HomeIcon sx={{ color: "#8DF9FF", fontSize: 20 }} />
+                            <Typography variant="body2" sx={{ color: "#A9BCD0" }}>
+                              <strong style={{ color: "#FFF", textShadow: "0 0 5px rgba(255,255,255,0.3)" }}>หอพัก:</strong> ฤดูหนาว
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <GroupsIcon sx={{ color: "#FF9EE2", fontSize: 20 }} />
+                            <Typography variant="body2" sx={{ color: "#A9BCD0" }}>
+                              <strong style={{ color: "#FFF", textShadow: "0 0 5px rgba(255,255,255,0.3)" }}>รูมเมท:</strong> ฮิเมะมิยะ โคยูคิ / คากามิ ริคุ
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </GlassCard>
+                    </Grid>
+                  </Grid>
+                </motion.div>
+              )}
+
+              {/* TAB 1: ABNORMALITIES & MEDICAL */}
+              {activeTab === 1 && (
                 <motion.div
                   key="tab1"
                   initial={{ opacity: 0, y: 15 }}
@@ -1102,13 +1059,7 @@ export default function KyoraProfile() {
                           title="ความผิดปกติทางร่างกาย"
                           subtitle="Physical Abnormalities & Alterations"
                         />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 2,
-                          }}
-                        >
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                           {[
                             "ผิวหนังบริเวณ คอ และ เอว ฉีกขาดและเปลี่ยนสภาพพัฒนาเป็นเหงือกปลา",
                             "ภายในปากมี ฟันแหลมคมหลายซี่",
@@ -1136,14 +1087,10 @@ export default function KyoraProfile() {
                                   height: 8,
                                   borderRadius: "50%",
                                   backgroundColor: "#8DF9FF",
-                                  boxShadow:
-                                    "0 0 10px #8DF9FF, 0 0 20px #8DF9FF",
+                                  boxShadow: "0 0 10px #8DF9FF, 0 0 20px #8DF9FF",
                                 }}
                               />
-                              <Typography
-                                variant="body1"
-                                sx={{ color: "#E2F1FF", fontWeight: 500 }}
-                              >
+                              <Typography variant="body1" sx={{ color: "#E2F1FF", fontWeight: 500 }}>
                                 {text}
                               </Typography>
                             </Box>
@@ -1159,8 +1106,7 @@ export default function KyoraProfile() {
                           background:
                             "linear-gradient(160deg, rgba(30, 15, 35, 0.6) 0%, rgba(10, 15, 30, 0.8) 100%)",
                           border: "1px solid rgba(255, 158, 226, 0.3)",
-                          boxShadow:
-                            "0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 158, 226, 0.05)",
+                          boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 158, 226, 0.05)",
                         }}
                       >
                         <SectionHeader
@@ -1178,24 +1124,15 @@ export default function KyoraProfile() {
                         >
                           <Typography
                             variant="h6"
-                            sx={{
-                              color: "#FF9EE2",
-                              fontWeight: 700,
-                              mb: 1,
-                              textShadow: "0 0 10px rgba(255, 158, 226, 0.4)",
-                            }}
+                            sx={{ color: "#FF9EE2", fontWeight: 700, mb: 1, textShadow: "0 0 10px rgba(255, 158, 226, 0.4)" }}
                           >
                             Insomnia (ภาวะนอนไม่หลับ)
                           </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "#CBD5E1", lineHeight: 1.8 }}
-                          >
+                          <Typography variant="body2" sx={{ color: "#CBD5E1", lineHeight: 1.8 }}>
                             ภาวะนอนไม่หลับไม่ได้เกิดจากสภาพร่างกายเพียงอย่างเดียว
                             แต่เป็นผลรวมของ{" "}
                             <strong style={{ color: "#FF9EE2" }}>
-                              ความเครียดทางจิตใจ +
-                              สภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
+                              ความเครียดทางจิตใจ + สภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
                             </strong>
                           </Typography>
                         </Box>
@@ -1205,8 +1142,8 @@ export default function KyoraProfile() {
                 </motion.div>
               )}
 
-              {/* TAB 1: BIOGRAPHY */}
-              {activeTab === 1 && (
+              {/* TAB 2: BIOGRAPHY */}
+              {activeTab === 2 && (
                 <motion.div
                   key="tab2"
                   initial={{ opacity: 0, y: 15 }}
@@ -1220,25 +1157,10 @@ export default function KyoraProfile() {
                       title="ประวัติความเป็นมา"
                       subtitle="Full Character Biography"
                     />
-                    <Box
-                      sx={{
-                        color: "#E2F1FF",
-                        lineHeight: 2,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2.5,
-                      }}
-                    >
+                    <Box sx={{ color: "#E2F1FF", lineHeight: 2, display: "flex", flexDirection: "column", gap: 2.5 }}>
                       <Typography variant="body1">
                         เคียวระเกิดใน{" "}
-                        <strong
-                          style={{
-                            color: "#8DF9FF",
-                            textShadow: "0 0 8px rgba(141,249,255,0.5)",
-                          }}
-                        >
-                          "ฮิซาเมะ"
-                        </strong>{" "}
+                        <strong style={{ color: "#8DF9FF", textShadow: "0 0 8px rgba(141,249,255,0.5)" }}>"ฮิซาเมะ"</strong>{" "}
                         ตระกูลเก่าแก่ที่มีฐานะร่ำรวยและยึดถือขนบธรรมเนียมอย่างเคร่งครัด
                         พวกเขากำหนดและให้ความสำคัญกับความสมบูรณ์แบบและสายเลือดที่บริสุทธิ์
                         ทว่าเคียวระกลับเกิดมาพร้อมกับ "ความผิดปกติ" ทางร่างกาย
@@ -1250,13 +1172,10 @@ export default function KyoraProfile() {
                         จนกระทั่งในวัย 14 ปี
                         ความผิดปกติของเขาแสดงอาการรุนแรงขึ้นจนตระกูลคิดจะกำจัดเขา
                         เคียวระจึงตัดสินใจโกหกครอบครัวว่าได้รับจดหมายเชิญจากสถาบันการแพทย์ลับที่จะช่วย
-                        "รักษา" เขาได้
-                        เพื่อใช้เป็นข้ออ้างในการเดินทางมายังโรงเรียนเวทมนตร์แห่งนี้
+                        "รักษา" เขาได้ เพื่อใช้เป็นข้ออ้างในการเดินทางมายังโรงเรียนเวทมนตร์แห่งนี้
                       </Typography>
 
-                      <Divider
-                        sx={{ borderColor: "rgba(141, 249, 255, 0.15)" }}
-                      />
+                      <Divider sx={{ borderColor: "rgba(141, 249, 255, 0.15)" }} />
 
                       <Typography variant="body1">
                         ปัจจุบันเคียวระอาศัยอยู่ในหอพักของโรงเรียนมัธยมปลายมาโฮชิกิ
@@ -1276,8 +1195,8 @@ export default function KyoraProfile() {
                 </motion.div>
               )}
 
-              {/* TAB 2: MAGIC & ABILITIES */}
-              {activeTab === 2 && (
+              {/* TAB 3: MAGIC & ABILITIES */}
+              {activeTab === 3 && (
                 <motion.div
                   key="tab3"
                   initial={{ opacity: 0, y: 15 }}
@@ -1299,26 +1218,22 @@ export default function KyoraProfile() {
                             {
                               name: "สรรค์สร้างเงา",
                               desc: "ความสามารถพื้นฐานในการ ดึงเงาจากวัตถุรอบตัวหรือจากร่างกายของตนเอง มาปั้นเป็นรูปร่างชั่วคราว วัตถุมีลักษณะเหมือน ของแข็งสีดำด้าน สลายตัวเมื่อเสียสมดุลหรือถูกโจมตีแรง เช่น อาวุธชั่วคราว เข็ม มีด ลิ่ม, มือเงาขนาดใหญ่สำหรับหยิบจับของ ,ร่มเงาสำหรับกันฝน",
-                              limit:
-                                "ต้องมี แหล่งกำเนิดเงา ใกล้ตัว / แสงสว่างจัดจะทำให้สร้างวัตถุได้ยาก / วัตถุขนาดใหญ่ใช้พลังเวทมาก",
+                              limit: "ต้องมี แหล่งกำเนิดเงา ใกล้ตัว / แสงสว่างจัดจะทำให้สร้างวัตถุได้ยาก / วัตถุขนาดใหญ่ใช้พลังเวทมาก",
                             },
                             {
                               name: "เคลื่อนที่ผ่านเงา",
                               desc: "สามารถเคลื่อนที่ระยะสั้นผ่านเงาได้โดยการจมหายเข้าไปในเงาหนึ่งและปรากฏออกจากอีกเงาหนึ่ง",
-                              limit:
-                                "ระยะประมาณ 3–6 เมตร / ต้องมีเงาทั้งต้นทางและปลายทาง / ใช้ต่อเนื่องหลายครั้งจะทำให้เวียนหัว / ไม่สามารถพาคนอื่นไปด้วย",
+                              limit: "ระยะประมาณ 3–6 เมตร / ต้องมีเงาทั้งต้นทางและปลายทาง / ใช้ต่อเนื่องหลายครั้งจะทำให้เวียนหัว / ไม่สามารถพาคนอื่นไปด้วย",
                             },
                             {
                               name: "เย็บเงา",
                               desc: "สร้างเข็มหรือลิ่มจากเงา แล้วปาให้ปักลงบนเงาของเป้าหมาย ทำให้ร่างจริงถูกตรึงกับพื้น คล้ายอาการ “ผีอำ” เป้าหมายขยับไม่ได้แต่ยังพูดได้",
-                              limit:
-                                "ต้องเห็นเงาของเป้าหมายชัดเจน / หากเงาถูกทำลาย (เช่นแสงเปลี่ยน) จะหลุด / ใช้กับหลายคนพร้อมกันยาก",
+                              limit: "ต้องเห็นเงาของเป้าหมายชัดเจน / หากเงาถูกทำลาย (เช่นแสงเปลี่ยน) จะหลุด / ใช้กับหลายคนพร้อมกันยาก",
                             },
                             {
                               name: "เงาเลียนแบบ",
                               desc: "สามารถสร้าง ร่างเงาที่มีรูปร่างเหมือนตัวเอง เอามาช่วยทำงานบ้าน",
-                              limit:
-                                "ถูกโจมตีครั้งเดียวก็สลาย / ใช้พลังเวทค่อนข้างมาก / เรียกออกมาได้แบบมีประสิทธิภาพมากสุด ได้แค่ 3 ร่าง",
+                              limit: "ถูกโจมตีครั้งเดียวก็สลาย / ใช้พลังเวทค่อนข้างมาก / เรียกออกมาได้แบบมีประสิทธิภาพมากสุด ได้แค่ 3 ร่าง",
                             },
                             {
                               name: "หนามเงา",
@@ -1328,14 +1243,12 @@ export default function KyoraProfile() {
                             {
                               name: "อาณาเขตเงา",
                               desc: "ขยายเงาของตัวเองเป็น อาณาเขตเงาขนาดเล็ก ดูดกลืนเสียง ลดการสะท้อนแสง คนในพื้นที่แทบไม่ถูกสังเกต ส่วนมากไว้ใช้ สำหรับทำงานเงียบๆ อ่านหนังสือ งานอดิเรก",
-                              limit:
-                                "พื้นที่เล็ก (ประมาณโต๊ะหรือห้องเล็ก) / ใช้พลังเวทต่อเนื่อง / หากแสงสว่างมากอาณาเขตจะอ่อนลง",
+                              limit: "พื้นที่เล็ก (ประมาณโต๊ะหรือห้องเล็ก) / ใช้พลังเวทต่อเนื่อง / หากแสงสว่างมากอาณาเขตจะอ่อนลง",
                             },
                             {
                               name: "โล่กลืนมนตรา",
                               desc: "บิดเงาของตัวเองขึ้นเป็น กำแพงเงาป้องกัน กลืนพลังเวทที่โจมตีเข้ามา ลดความเสียหายเวทมนตร์",
-                              limit:
-                                "ป้องกันเวทได้ดีกว่าการโจมตีทางกายภาพ / ใช้ต่อเนื่องทำให้พลังเวทหมดเร็ว",
+                              limit: "ป้องกันเวทได้ดีกว่าการโจมตีทางกายภาพ / ใช้ต่อเนื่องทำให้พลังเวทหมดเร็ว",
                             },
                           ].map((spell, i) => (
                             <Grid item xs={12} md={6} key={i}>
@@ -1351,31 +1264,19 @@ export default function KyoraProfile() {
                                   flexDirection: "column",
                                   justifyContent: "space-between",
                                   transition: "background 0.3s ease",
-                                  "&:hover": {
-                                    background: "rgba(15, 30, 50, 0.8)",
-                                  },
+                                  "&:hover": { background: "rgba(15, 30, 50, 0.8)" }
                                 }}
                               >
                                 <Box>
                                   <Typography
                                     variant="h6"
-                                    sx={{
-                                      color: "#8DF9FF",
-                                      fontWeight: 700,
-                                      mb: 1,
-                                      textShadow:
-                                        "0 0 8px rgba(141,249,255,0.3)",
-                                    }}
+                                    sx={{ color: "#8DF9FF", fontWeight: 700, mb: 1, textShadow: "0 0 8px rgba(141,249,255,0.3)" }}
                                   >
                                     {spell.name}
                                   </Typography>
                                   <Typography
                                     variant="body2"
-                                    sx={{
-                                      color: "#E2F1FF",
-                                      mb: 2,
-                                      lineHeight: 1.7,
-                                    }}
+                                    sx={{ color: "#E2F1FF", mb: 2, lineHeight: 1.7 }}
                                   >
                                     {spell.desc}
                                   </Typography>
@@ -1385,24 +1286,16 @@ export default function KyoraProfile() {
                                     p: 1.5,
                                     borderRadius: "8px",
                                     background: "rgba(0,0,0,0.5)",
-                                    border:
-                                      "1px solid rgba(141, 249, 255, 0.1)",
+                                    border: "1px solid rgba(141, 249, 255, 0.1)",
                                   }}
                                 >
                                   <Typography
                                     variant="caption"
-                                    sx={{
-                                      color: "#FF9EE2",
-                                      fontWeight: 600,
-                                      display: "block",
-                                    }}
+                                    sx={{ color: "#FF9EE2", fontWeight: 600, display: "block" }}
                                   >
                                     ข้อจำกัด / เงื่อนไข:
                                   </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ color: "#94A3B8" }}
-                                  >
+                                  <Typography variant="caption" sx={{ color: "#94A3B8" }}>
                                     {spell.limit}
                                   </Typography>
                                 </Box>
@@ -1420,8 +1313,7 @@ export default function KyoraProfile() {
                           background:
                             "linear-gradient(135deg, rgba(20, 10, 35, 0.75) 0%, rgba(5, 5, 20, 0.9) 100%)",
                           border: "1px solid rgba(255, 158, 226, 0.4)",
-                          boxShadow:
-                            "0 0 35px rgba(255, 158, 226, 0.15), inset 0 0 20px rgba(255, 158, 226, 0.05)",
+                          boxShadow: "0 0 35px rgba(255, 158, 226, 0.15), inset 0 0 20px rgba(255, 158, 226, 0.05)",
                         }}
                       >
                         <SectionHeader
@@ -1434,20 +1326,17 @@ export default function KyoraProfile() {
                             {
                               name: "ดึงเงา",
                               desc: "ดึงเงาของวัตถุหรือสิ่งมีชีวิตรอบตัวมาหล่อเลี้ยงพลังเวทของตนเองชั่วคราว พลังที่ได้รับจะไม่ถาวร เป็นการฟื้นฟูพลังเวท ลดความเหนื่อยล้า บรรเทาความเจ็บปวดให้กับผู้ใช้\n\nถ้าเป็นสิ่งมีชีวิตจะให้ผลดีมากกว่า ผลที่ส่งกับสิ่งมีชีวิต คือ รู้สึกอ่อนแรงเล็กน้อย หนาววูบเหมือนพลังบางส่วนถูกดึงออก รวมถึงอาจรู้สึกว่างเปล่าหรือเฉื่อยชาในช่วงเวลาสั้น ๆ",
-                              limit:
-                                "พลังที่ดึงมา ไม่ถาวร และจะค่อย ๆ สลายไป / ไม่สามารถดึงพลังจำนวนมากจากเป้าหมายเดียวได้ / หากใช้ต่อเนื่องมากเกินไป ผู้ใช้จะเกิดอาการ เวียนหัว คลื่นไส้ เสียสมาธิ",
+                              limit: "พลังที่ดึงมา ไม่ถาวร และจะค่อย ๆ สลายไป / ไม่สามารถดึงพลังจำนวนมากจากเป้าหมายเดียวได้ / หากใช้ต่อเนื่องมากเกินไป ผู้ใช้จะเกิดอาการ เวียนหัว คลื่นไส้ เสียสมาธิ",
                             },
                             {
                               name: "กินเงา",
                               desc: "สามารถ กัดกินอาการผิดปกติจากผู้อื่น ไม่ว่าจะเป็นความเจ็บปวด ความเหนื่อยล้า หรือความปั่นป่วนทางจิตใจ โดยดึงสิ่งเหล่านั้นออกมาในรูปของเงา แล้วให้ความมืดของตนเองกลืนกินเข้าไป เมื่อเงาของอาการเหล่านั้นถูกดึงออก เป้าหมายจะรู้สึกว่าภาระบางอย่างถูกปลดปล่อยออกจากร่างกายและจิตใจ บรรเทาความเจ็บปวดทางร่างกาย ลดความเหนื่อยล้าและความอ่อนแรง ทำให้จิตใจสงบลง\n\nโดยปกติ เงาของเคียวระจะเป็นผู้กลืนกินเงาของอาการผิดปกติแทน ราวกับมีชีวิตของตัวเอง แต่หากเคียวระ เป็นผู้กัดกินเงานั้นด้วยตนเองโดยตรง ผลของการบรรเทาจะมีประสิทธิภาพมากกว่า",
-                              limit:
-                                "การรักษาเป็นเพียง การบรรเทาชั่วคราว / หากมากเกินไป เคียวระอาจเกิดอาการ เวียนหัว อ่อนล้า เสียสมาธิ / การกินเงาจากผู้อื่นต้องใช้พลังเวทมากกว่าการรักษาตัวเอง / ไม่สามารถลบล้างอาการรุนแรงหรือใช้ติดต่อกันหลายครั้งในเวลาใกล้กันได้",
+                              limit: "การรักษาเป็นเพียง การบรรเทาชั่วคราว / หากมากเกินไป เคียวระอาจเกิดอาการ เวียนหัว อ่อนล้า เสียสมาธิ / การกินเงาจากผู้อื่นต้องใช้พลังเวทมากกว่าการรักษาตัวเอง / ไม่สามารถลบล้างอาการรุนแรงหรือใช้ติดต่อกันหลายครั้งในเวลาใกล้กันได้",
                             },
                             {
                               name: "ฝนเขี้ยวเงา",
                               desc: "ควบแน่นเงารอบตัวให้แตกตัวเป็น เขี้ยวหนามสีดำจำนวนมาก ก่อนจะปล่อยให้พุ่งลงมาจากอากาศราวกับฝน เขี้ยวเงาเหล่านี้จะตกลงใส่พื้นที่เป้าหมายอย่างรวดเร็ว หนามเงาเหล่านี้มีความหนาแน่นสูงพอที่จะ สร้างบาดแผลจริงต่อร่างกาย เมื่อกระทบเป้าหมาย ทำให้พื้นที่ที่ถูกโจมตีกลายเป็นบริเวณอันตรายที่ยากต่อการเคลื่อนไหว เมื่อหนามเงาปักลงพื้น มันจะคงสภาพอยู่เพียงชั่วครู่ก่อนจะสลายไป",
-                              limit:
-                                "ต้องมีเงาในพื้นที่จึงจะสร้างหนามจำนวนมากได้ / ใช้พลังเวทค่อนข้างมาก / เป็นการโจมตีแบบพื้นที่ ความแม่นยำจึงไม่สูง เน้นจำนวน / หากแสงสว่างจัด จำนวนและความแข็งของหนามเงาจะลดลง",
+                              limit: "ต้องมีเงาในพื้นที่จึงจะสร้างหนามจำนวนมากได้ / ใช้พลังเวทค่อนข้างมาก / เป็นการโจมตีแบบพื้นที่ ความแม่นยำจึงไม่สูง เน้นจำนวน / หากแสงสว่างจัด จำนวนและความแข็งของหนามเงาจะลดลง",
                             },
                           ].map((spell, i) => (
                             <Grid item xs={12} key={i}>
@@ -1462,13 +1351,7 @@ export default function KyoraProfile() {
                               >
                                 <Typography
                                   variant="h6"
-                                  sx={{
-                                    color: "#FF9EE2",
-                                    fontWeight: 700,
-                                    mb: 1.5,
-                                    textShadow:
-                                      "0 0 10px rgba(255,158,226,0.3)",
-                                  }}
+                                  sx={{ color: "#FF9EE2", fontWeight: 700, mb: 1.5, textShadow: "0 0 10px rgba(255,158,226,0.3)" }}
                                 >
                                   {spell.name}
                                 </Typography>
@@ -1493,18 +1376,11 @@ export default function KyoraProfile() {
                                 >
                                   <Typography
                                     variant="caption"
-                                    sx={{
-                                      color: "#FF9EE2",
-                                      fontWeight: 600,
-                                      display: "block",
-                                    }}
+                                    sx={{ color: "#FF9EE2", fontWeight: 600, display: "block" }}
                                   >
                                     ข้อจำกัด & ผลข้างเคียง:
                                   </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ color: "#94A3B8" }}
-                                  >
+                                  <Typography variant="caption" sx={{ color: "#94A3B8" }}>
                                     {spell.limit}
                                   </Typography>
                                 </Box>
@@ -1518,8 +1394,8 @@ export default function KyoraProfile() {
                 </motion.div>
               )}
 
-              {/* TAB 3: PERSONALITY */}
-              {activeTab === 3 && (
+              {/* TAB 4: PERSONALITY */}
+              {activeTab === 4 && (
                 <motion.div
                   key="tab4"
                   initial={{ opacity: 0, y: 15 }}
@@ -1565,15 +1441,7 @@ export default function KyoraProfile() {
                               textShadow: "0 0 10px rgba(141,249,255,0.3)",
                             }}
                           >
-                            {trait.icon && (
-                              <trait.icon
-                                sx={{
-                                  color: "#FF9EE2",
-                                  filter:
-                                    "drop-shadow(0 0 5px rgba(255,158,226,0.5))",
-                                }}
-                              />
-                            )}
+                            {trait.icon && <trait.icon sx={{ color: "#FF9EE2", filter: "drop-shadow(0 0 5px rgba(255,158,226,0.5))" }} />}
                             {trait.title}
                           </Typography>
                           <Typography
@@ -1593,8 +1461,8 @@ export default function KyoraProfile() {
                 </motion.div>
               )}
 
-              {/* TAB 4: LIKES, DISLIKES & FEARS */}
-              {activeTab === 4 && (
+              {/* TAB 5: LIKES, DISLIKES & FEARS */}
+              {activeTab === 5 && (
                 <motion.div
                   key="tab5"
                   initial={{ opacity: 0, y: 15 }}
@@ -1611,13 +1479,7 @@ export default function KyoraProfile() {
                           title="สิ่งที่ชอบ"
                           subtitle="Preferences & Pleasures"
                         />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 1.5,
-                          }}
-                        >
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                           {[
                             "เสียงฝนตกหนัก",
                             "พื้นที่สลัว / ร่มเงา",
@@ -1640,13 +1502,8 @@ export default function KyoraProfile() {
                                 gap: 1.5,
                               }}
                             >
-                              <FavoriteIcon
-                                sx={{ color: "#8DF9FF", fontSize: 16 }}
-                              />
-                              <Typography
-                                variant="body2"
-                                sx={{ color: "#E2F1FF" }}
-                              >
+                              <FavoriteIcon sx={{ color: "#8DF9FF", fontSize: 16 }} />
+                              <Typography variant="body2" sx={{ color: "#E2F1FF" }}>
                                 {item}
                               </Typography>
                             </Box>
@@ -1663,13 +1520,7 @@ export default function KyoraProfile() {
                           title="สิ่งที่ไม่ชอบ"
                           subtitle="Dislikes & Aversions"
                         />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 1.5,
-                          }}
-                        >
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                           {[
                             "การเป็นจุดสนใจ",
                             "คนที่ทำตัวตามใจชอบ ไร้ระเบียบ หรือร่าเริงเกินเหตุ",
@@ -1688,13 +1539,8 @@ export default function KyoraProfile() {
                                 gap: 1.5,
                               }}
                             >
-                              <CancelIcon
-                                sx={{ color: "#FF9EE2", fontSize: 16 }}
-                              />
-                              <Typography
-                                variant="body2"
-                                sx={{ color: "#E2F1FF" }}
-                              >
+                              <CancelIcon sx={{ color: "#FF9EE2", fontSize: 16 }} />
+                              <Typography variant="body2" sx={{ color: "#E2F1FF" }}>
                                 {item}
                               </Typography>
                             </Box>
@@ -1718,13 +1564,7 @@ export default function KyoraProfile() {
                           title="สิ่งที่กลัว"
                           subtitle="Deepest Fears & Phobias"
                         />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 1.5,
-                          }}
-                        >
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                           {[
                             "การถูกครอบครัวจับได้",
                             "การถูกมองว่าเป็นความผิดพลาด",
@@ -1742,13 +1582,8 @@ export default function KyoraProfile() {
                                 gap: 1.5,
                               }}
                             >
-                              <WarningAmberIcon
-                                sx={{ color: "#FF6384", fontSize: 18 }}
-                              />
-                              <Typography
-                                variant="body2"
-                                sx={{ color: "#E2F1FF", fontWeight: 600 }}
-                              >
+                              <WarningAmberIcon sx={{ color: "#FF6384", fontSize: 18 }} />
+                              <Typography variant="body2" sx={{ color: "#E2F1FF", fontWeight: 600 }}>
                                 {item}
                               </Typography>
                             </Box>
