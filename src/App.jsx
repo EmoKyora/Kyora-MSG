@@ -21,19 +21,15 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import MusicOffIcon from "@mui/icons-material/MusicOff";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import HealingIcon from "@mui/icons-material/Healing";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import ShieldIcon from "@mui/icons-material/Shield";
 import CancelIcon from "@mui/icons-material/Cancel";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import PianoIcon from "@mui/icons-material/Piano";
+import InfoIcon from "@mui/icons-material/Info";
 
 const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23C5FF75' /%3E%3Cstop offset='100%25' stop-color='%23FF9EE2' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(197,255,117,0.08)' stroke='url(%23grad3)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 4px rgba(197,255,117,0.4))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
-
-
 const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%239ACD32' /%3E%3Cstop offset='100%25' stop-color='%23FF1493' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(154,205,50,0.1)' stroke='url(%23grad4)' stroke-width='4.5' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 5px rgba(154,205,50,0.45))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
 
 const theme = createTheme({
@@ -58,23 +54,203 @@ const theme = createTheme({
       fontFamily: "'Prompt', sans-serif",
       fontWeight: 300,
       fontSize: "0.95rem",
+      lineHeight: 1.7,
     },
     overline: {
-      fontFamily: "'Cinzel', 'Playfair Display', serif",
+      fontFamily: "'Prompt', 'Cinzel', serif",
       letterSpacing: 3,
     },
   },
   palette: {
     mode: "dark",
-    background: { default: "#040914" }, // สีน้ำเงินเข้มจัดเกือบดำ (Abyss)
-    primary: { main: "#B3C6D6" }, // สีเงินประกายฟ้า (Icy Silver)
-    secondary: { main: "#5C748A" }, // สีเทาอมฟ้า (Steel Blue)
-    info: { main: "#708A9E" }, // สีฟ้าน้ำทะเลลึก
-    error: { main: "#7A2A3B" }, // แดงเข้มหม่นๆ (Dark Crimson)
-    text: { primary: "#EAEFF5", secondary: "#8A9BB0" }, // ขาวน้ำแข็ง และ เทาเย็น
+    background: { default: "#040914" },
+    primary: { main: "#B3C6D6" },
+    secondary: { main: "#5C748A" },
+    info: { main: "#708A9E" },
+    error: { main: "#7A2A3B" },
+    text: { primary: "#EAEFF5", secondary: "#8A9BB0" },
   },
 });
 
+// --- Animations Settings ---
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
+
+// --- Decorative Background (Piano & Crane) ---
+const PhantomPianoAndCrane = () => {
+  // สร้างคีย์เปียโนจำลอง
+  const whiteKeys = Array.from({ length: 8 });
+  const blackKeys = [1, 2, 4, 5, 6];
+
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: 0,
+        overflow: "hidden",
+        opacity: 0.25,
+      }}
+    >
+      {/* 1. Animated Paper Crane */}
+      <motion.div
+        animate={{
+          y: [0, -15, 5, 0],
+          x: [0, 10, -5, 0],
+          rotate: [-2, 3, -1, -2],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          position: "absolute",
+          top: "10%",
+          right: "5%",
+          width: 80,
+          height: 80,
+          opacity: 0.4,
+          filter: "drop-shadow(0px 0px 8px rgba(179, 198, 214, 0.5))",
+        }}
+      >
+        <svg
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            stroke="url(#craneGrad)"
+            strokeWidth="3"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fill="rgba(179, 198, 214, 0.1)"
+          >
+            <polygon points="40,65 35,25 15,40 28,40" />
+            <polygon points="40,65 10,55 52,50" />
+            <polygon points="52,50 75,15 60,70" />
+            <polygon points="60,70 90,75 52,50" />
+            <polygon points="40,65 48,85 60,70 52,50" />
+            <line x1="48" y1="85" x2="52" y2="50" />
+          </g>
+          <defs>
+            <linearGradient id="craneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="100%" stopColor="#5C748A" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </motion.div>
+
+      {/* 2. Phantom Piano Keys at the bottom */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: -20,
+          left: -10,
+          display: "flex",
+          transform: "rotate(-5deg)",
+          opacity: 0.3,
+        }}
+      >
+        {whiteKeys.map((_, i) => (
+          <Box key={`white-${i}`} sx={{ position: "relative" }}>
+            <motion.div
+              animate={{
+                backgroundColor: [
+                  "rgba(255,255,255,0.05)",
+                  "rgba(179, 198, 214, 0.3)",
+                  "rgba(255,255,255,0.05)",
+                ],
+                boxShadow: [
+                  "none",
+                  "0 0 15px rgba(179, 198, 214, 0.5)",
+                  "none",
+                ],
+                y: [0, Math.random() * 5 + 2, 0],
+              }}
+              transition={{
+                duration: 2 + Math.random() * 2,
+                repeat: Infinity,
+                repeatDelay: Math.random() * 5,
+                ease: "easeInOut",
+              }}
+              style={{
+                width: 30,
+                height: 120,
+                border: "1px solid rgba(179, 198, 214, 0.2)",
+                borderBottomLeftRadius: 4,
+                borderBottomRightRadius: 4,
+                marginRight: 2,
+                transformOrigin: "top",
+              }}
+            />
+            {blackKeys.includes(i) && (
+              <motion.div
+                animate={{
+                  backgroundColor: [
+                    "rgba(0,0,0,0.5)",
+                    "rgba(92, 116, 138, 0.8)",
+                    "rgba(0,0,0,0.5)",
+                  ],
+                  y: [0, Math.random() * 4 + 1, 0],
+                }}
+                transition={{
+                  duration: 1.5 + Math.random() * 2,
+                  repeat: Infinity,
+                  repeatDelay: Math.random() * 4,
+                  ease: "easeInOut",
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: -10,
+                  width: 18,
+                  height: 70,
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  border: "1px solid rgba(179, 198, 214, 0.1)",
+                  borderBottomLeftRadius: 3,
+                  borderBottomRightRadius: 3,
+                  zIndex: 1,
+                  transformOrigin: "top",
+                }}
+              />
+            )}
+          </Box>
+        ))}
+      </Box>
+
+      {/* Floating Music Notes Overlay */}
+      <motion.div
+        animate={{ y: [0, -30], opacity: [0, 0.3, 0] }}
+        transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+        style={{ position: "absolute", bottom: "20%", left: "15%" }}
+      >
+        <MusicNoteIcon sx={{ color: "primary.main", fontSize: 16 }} />
+      </motion.div>
+      <motion.div
+        animate={{ y: [0, -40], opacity: [0, 0.2, 0], x: [0, 10] }}
+        transition={{ duration: 5, repeat: Infinity, delay: 3 }}
+        style={{ position: "absolute", bottom: "30%", right: "25%" }}
+      >
+        <MusicNoteIcon sx={{ color: "secondary.main", fontSize: 20 }} />
+      </motion.div>
+    </Box>
+  );
+};
+
+// --- Components ---
 const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
   const swimTransition = {
     duration: 2.5,
@@ -195,21 +371,6 @@ const LoadingScreen = ({ onComplete }) => {
           filter: "blur(60px)",
           transform: "rotate(10deg)",
           pointerEvents: "none",
-        }}
-      />
-      <motion.div
-        animate={{ opacity: [0.05, 0.1, 0.05] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          position: "absolute",
-          bottom: "-20%",
-          left: "50%",
-          width: "80vw",
-          height: "40vh",
-          transform: "translateX(-50%)",
-          background:
-            "radial-gradient(ellipse at center, rgba(30, 80, 110, 0.3) 0%, transparent 70%)",
-          filter: "blur(40px)",
         }}
       />
       {loadParticles.map((particle) => (
@@ -375,7 +536,6 @@ const AbyssalAtmosphere = () => {
       })),
     [],
   );
-
   return (
     <Box
       sx={{
@@ -413,67 +573,125 @@ const AbyssalAtmosphere = () => {
 const LuxuryCard = ({ children, sx }) => (
   <Box
     sx={{
-      borderRadius: "8px",
-      background: "rgba(10, 15, 25, 0.6)",
-      backdropFilter: "blur(12px)",
-      border: "1px solid rgba(179, 198, 214, 0.1)",
-      borderTop: "1px solid rgba(179, 198, 214, 0.2)",
-      boxShadow: "0 20px 40px rgba(0,0,0,0.7)",
+      borderRadius: "12px",
+      background: "rgba(10, 15, 25, 0.65)",
+      backdropFilter: "blur(16px)",
+      border: "1px solid rgba(179, 198, 214, 0.15)",
+      borderTop: "1px solid rgba(179, 198, 214, 0.3)",
+      boxShadow:
+        "0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)",
       overflow: "hidden",
+      position: "relative",
       ...sx,
     }}
   >
+    <Box
+      sx={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "1px",
+        background:
+          "linear-gradient(90deg, transparent, rgba(179,198,214,0.5), transparent)",
+      }}
+    />
     {children}
   </Box>
 );
 
-const GlassCard = ({ children, sx, hoverEffect = false }) => (
-  <Box
-    sx={{
-      background: "rgba(15, 22, 35, 0.4)",
-      backdropFilter: "blur(10px)",
-      border: "1px solid rgba(179, 198, 214, 0.05)",
-      borderRadius: "6px",
-      p: 3,
-      transition: "all 0.3s ease",
-      ...(hoverEffect && {
-        "&:hover": {
-          background: "rgba(22, 32, 50, 0.6)",
-          border: "1px solid rgba(179, 198, 214, 0.15)",
-        },
-      }),
-      ...sx,
-    }}
-  >
-    {children}
-  </Box>
+const GlassCard = ({
+  children,
+  sx,
+  hoverEffect = false,
+  disableDeco = false,
+}) => (
+  <motion.div variants={staggerItem} style={{ height: "100%" }}>
+    <Box
+      sx={{
+        background:
+          "linear-gradient(135deg, rgba(15, 22, 35, 0.5) 0%, rgba(6, 10, 18, 0.7) 100%)",
+        backdropFilter: "blur(12px)",
+        border: "1px solid rgba(179, 198, 214, 0.08)",
+        borderRadius: "10px",
+        p: { xs: 3, md: 4 },
+        position: "relative",
+        overflow: "hidden",
+        height: "100%",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+        transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        ...(hoverEffect && {
+          "&:hover": {
+            transform: "translateY(-4px)",
+            background:
+              "linear-gradient(135deg, rgba(22, 32, 50, 0.7) 0%, rgba(10, 15, 25, 0.8) 100%)",
+            border: "1px solid rgba(179, 198, 214, 0.25)",
+            boxShadow: "0 12px 40px rgba(179, 198, 214, 0.1)",
+          },
+        }),
+        ...sx,
+      }}
+    >
+      {!disableDeco && <PhantomPianoAndCrane />}
+      <Box sx={{ position: "relative", zIndex: 1 }}>{children}</Box>
+    </Box>
+  </motion.div>
 );
 
 const SectionHeader = ({ icon: Icon, title, subtitle }) => (
-  <Box
-    sx={{ mb: 3, borderBottom: "1px solid rgba(179, 198, 214, 0.05)", pb: 2 }}
-  >
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-      <Icon sx={{ color: "primary.main", fontSize: 22 }} />
-      <Typography variant="h6" sx={{ color: "#EAEFF5" }}>
-        {title}
-      </Typography>
-    </Box>
-    {subtitle && (
-      <Typography
-        variant="caption"
+  <Box sx={{ mb: 4, position: "relative" }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1.5,
+        position: "relative",
+        zIndex: 2,
+      }}
+    >
+      <Box
         sx={{
-          color: "text.secondary",
-          letterSpacing: 1,
-          textTransform: "uppercase",
-          ml: 4.2,
-          mt: 0.5,
-          display: "block",
+          p: 1,
+          borderRadius: "8px",
+          background: "rgba(179, 198, 214, 0.1)",
+          border: "1px solid rgba(179, 198, 214, 0.2)",
+          display: "flex",
         }}
       >
-        {subtitle}
-      </Typography>
-    )}
+        <Icon sx={{ color: "primary.main", fontSize: 24 }} />
+      </Box>
+      <Box>
+        <Typography
+          variant="h5"
+          sx={{ color: "#EAEFF5", textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
+        >
+          {title}
+        </Typography>
+        {subtitle && (
+          <Typography
+            variant="caption"
+            sx={{
+              color: "primary.main",
+              letterSpacing: 1.5,
+              textTransform: "uppercase",
+              opacity: 0.8,
+              display: "block",
+            }}
+          >
+            {subtitle}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+    <Box
+      sx={{
+        mt: 2,
+        height: "1px",
+        width: "100%",
+        background:
+          "linear-gradient(90deg, rgba(179,198,214,0.3) 0%, transparent 100%)",
+      }}
+    />
   </Box>
 );
 
@@ -525,14 +743,14 @@ export default function KyoraProfile() {
           },
           "a, button, [role='button'], .MuiTab-root, .MuiIconButton-root, .MuiButtonBase-root":
             { cursor: `${pointerCraneCursor} !important` },
-          "::-webkit-scrollbar": { width: "4px" },
-          "::-webkit-scrollbar-track": { background: "transparent" },
+          "::-webkit-scrollbar": { width: "6px" },
+          "::-webkit-scrollbar-track": { background: "rgba(0,0,0,0.2)" },
           "::-webkit-scrollbar-thumb": {
-            background: "rgba(179, 198, 214, 0.15)",
+            background: "rgba(179, 198, 214, 0.2)",
             borderRadius: "10px",
           },
           "::-webkit-scrollbar-thumb:hover": {
-            background: "rgba(179, 198, 214, 0.3)",
+            background: "rgba(179, 198, 214, 0.4)",
           },
         }}
       />
@@ -551,20 +769,20 @@ export default function KyoraProfile() {
           <audio ref={audioRef} src="/Song.mp3" loop autoPlay />
 
           <Box sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 999 }}>
-                <AnimatePresence>
+            <AnimatePresence>
               {isPlaying && (
                 <Box
                   component={motion.div}
                   animate={{
                     scale: [1, 1.3, 1],
                     boxShadow: [
-                      "0 0 0px 0px rgba(255, 162, 183, 0)",
-                      "0 0 20px 10px rgba(255, 162, 183, 0.4)",
-                      "0 0 0px 0px rgba(255, 162, 183, 0)",
+                      "0 0 0px 0px rgba(179, 198, 214, 0)",
+                      "0 0 20px 10px rgba(179, 198, 214, 0.2)",
+                      "0 0 0px 0px rgba(179, 198, 214, 0)",
                     ],
                   }}
                   transition={{
-                    duration: 1.2,
+                    duration: 2,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
@@ -582,12 +800,15 @@ export default function KyoraProfile() {
               sx={{
                 background: "rgba(10, 15, 25, 0.8)",
                 border: "1px solid",
-                borderColor: "rgba(179, 198, 214, 0.15)",
+                borderColor: "rgba(179, 198, 214, 0.25)",
                 color: isPlaying ? "primary.main" : "text.secondary",
                 backdropFilter: "blur(10px)",
                 p: 2,
                 transition: "all 0.3s ease",
-                "&:hover": { background: "rgba(179, 198, 214, 0.1)" },
+                "&:hover": {
+                  background: "rgba(179, 198, 214, 0.15)",
+                  transform: "scale(1.05)",
+                },
               }}
             >
               {isPlaying ? <MusicNoteIcon /> : <MusicOffIcon />}
@@ -600,18 +821,18 @@ export default function KyoraProfile() {
               zIndex: 1,
               py: { xs: 4, md: 8 },
               px: { xs: 2, md: 4 },
-              maxWidth: 1280,
+              maxWidth: 1200,
               mx: "auto",
             }}
           >
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
             >
               <LuxuryCard sx={{ mb: 6 }}>
                 <Box sx={{ p: { xs: 4, md: 6 } }}>
-                  <Grid container spacing={4} alignItems="center">
+                  <Grid container spacing={5} alignItems="center">
                     <Grid item xs={12} md={4} sx={{ textAlign: "center" }}>
                       <Box
                         sx={{
@@ -625,20 +846,21 @@ export default function KyoraProfile() {
                             position: "absolute",
                             inset: 0,
                             borderRadius: "50%",
-                            border: "1px solid rgba(179, 198, 214, 0.05)",
-                            borderTop: "1px solid #B3C6D6",
-                            borderBottom: "1px solid #B3C6D6",
-                            opacity: 0.5,
+                            border: "1px solid rgba(179, 198, 214, 0.1)",
+                            borderTop: "2px solid #B3C6D6",
+                            borderBottom: "2px solid #5C748A",
+                            opacity: 0.7,
                           }}
                         />
                         <Avatar
                           src="YOUR_KYORA_IMAGE_URL.jpg"
                           alt="Hisame Kyōra"
                           sx={{
-                            width: { xs: 160, sm: 200 },
-                            height: { xs: 160, sm: 200 },
-                            border: "4px solid #040914",
-                            filter: "grayscale(30%) contrast(1.1)",
+                            width: { xs: 180, sm: 220 },
+                            height: { xs: 180, sm: 220 },
+                            border: "4px solid rgba(4, 9, 20, 0.8)",
+                            filter: "grayscale(20%) contrast(1.1)",
+                            boxShadow: "0 0 30px rgba(0,0,0,0.8)",
                           }}
                         />
                       </Box>
@@ -648,16 +870,21 @@ export default function KyoraProfile() {
                       <Typography
                         variant="overline"
                         sx={{
-                          color: "text.secondary",
+                          color: "primary.main",
                           display: "block",
                           mb: 1,
+                          opacity: 0.8,
                         }}
                       >
-                        ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 ✦
+                        ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 | วิถี ความมืด ✦
                       </Typography>
                       <MetallicText
                         variant="h2"
-                        sx={{ mb: 1, fontSize: { xs: "2.2rem", md: "3rem" } }}
+                        sx={{
+                          mb: 1,
+                          fontSize: { xs: "2.5rem", md: "3.5rem" },
+                          textShadow: "0 4px 20px rgba(0,0,0,0.8)",
+                        }}
                       >
                         氷雨 響羅
                       </MetallicText>
@@ -667,14 +894,14 @@ export default function KyoraProfile() {
                           color: "primary.main",
                           mb: 4,
                           opacity: 0.9,
-                          fontSize: "1.2rem",
+                          fontSize: "1.3rem",
                         }}
                       >
                         ฮิซาเมะ เคียวระ (Hisame Kyōra)
                       </Typography>
 
                       <Divider
-                        sx={{ mb: 4, borderColor: "rgba(179, 198, 214, 0.1)" }}
+                        sx={{ mb: 4, borderColor: "rgba(179, 198, 214, 0.15)" }}
                       />
 
                       <Grid container spacing={2}>
@@ -683,18 +910,22 @@ export default function KyoraProfile() {
                           { label: "BIRTHDAY", val: "12 / 06" },
                           { label: "GENDER", val: "ชาย" },
                           { label: "BLOOD", val: "A" },
-                          { label: "HEIGHT", val: "184 cm" },
-                          { label: "WEIGHT", val: "72 kg" },
-                          { label: "CLASS", val: "มังไก / 3-B" },
+                          { label: "NATIONALITY", val: "ญี่ปุ่น / ญี่ปุ่น" },
+                          { label: "WEIGHT / HEIGHT", val: "72 kg / 184 cm" },
+                          { label: "CLASS / ROOM", val: "มังไก / 3-B" },
                           { label: "DORM", val: "ฤดูหนาว" },
-                          { label: "CLUB", val: "ดนตรีและประสานเสียง" },
+                          { label: "ROOMMATE", val: "คากามิ ริคุ" },
+                          { label: "STUDENT ID", val: "30014" },
+                          { label: "CLUB", val: "-" },
                         ].map((info, idx) => (
                           <Grid item xs={6} sm={4} key={idx}>
                             <Box
                               sx={{
-                                pl: 1.5,
+                                pl: 2,
                                 borderLeft:
-                                  "2px solid rgba(179, 198, 214, 0.15)",
+                                  "2px solid rgba(179, 198, 214, 0.2)",
+                                transition: "border-color 0.3s",
+                                "&:hover": { borderLeftColor: "primary.main" },
                               }}
                             >
                               <Typography
@@ -702,13 +933,15 @@ export default function KyoraProfile() {
                                 sx={{
                                   color: "text.secondary",
                                   fontFamily: "'Cinzel', serif",
+                                  display: "block",
+                                  mb: 0.5,
                                 }}
                               >
                                 {info.label}
                               </Typography>
                               <Typography
                                 variant="body2"
-                                sx={{ color: "#EAEFF5" }}
+                                sx={{ color: "#EAEFF5", fontWeight: 400 }}
                               >
                                 {info.val}
                               </Typography>
@@ -726,81 +959,102 @@ export default function KyoraProfile() {
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
-                gap: 4,
+                gap: 5,
               }}
             >
-              <Box sx={{ width: { xs: "100%", md: "240px" }, flexShrink: 0 }}>
-                <Tabs
-                  value={activeTab}
-                  onChange={handleTabChange}
-                  orientation={
-                    window.innerWidth > 900 ? "vertical" : "horizontal"
-                  }
-                  variant="scrollable"
-                  scrollButtons="auto"
-                  sx={{
-                    "& .MuiTabs-indicator": {
-                      backgroundColor: "primary.main",
-                      width: { md: "2px" },
-                      height: { xs: "2px" },
-                    },
-                    "& .MuiTab-root": {
-                      color: "text.secondary",
-                      alignItems: { md: "flex-start" },
-                      textAlign: "left",
-                      py: 2,
-                      px: 3,
-                      transition: "all 0.3s",
-                      borderBottom: {
-                        xs: "1px solid rgba(179, 198, 214, 0.05)",
-                        md: "none",
-                      },
-                      "&.Mui-selected": {
-                        color: "primary.main",
-                        background: "rgba(179, 198, 214, 0.04)",
-                      },
-                    },
-                  }}
+              <Box sx={{ width: { xs: "100%", md: "260px" }, flexShrink: 0 }}>
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
                 >
-                  <Tab
-                    icon={<LocalHospitalIcon sx={{ mr: { md: 1.5 } }} />}
-                    label="ความผิดปกติ & สุขภาพ"
-                    iconPosition="start"
-                  />
-                  <Tab
-                    icon={<MenuBookIcon sx={{ mr: { md: 1.5 } }} />}
-                    label="ประวัติความเป็นมา"
-                    iconPosition="start"
-                  />
-                  <Tab
-                    icon={<AutoAwesomeIcon sx={{ mr: { md: 1.5 } }} />}
-                    label="เวทมนตร์ & ทักษะ"
-                    iconPosition="start"
-                  />
-                  <Tab
-                    icon={<PsychologyIcon sx={{ mr: { md: 1.5 } }} />}
-                    label="ลักษณะนิสัย"
-                    iconPosition="start"
-                  />
-                  <Tab
-                    icon={<FavoriteIcon sx={{ mr: { md: 1.5 } }} />}
-                    label="ความชอบ & ความกลัว"
-                    iconPosition="start"
-                  />
-                </Tabs>
+                  <Tabs
+                    value={activeTab}
+                    onChange={handleTabChange}
+                    orientation={
+                      window.innerWidth > 900 ? "vertical" : "horizontal"
+                    }
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{
+                      "& .MuiTabs-indicator": {
+                        backgroundColor: "primary.main",
+                        width: { md: "3px" },
+                        height: { xs: "3px" },
+                        borderRadius: "4px",
+                      },
+                      "& .MuiTab-root": {
+                        color: "text.secondary",
+                        alignItems: { md: "flex-start" },
+                        textAlign: "left",
+                        py: 2.5,
+                        px: 3,
+                        transition: "all 0.3s ease",
+                        fontSize: "1rem",
+                        borderRadius: "8px",
+                        borderBottom: {
+                          xs: "1px solid rgba(179, 198, 214, 0.05)",
+                          md: "none",
+                        },
+                        mb: { md: 1 },
+                        "&:hover": {
+                          background: "rgba(179, 198, 214, 0.05)",
+                          color: "#EAEFF5",
+                        },
+                        "&.Mui-selected": {
+                          color: "primary.main",
+                          background: "rgba(179, 198, 214, 0.1)",
+                          boxShadow: "inset 4px 0 0 rgba(179, 198, 214, 0.5)",
+                        },
+                      },
+                    }}
+                  >
+                    <Tab
+                      icon={<LocalHospitalIcon sx={{ mr: { md: 2 } }} />}
+                      label="ความผิดปกติ & สุขภาพ"
+                      iconPosition="start"
+                    />
+                    <Tab
+                      icon={<MenuBookIcon sx={{ mr: { md: 2 } }} />}
+                      label="ประวัติความเป็นมา"
+                      iconPosition="start"
+                    />
+                    <Tab
+                      icon={<AutoAwesomeIcon sx={{ mr: { md: 2 } }} />}
+                      label="ทักษะเวทมนตร์"
+                      iconPosition="start"
+                    />
+                    <Tab
+                      icon={<PsychologyIcon sx={{ mr: { md: 2 } }} />}
+                      label="ลักษณะนิสัย"
+                      iconPosition="start"
+                    />
+                    <Tab
+                      icon={<FavoriteIcon sx={{ mr: { md: 2 } }} />}
+                      label="ความชอบ & ความกลัว"
+                      iconPosition="start"
+                    />
+                    <Tab
+                      icon={<InfoIcon sx={{ mr: { md: 2 } }} />}
+                      label="ข้อมูลอื่นๆ"
+                      iconPosition="start"
+                    />
+                  </Tabs>
+                </motion.div>
               </Box>
 
               <Box sx={{ flexGrow: 1, minWidth: 0 }}>
                 <AnimatePresence mode="wait">
+                  {/* TAB 0: ความผิดปกติ & สุขภาพ */}
                   {activeTab === 0 && (
                     <motion.div
                       key="tab0"
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.3 }}
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
                     >
-                      <Grid container spacing={3}>
+                      <Grid container spacing={4}>
                         <Grid item xs={12}>
                           <GlassCard>
                             <SectionHeader
@@ -808,22 +1062,28 @@ export default function KyoraProfile() {
                               title="ความผิดปกติทางร่างกาย"
                               subtitle="Physical Abnormalities"
                             />
-                            <Grid container spacing={2}>
+                            <Grid container spacing={3}>
                               {[
-                                "ผิวหนังบริเวณคอและเอวฉีกขาดและเปลี่ยนสภาพพัฒนาเป็นเหงือกปลา",
-                                "ภายในปากมีฟันแหลมคมหลายซี่แบบฉลาม",
-                                "ร่างกายแผ่ไอเย็นจาง ๆ ตลอดเวลา",
+                                "ผิวหนังบริเวณ คอ และ เอว ฉีกขาดและเปลี่ยนสภาพพัฒนาเป็นเหงือกปลา",
+                                "ภายในปากมี ฟันแหลมคมหลายซี่",
+                                "ร่างกาย แผ่ไอเย็นจาง ๆ ตลอดเวลา",
                                 "ใบหูเริ่มเปลี่ยนรูป",
-                                "หางปลาขนาดใหญ่งอกจากกระดูกก้นกบ",
-                                "มีครีบยาวบางงอกจากแผ่นหลัง",
+                                "หางปลาขนาดใหญ่ งอกจากกระดูกก้นกบ",
+                                "มี ครีบยาวบาง งอกจากแผ่นหลัง",
                               ].map((text, i) => (
                                 <Grid item xs={12} sm={6} key={i}>
                                   <Box
                                     sx={{
-                                      p: 2,
-                                      background: "rgba(179, 198, 214, 0.03)",
-                                      borderLeft: "2px solid #B3C6D6",
-                                      borderRadius: "0 4px 4px 0",
+                                      p: 2.5,
+                                      background:
+                                        "linear-gradient(90deg, rgba(179, 198, 214, 0.08) 0%, rgba(179, 198, 214, 0) 100%)",
+                                      borderLeft: "3px solid #B3C6D6",
+                                      borderRadius: "0 8px 8px 0",
+                                      height: "100%",
+                                      transition: "transform 0.3s",
+                                      "&:hover": {
+                                        transform: "translateX(8px)",
+                                      },
                                     }}
                                   >
                                     <Typography variant="body2">
@@ -835,9 +1095,8 @@ export default function KyoraProfile() {
                             </Grid>
                           </GlassCard>
                         </Grid>
-
                         <Grid item xs={12}>
-                          <GlassCard>
+                          <GlassCard hoverEffect>
                             <SectionHeader
                               icon={LocalHospitalIcon}
                               title="โรคประจำตัว"
@@ -846,23 +1105,24 @@ export default function KyoraProfile() {
                             <Box
                               sx={{
                                 p: 3,
-                                background: "rgba(0,0,0,0.3)",
-                                borderRadius: "4px",
+                                background: "rgba(0,0,0,0.4)",
+                                borderRadius: "8px",
+                                border: "1px solid rgba(179, 198, 214, 0.1)",
                               }}
                             >
                               <Typography
                                 variant="h6"
-                                sx={{ color: "primary.main", mb: 1 }}
+                                sx={{ color: "primary.main", mb: 1.5 }}
                               >
                                 Insomnia (ภาวะนอนไม่หลับ)
                               </Typography>
                               <Typography
-                                variant="body2"
+                                variant="body1"
                                 sx={{ color: "text.secondary" }}
                               >
                                 ภาวะนอนไม่หลับไม่ได้เกิดจากสภาพร่างกายเพียงอย่างเดียว
-                                แต่เป็นผลรวมของความเครียดทางจิตใจ
-                                และสภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
+                                แต่เป็นผลรวมของ ความเครียดทางจิตใจ +
+                                สภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
                               </Typography>
                             </Box>
                           </GlassCard>
@@ -871,13 +1131,14 @@ export default function KyoraProfile() {
                     </motion.div>
                   )}
 
+                  {/* TAB 1: ประวัติความเป็นมา */}
                   {activeTab === 1 && (
                     <motion.div
                       key="tab1"
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.3 }}
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
                     >
                       <GlassCard>
                         <SectionHeader
@@ -887,67 +1148,126 @@ export default function KyoraProfile() {
                         />
                         <Typography
                           variant="body1"
-                          sx={{ color: "text.secondary", mb: 3 }}
+                          sx={{
+                            color: "text.secondary",
+                            mb: 4,
+                            textIndent: "40px",
+                          }}
                         >
                           <span
                             style={{
                               color: "#EAEFF5",
-                              fontSize: "1.2rem",
+                              fontSize: "1.6rem",
                               fontWeight: 500,
+                              fontFamily: "'Cinzel', serif",
+                              lineHeight: 1,
                             }}
                           >
                             เ
                           </span>
                           คียวระเกิดใน "ฮิซาเมะ"
                           ตระกูลเก่าแก่ที่มีฐานะร่ำรวยและยึดถือขนบธรรมเนียมอย่างเคร่งครัด
-                          พวกเขากำหนดและให้ความสำคัญกับความสมบูรณ์แบบและสายเลือดที่บริสุทธิ์
-                          ทว่าเคียวระกลับเกิดมาพร้อมกับความผิดปกติทางร่างกาย
-                          ทำให้ครอบครัวมองเขาเป็นความอัปยศ
+                          พวกเขาให้ความสำคัญกับความสมบูรณ์แบบและสายเลือดที่บริสุทธิ์
+                          ทว่าเคียวระกลับเกิดมาพร้อมกับ "ความผิดปกติ" ทางร่างกาย
+                          ทำให้ครอบครัวมองเขาเป็นความอัปยศและความผิดพลาด
                           เขาจึงถูกเลี้ยงดูมาภายใต้ความกดดันอย่างหนัก
                           ถูกบังคับให้ต้องเพียบพร้อมในทุกด้านเพื่อชดเชยร่างกายที่ผิดปกติ
+                          เคียวระต้องใช้ชีวิตราวกับนักโทษในบ้านของตัวเอง
                           ต้องสวมเสื้อผ้ามิดชิดเพื่อปกปิดความลับนี้ไว้
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          sx={{ color: "text.secondary", mb: 3 }}
-                        >
                           จนกระทั่งในวัย 14 ปี
                           ความผิดปกติของเขาแสดงอาการรุนแรงขึ้นจนตระกูลคิดจะกำจัดเขา
-                          เคียวระจึงตัดสินใจโกหกครอบครัวว่าได้รับจดหมายเชิญจากสถาบันการแพทย์ลับที่จะช่วยรักษาเขาได้
+                          เคียวระจึงตัดสินใจโกหกครอบครัวว่าได้รับจดหมายเชิญจากสถาบันการแพทย์ลับที่จะช่วย
+                          "รักษา" เขาได้
                           เพื่อใช้เป็นข้ออ้างในการเดินทางมายังโรงเรียนเวทมนตร์แห่งนี้
                         </Typography>
-                        <Divider
+
+                        <Box
                           sx={{
-                            my: 3,
-                            borderColor: "rgba(179, 198, 214, 0.05)",
+                            my: 4,
+                            display: "flex",
+                            alignItems: "center",
+                            opacity: 0.5,
                           }}
-                        />
+                        >
+                          <Box
+                            sx={{
+                              flexGrow: 1,
+                              height: "1px",
+                              background:
+                                "linear-gradient(90deg, transparent, #B3C6D6)",
+                            }}
+                          />
+                          <AutoAwesomeIcon
+                            sx={{ mx: 2, color: "primary.main", fontSize: 16 }}
+                          />
+                          <Box
+                            sx={{
+                              flexGrow: 1,
+                              height: "1px",
+                              background:
+                                "linear-gradient(270deg, transparent, #B3C6D6)",
+                            }}
+                          />
+                        </Box>
+
                         <Typography
                           variant="body1"
-                          sx={{ color: "text.secondary" }}
+                          sx={{
+                            color: "text.secondary",
+                            mb: 4,
+                            textIndent: "40px",
+                          }}
                         >
                           ปัจจุบันเคียวระอาศัยอยู่ในหอพักของโรงเรียนมัธยมปลายมาโฮชิกิ
                           หลังจากที่ได้เห็นว่าที่นี่มีผู้คนที่มีความผิดปกติมากมาย
-                          เขาจึงเริ่มคลายความหวาดระแวง ในด้านฐานะ
-                          เคียวระมีสภาพคล่องทางการเงินที่สูงมาก
-                          มักจะใช้แต่ข้าวของเครื่องใช้ที่มีคุณภาพสูง
-                          และเป็นคนหวงแหนพื้นที่ส่วนตัวและเจ้าระเบียบมาก
-                          แบ่งขอบเขตของตัวเองกับรูมเมท (ฮิเมะมิยะ โคยูคิ /
-                          คากามิ ริคุ) อย่างชัดเจน
+                          เขาจึงเริ่มคลายความหวาดระแวงและเลิกหมกมุ่นกับการปกปิดร่างกายตนเองอย่างที่เคยทำในอดีต
+                          ในด้านฐานะ เคียวระมีสภาพคล่องทางการเงินที่สูงมาก
+                          เขาได้รับเงินสนับสนุนจากตระกูลอย่างสม่ำเสมอ
+                          (เนื่องจากครอบครัวยังคงเชื่อว่าเขากำลังใช้เงินเพื่อรักษาตัวให้กลับมาปกติ)
+                          แม้เขาจะไม่ได้มีนิสัยใช้จ่ายฟุ่มเฟือย
+                          แต่ด้วยความเคยชิน
+                          เขามักจะใช้แต่ข้าวของเครื่องใช้ที่มีคุณภาพสูง
+                          สำหรับการใช้ชีวิตในหอพัก
+                          เขาเป็นคนหวงแหนพื้นที่ส่วนตัวและเจ้าระเบียบมาก
+                          แบ่งขอบเขตของตัวเองกับรูมเมทอย่างชัดเจน
                         </Typography>
+
+                        <Box
+                          sx={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            background: "rgba(122, 42, 59, 0.1)",
+                            border: "1px solid rgba(122, 42, 59, 0.3)",
+                            borderRadius: "6px",
+                            px: 2,
+                            py: 1,
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: "#FF7B93",
+                              fontWeight: 500,
+                              letterSpacing: 1,
+                            }}
+                          >
+                            [ ล็อคข้อมูลเพิ่มเติม ]
+                          </Typography>
+                        </Box>
                       </GlassCard>
                     </motion.div>
                   )}
 
+                  {/* TAB 2: เวทมนตร์ */}
                   {activeTab === 2 && (
                     <motion.div
                       key="tab2"
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.3 }}
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
                     >
-                      <Grid container spacing={3}>
+                      <Grid container spacing={4}>
                         <Grid item xs={12}>
                           <GlassCard>
                             <SectionHeader
@@ -955,61 +1275,126 @@ export default function KyoraProfile() {
                               title="เวทมนตร์พื้นฐาน"
                               subtitle="Shadow Manipulations"
                             />
-                            <Grid container spacing={2}>
+                            <Grid container spacing={3}>
                               {[
                                 {
                                   name: "สรรค์สร้างเงา",
-                                  desc: "ดึงเงาจากวัตถุรอบตัวมาปั้นเป็นรูปร่างชั่วคราว เช่น อาวุธ หรือมือเงา",
+                                  desc: "ความสามารถพื้นฐานในการ ดึงเงาจากวัตถุรอบตัวหรือจากร่างกายของตนเอง มาปั้นเป็นรูปร่างชั่วคราว วัตถุมีลักษณะเหมือน ของแข็งสีดำด้าน สลายตัวเมื่อเสียสมดุลหรือถูกโจมตีแรง เช่น อาวุธชั่วคราว เข็ม มีด ลิ่ม, มือเงาขนาดใหญ่สำหรับหยิบจับของ, ร่มเงาสำหรับกันฝน",
+                                  bullets: [
+                                    "ต้องมี แหล่งกำเนิดเงา ใกล้ตัว",
+                                    "แสงสว่างจัดจะทำให้สร้างวัตถุได้ยาก",
+                                    "วัตถุขนาดใหญ่ใช้พลังเวทมาก",
+                                  ],
                                 },
                                 {
                                   name: "เคลื่อนที่ผ่านเงา",
-                                  desc: "จมหายเข้าไปในเงาหนึ่งและปรากฏออกจากอีกเงาหนึ่ง (ระยะ 3-6 เมตร)",
+                                  desc: "สามารถเคลื่อนที่ระยะสั้นผ่านเงาได้โดยการจมหายเข้าไปในเงาหนึ่งและปรากฏออกจากอีกเงาหนึ่ง",
+                                  bullets: [
+                                    "ระยะประมาณ 3–6 เมตร",
+                                    "ต้องมีเงาทั้งต้นทางและปลายทาง",
+                                    "ใช้ต่อเนื่องหลายครั้งจะทำให้เวียนหัว",
+                                    "ไม่สามารถพาคนอื่นไปด้วย",
+                                  ],
                                 },
                                 {
                                   name: "เย็บเงา",
-                                  desc: "สร้างเข็มปักลงบนเงาเป้าหมาย ตรึงร่างจริงให้ขยับไม่ได้คล้ายผีอำ",
+                                  desc: "สร้างเข็มหรือลิ่มจากเงา แล้วปาให้ปักลงบนเงาของเป้าหมาย ทำให้ร่างจริงถูกตรึงกับพื้น คล้ายอาการ “ผีอำ” เป้าหมายขยับไม่ได้แต่ยังพูดได้",
+                                  bullets: [
+                                    "ต้องเห็นเงาของเป้าหมายชัดเจน",
+                                    "หากเงาถูกทำลาย (เช่นแสงเปลี่ยน) จะหลุด",
+                                    "ใช้กับหลายคนพร้อมกันยาก",
+                                  ],
                                 },
                                 {
                                   name: "เงาเลียนแบบ",
-                                  desc: "สร้างร่างเงาเหมือนตัวเองเอามาช่วยทำงานบ้าน ถูกโจมตีครั้งเดียวจะสลาย",
+                                  desc: "สามารถสร้าง ร่างเงาที่มีรูปร่างเหมือนตัวเอง เอามาช่วยทำงานบ้าน",
+                                  bullets: [
+                                    "ถูกโจมตีครั้งเดียวก็สลาย",
+                                    "ใช้พลังเวทค่อนข้างมาก",
+                                    "เรียกออกมาได้แบบมีประสิทธิภาพมากสุด ได้แค่ 3 ร่าง",
+                                  ],
                                 },
                                 {
                                   name: "หนามเงา",
-                                  desc: "แทงเป้าหมายด้วยเงา รบกวนการไหลเวียนพลังเวท ทำให้เป้าหมายชา",
+                                  desc: "ควบแน่นเงาเป็นของแหลมพอดีมือ แทงใส่เป้าหมาย ไม่ทำให้เกิดบาดแผลจริงแต่ รบกวนการไหลเวียนพลังเวท ส่วนที่ถูกแทงจะ ชาและขยับไม่ได้ชั่วคราว",
+                                  bullets: ["ระยะโจมตีสั้น", "ผลอยู่ไม่นาน"],
                                 },
                                 {
                                   name: "อาณาเขตเงา",
-                                  desc: "ขยายเงาตัวเองดูดกลืนเสียง สำหรับทำงานเงียบๆ ในพื้นที่เล็กๆ",
+                                  desc: "ขยายเงาของตัวเองเป็น อาณาเขตเงาขนาดเล็ก ดูดกลืนเสียง ลดการสะท้อนแสง คนในพื้นที่แทบไม่ถูกสังเกต ส่วนมากไว้ใช้ สำหรับทำงานเงียบๆ อ่านหนังสือ งานอดิเรก",
+                                  bullets: [
+                                    "พื้นที่เล็ก (ประมาณโต๊ะหรือห้องเล็ก)",
+                                    "ใช้พลังเวทต่อเนื่อง",
+                                    "หากแสงสว่างมากอาณาเขตจะอ่อนลง",
+                                  ],
                                 },
                                 {
                                   name: "โล่กลืนมนตรา",
-                                  desc: "บิดเงาขึ้นเป็นกำแพงป้องกัน กลืนพลังเวทที่โจมตีเข้ามา",
+                                  desc: "บิดเงาของตัวเองขึ้นเป็น กำแพงเงาป้องกัน กลืนพลังเวทที่โจมตีเข้ามา ลดความเสียหายเวทมนตร์",
+                                  bullets: [
+                                    "ป้องกันเวทได้ดีกว่าการโจมตีทางกายภาพ",
+                                    "ใช้ต่อเนื่องทำให้พลังเวทหมดเร็ว",
+                                    "พลังในส่วนนี้เป็นสิ่งที่เคียวระไม่ค่อยใช้ มีแค่ส่วนน้อยที่รู้ว่าเขาทำได้ (น้อยมาก!)",
+                                  ],
                                 },
                               ].map((spell, i) => (
                                 <Grid item xs={12} sm={6} key={i}>
                                   <Paper
                                     elevation={0}
                                     sx={{
-                                      p: 2,
+                                      p: 3,
                                       height: "100%",
                                       background: "rgba(0,0,0,0.3)",
                                       border:
-                                        "1px solid rgba(179, 198, 214, 0.05)",
-                                      borderRadius: "4px",
+                                        "1px solid rgba(179, 198, 214, 0.1)",
+                                      borderRadius: "8px",
+                                      transition: "all 0.3s",
+                                      "&:hover": {
+                                        background: "rgba(179, 198, 214, 0.05)",
+                                        borderColor: "primary.main",
+                                      },
                                     }}
                                   >
                                     <Typography
-                                      variant="subtitle2"
-                                      sx={{ color: "primary.main", mb: 1 }}
+                                      variant="subtitle1"
+                                      sx={{
+                                        color: "primary.main",
+                                        mb: 1.5,
+                                        fontWeight: 500,
+                                      }}
                                     >
                                       {spell.name}
                                     </Typography>
                                     <Typography
                                       variant="body2"
-                                      sx={{ color: "text.secondary" }}
+                                      sx={{ color: "text.secondary", mb: 2 }}
                                     >
                                       {spell.desc}
                                     </Typography>
+                                    {spell.bullets && (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          flexDirection: "column",
+                                          gap: 1,
+                                        }}
+                                      >
+                                        {spell.bullets.map((bullet, idx) => (
+                                          <Typography
+                                            key={idx}
+                                            variant="body2"
+                                            sx={{
+                                              color: "text.secondary",
+                                              pl: 1.5,
+                                              borderLeft:
+                                                "2px solid rgba(179, 198, 214, 0.3)",
+                                            }}
+                                          >
+                                            - {bullet}
+                                          </Typography>
+                                        ))}
+                                      </Box>
+                                    )}
                                   </Paper>
                                 </Grid>
                               ))}
@@ -1018,47 +1403,91 @@ export default function KyoraProfile() {
                         </Grid>
 
                         <Grid item xs={12}>
-                          <GlassCard sx={{ borderLeft: "2px solid #5C748A" }}>
+                          <GlassCard sx={{ borderLeft: "4px solid #5C748A" }}>
                             <SectionHeader
                               icon={ShieldIcon}
-                              title="พลังเวทเร้นลับ"
-                              subtitle="Hidden & Forbidden Arts"
+                              title="ทักษะเวทมนตร์อื่นๆ"
+                              subtitle="Advanced & Special Arts"
                             />
-                            <Grid container spacing={2}>
+                            <Grid container spacing={3}>
                               {[
                                 {
                                   name: "ดึงเงา",
-                                  desc: "ดึงเงาของวัตถุหรือสิ่งมีชีวิตมาหล่อเลี้ยงพลังเวทตนเองชั่วคราว บรรเทาความเหนื่อยล้า แต่เป้าหมายจะอ่อนแรงลง",
+                                  desc: "ดึงเงาของวัตถุหรือสิ่งมีชีวิตรอบตัวมาหล่อเลี้ยงพลังเวทของตนเองชั่วคราว พลังที่ได้รับจะไม่ถาวร เป็นการฟื้นฟูพลังเวท ลดความเหนื่อยล้า บรรเทาความเจ็บปวดให้กับผู้ใช้ ถ้าเป็นสิ่งมีชีวิตจะให้ผลดีมากกว่า ผลที่ส่งกับสิ่งมีชีวิต คือ รู้สึกอ่อนแรงเล็กน้อย หนาววูบเหมือนพลังบางส่วนถูกดึงออก รวมถึงอาจรู้สึกว่างเปล่าหรือเฉื่อยชาในช่วงเวลาสั้น ๆ",
+                                  bullets: [
+                                    "พลังที่ดึงมา ไม่ถาวร และจะค่อย ๆ สลายไป",
+                                    "ไม่สามารถดึงพลังจำนวนมากจากเป้าหมายเดียวได้",
+                                    "หากใช้ต่อเนื่องมากเกินไป ผู้ใช้จะเกิดอาการ เวียนหัว คลื่นไส้ เสียสมาธิ",
+                                  ],
                                 },
                                 {
                                   name: "กินเงา",
-                                  desc: "กัดกินความเจ็บปวดหรือความเหนื่อยล้าจากผู้อื่นโดยดึงออกมาในรูปเงา เป็นการบรรเทาชั่วคราว แต่ทำให้ตัวเองรับภาระแทน",
+                                  desc: "สามารถ กัดกินอาการผิดปกติจากผู้อื่น ไม่ว่าจะเป็นความเจ็บปวด ความเหนื่อยล้า หรือความปั่นป่วนทางจิตใจ โดยดึงสิ่งเหล่านั้นออกมาในรูปของเงา แล้วให้ความมืดของตนเองกลืนกินเข้าไป เมื่อเงาของอาการเหล่านั้นถูกดึงออก เป้าหมายจะรู้สึกว่าภาระบางอย่างถูกปลดปล่อยออกจากร่างกายและจิตใจ บรรเทาความเจ็บปวดทางร่างกาย ลดความเหนื่อยล้าและความอ่อนแรง ทำให้จิตใจสงบลง โดยปกติ เงาของเคียวระจะเป็นผู้กลืนกินเงาของอาการผิดปกติแทน ราวกับมีชีวิตของตัวเอง แต่หากเคียวระเป็นผู้กัดกินเงานั้นด้วยตนเองโดยตรง ผลของการบรรเทาจะมีประสิทธิภาพมากกว่า",
+                                  bullets: [
+                                    "การรักษาเป็นเพียง การบรรเทาชั่วคราว",
+                                    "หากมากเกินไป เคียวระอาจเกิดอาการ เวียนหัว อ่อนล้า เสียสมาธิ",
+                                    "การกินเงาจากผู้อื่นต้องใช้พลังเวทมากกว่าการรักษาตัวเอง",
+                                    "ไม่สามารถลบล้างอาการรุนแรงหรือใช้ติดต่อกันหลายครั้งในเวลาใกล้กันได้",
+                                  ],
                                 },
                                 {
                                   name: "ฝนเขี้ยวเงา",
-                                  desc: "สร้างหนามดำจำนวนมากตกลงมาแบบปูพรม สามารถสร้างบาดแผลจริงได้ แต่กินพลังเวทสูง",
+                                  desc: "ควบแน่นเงารอบตัวให้แตกตัวเป็น เขี้ยวหนามสีดำจำนวนมาก ก่อนจะปล่อยให้พุ่งลงมาจากอากาศราวกับฝน เขี้ยวเงาเหล่านี้จะตกลงใส่พื้นที่เป้าหมายอย่างรวดเร็ว หนามเงาเหล่านี้มีความหนาแน่นสูงพอที่จะ สร้างบาดแผลจริงต่อร่างกาย เมื่อกระทบเป้าหมาย ทำให้พื้นที่ที่ถูกโจมตีกลายเป็นบริเวณอันตรายที่ยากต่อการเคลื่อนไหว เมื่อหนามเงาปักลงพื้น มันจะคงสภาพอยู่เพียงชั่วครู่ก่อนจะสลายไป",
+                                  bullets: [
+                                    "ต้องมีเงาในพื้นที่จึงจะสร้างหนามจำนวนมากได้",
+                                    "ใช้พลังเวทค่อนข้างมาก",
+                                    "เป็นการโจมตีแบบพื้นที่ ความแม่นยำจึงไม่สูง เน้นจำนวน",
+                                    "หากแสงสว่างจัด จำนวนและความแข็งของหนามเงาจะลดลง",
+                                  ],
                                 },
                               ].map((spell, i) => (
                                 <Grid item xs={12} key={i}>
                                   <Box
                                     sx={{
-                                      p: 2,
-                                      borderBottom:
+                                      p: 2.5,
+                                      background: "rgba(0,0,0,0.2)",
+                                      borderRadius: "8px",
+                                      border:
                                         "1px solid rgba(179, 198, 214, 0.05)",
                                     }}
                                   >
                                     <Typography
-                                      variant="subtitle2"
-                                      sx={{ color: "#EAEFF5", mb: 1 }}
+                                      variant="h6"
+                                      sx={{ color: "#EAEFF5", mb: 1.5 }}
                                     >
                                       {spell.name}
                                     </Typography>
                                     <Typography
-                                      variant="body2"
-                                      sx={{ color: "text.secondary" }}
+                                      variant="body1"
+                                      sx={{ color: "text.secondary", mb: 2 }}
                                     >
                                       {spell.desc}
                                     </Typography>
+                                    {spell.bullets && (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          flexDirection: "column",
+                                          gap: 1,
+                                          mt: 1,
+                                        }}
+                                      >
+                                        {spell.bullets.map((bullet, idx) => (
+                                          <Typography
+                                            key={idx}
+                                            variant="body2"
+                                            sx={{
+                                              color: "text.secondary",
+                                              pl: 1.5,
+                                              borderLeft:
+                                                "2px solid rgba(92, 116, 138, 0.5)",
+                                            }}
+                                          >
+                                            - {bullet}
+                                          </Typography>
+                                        ))}
+                                      </Box>
+                                    )}
                                   </Box>
                                 </Grid>
                               ))}
@@ -1069,47 +1498,65 @@ export default function KyoraProfile() {
                     </motion.div>
                   )}
 
+                  {/* TAB 3: ลักษณะนิสัย */}
                   {activeTab === 3 && (
                     <motion.div
                       key="tab3"
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.3 }}
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
                     >
-                      <Grid container spacing={3}>
+                      <Grid container spacing={4}>
                         {[
                           {
-                            title: "ขี้อาย (แบบหน้านิ่ง)",
-                            desc: "ภายนอกรักษาสีหน้านิ่งเฉย แต่ภายในมักประหม่า ใช้คำสุภาพเป็นกำแพงกั้นบทสนทนาเพื่อหนีไปอยู่คนเดียว",
+                            title: "ขี้อาย",
+                            desc: "เขาไม่ได้เป็นคนขี้อายแบบหลบหน้าหลบตา แม้ภายในจะรู้สึกประหม่า ภายนอกเขาก็ยังคงพยายามรักษาสีหน้านิ่งเฉยเอาไว้ เขาสามารถพูดคุยกับผู้อื่นได้ตามปกติ แต่จะใช้ถ้อยคำที่สุภาพและเป็นทางการเกินจำเป็นเป็นเหมือนกำแพงกั้นไม่ให้ใครเข้ามาใกล้ชิดมากนัก เขาหลีกเลี่ยงการสบตากับผู้อื่นเป็นเวลานาน และมักตอบคำถามสั้น ๆ ได้ใจความ เพื่อให้บทสนทนาจบลงโดยเร็วที่สุด เมื่อสิ้นสุดบทสนทนา เขามักจะหลบไปอยู่ในมุมเงียบ ๆ ตามลำพังทันที",
                           },
                           {
                             title: "เจ้าระเบียบ",
-                            desc: "ยึดติดกับความสมบูรณ์แบบเพื่อเป็นเกราะป้องกันไม่ให้ใครกล้าเข้ามาจับผิด",
+                            desc: "แรงกดดันจากครอบครัวทำให้เขายึดติดกับความสมบูรณ์แบบ กฎระเบียบ ความเรียบร้อย และความรับผิดชอบอย่างมาก ขาใช้ความเพียบพร้อมนี้เป็นเกราะป้องกันไม่ให้ใครกล้าเข้ามาจับผิดหรือตั้งคำถามถึงตัวตนของเขา",
                           },
                           {
                             title: "หวาดระแวงการสัมผัส",
-                            desc: "ระแวงการสัมผัสตัวอย่างรุนแรง หากถูกโดนตัวจะปัดทิ้งอย่างรวดเร็วจนดูเหมือนคนหยิ่งยโส",
+                            desc: "ระแวงการสัมผัสตัวอย่างรุนแรง หากมีใครมาตบไหล่หรือพยายามสวมกอด แบบไม่ทันตั้งตัว เขาจะชะงัก เผลอชักสีหน้ารังเกียจ หรือปัดมือทิ้งอย่างรวดเร็วจนดูเหมือนคนหยิ่งยโส",
                           },
                           {
                             title: "โลกส่วนตัวสูง",
-                            desc: "แอบไปพับโอริกามิ หรือเล่นเปียโนในห้องดนตรีเงียบๆ เป็นช่วงเวลาที่ปลดปล่อยความรู้สึกที่แท้จริงออกมา",
+                            desc: "เขามีพื้นที่ส่วนตัวที่แทบไม่มีใครเข้าถึงได้ และมักจะเก็บมันไว้เป็นความลับที่ไม่ต้องการให้ใครรับรู้ เมื่อรู้สึกเครียด เขาทำงานอดิเรก ตามลำพัง",
                           },
                           {
-                            title: "ปากร้ายใจดี (ซึนเดเระ)",
-                            desc: "ปากบ่นว่าน่ารำคาญแต่ก็ช่วยจนเสร็จ โหยหาความอ่อนโยน และเป็นผู้ฟังที่ดีที่จำรายละเอียดของคนอื่นได้เสมอ",
+                            title: "อ่อนโยน(?) ซึนแหละ",
+                            desc: "เป็นคนที่แสดงความใส่ใจต่อผู้อื่นผ่านการกระทำมากกว่าคำพูด หากเห็นใครกำลังลำบาก เขามักจะเข้าไปช่วยโดยไม่พูดอะไรนัก สีหน้ามักยังคงเรียบนิ่ง หรือบ่นพึมพำว่า “น่ารำคาญ” เหมือนฝืนใจช่วย แต่สุดท้ายก็ช่วยจนเสร็จอยู่ดี แม้ภายนอกจะดูเย็นชาและเข้มงวด ทว่าลึก ๆ แล้วเขาโหยหาความเมตตาและความอ่อนโยนจากผู้อื่น หากพบเห็นคนหรือสัตว์ที่กำลังเดือดร้อน เขามักอดไม่ได้ที่จะยื่นมือเข้าไปช่วย ถึงจะยังคงทำหน้าตายหรือบ่นอุบอิบเหมือนเดิมก็ตาม เป็นผู้ฟังที่ดี แม้ภายนอกจะทำท่าทีเหมือนไม่ได้สนใจบทสนทนา แต่เขากลับจดจำรายละเอียดเล็ก ๆ น้อย ๆ ของคนรอบตัวได้เสมอ และมักนำสิ่งเหล่านั้นไปช่วยเหลือผู้อื่นอย่างเงียบ ๆ โดยที่แทบไม่พูดถึงมันเลย",
                           },
                         ].map((trait, index) => (
                           <Grid item xs={12} md={6} key={index}>
-                            <GlassCard hoverEffect sx={{ height: "100%" }}>
+                            <GlassCard
+                              hoverEffect
+                              sx={{ height: "100%", p: 3 }}
+                            >
                               <Typography
-                                variant="subtitle1"
-                                sx={{ color: "primary.main", mb: 1 }}
+                                variant="h6"
+                                sx={{
+                                  color: "primary.main",
+                                  mb: 2,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}
                               >
+                                <span
+                                  style={{
+                                    width: "8px",
+                                    height: "8px",
+                                    background: "#B3C6D6",
+                                    borderRadius: "50%",
+                                  }}
+                                ></span>
                                 {trait.title}
                               </Typography>
                               <Typography
-                                variant="body2"
+                                variant="body1"
                                 sx={{ color: "text.secondary" }}
                               >
                                 {trait.desc}
@@ -1117,19 +1564,45 @@ export default function KyoraProfile() {
                             </GlassCard>
                           </Grid>
                         ))}
+                        <Grid item xs={12}>
+                          <Box
+                            sx={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              background: "rgba(122, 42, 59, 0.1)",
+                              border: "1px solid rgba(122, 42, 59, 0.3)",
+                              borderRadius: "6px",
+                              px: 2,
+                              py: 1,
+                              mt: 2,
+                            }}
+                          >
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "#FF7B93",
+                                fontWeight: 500,
+                                letterSpacing: 1,
+                              }}
+                            >
+                              [ ล็อคข้อมูลเพิ่มเติม ]
+                            </Typography>
+                          </Box>
+                        </Grid>
                       </Grid>
                     </motion.div>
                   )}
 
+                  {/* TAB 4: สิ่งที่ชอบ ไม่ชอบ กลัว */}
                   {activeTab === 4 && (
                     <motion.div
                       key="tab4"
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.3 }}
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
                     >
-                      <Grid container spacing={3}>
+                      <Grid container spacing={4}>
                         <Grid item xs={12} md={4}>
                           <GlassCard sx={{ height: "100%" }}>
                             <SectionHeader
@@ -1141,32 +1614,54 @@ export default function KyoraProfile() {
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 1,
+                                gap: 1.5,
                               }}
                             >
                               {[
                                 "เสียงฝนตกหนัก",
                                 "พื้นที่สลัว / ร่มเงา",
-                                "ความสมบูรณ์แบบ",
-                                "เสียงดนตรี",
-                                "กลิ่นน้ำเค็ม",
+                                "ความสมบูรณ์แบบและความเป็นระเบียบ",
+                                "กลิ่นน้ำเค็มและเสียงคลื่นทะเล",
+                                "ขนมวากาชิ / พาร์เฟต์",
                                 "ของน่ารัก",
-                                "ขนมวากาชิ",
+                                "อุซากี้ เป็นเพียงการ์ตูนในโลกมนุษย์",
                               ].map((item, idx) => (
-                                <Typography
+                                <Box
                                   key={idx}
-                                  variant="body2"
                                   sx={{
-                                    color: "text.secondary",
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: 1.5,
                                     p: 1,
-                                    borderBottom:
-                                      "1px solid rgba(179, 198, 214, 0.03)",
+                                    borderRadius: "4px",
+                                    "&:hover": {
+                                      background: "rgba(179, 198, 214, 0.05)",
+                                    },
                                   }}
                                 >
-                                  • {item}
-                                </Typography>
+                                  <span
+                                    style={{
+                                      color: "#B3C6D6",
+                                      marginTop: "2px",
+                                    }}
+                                  >
+                                    ✦
+                                  </span>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ color: "text.secondary" }}
+                                  >
+                                    {item}
+                                  </Typography>
+                                </Box>
                               ))}
                             </Box>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500 }}
+                            >
+                              [ล็อค]
+                            </Typography>
                           </GlassCard>
                         </Grid>
 
@@ -1181,29 +1676,50 @@ export default function KyoraProfile() {
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 1,
+                                gap: 1.5,
                               }}
                             >
                               {[
                                 "การเป็นจุดสนใจ",
-                                "คนที่ไร้ระเบียบ",
+                                "คนที่ทำตัวตามใจชอบ ไร้ระเบียบ หรือร่าเริงเกินเหตุ",
                                 "การถูกสัมผัสตัวอย่างกะทันหัน",
-                                "ความหลากหลายทางเพศ",
                               ].map((item, idx) => (
-                                <Typography
+                                <Box
                                   key={idx}
-                                  variant="body2"
                                   sx={{
-                                    color: "text.secondary",
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    gap: 1.5,
                                     p: 1,
-                                    borderBottom:
-                                      "1px solid rgba(179, 198, 214, 0.03)",
+                                    borderRadius: "4px",
+                                    "&:hover": {
+                                      background: "rgba(179, 198, 214, 0.05)",
+                                    },
                                   }}
                                 >
-                                  • {item}
-                                </Typography>
+                                  <span
+                                    style={{
+                                      color: "#5C748A",
+                                      marginTop: "2px",
+                                    }}
+                                  >
+                                    ✦
+                                  </span>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ color: "text.secondary" }}
+                                  >
+                                    {item}
+                                  </Typography>
+                                </Box>
                               ))}
                             </Box>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500 }}
+                            >
+                              [ล็อค]
+                            </Typography>
                           </GlassCard>
                         </Grid>
 
@@ -1214,30 +1730,104 @@ export default function KyoraProfile() {
                               title="สิ่งที่กลัว"
                               subtitle="Fears"
                             />
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "#FF7B93",
+                                mt: 2,
+                                fontWeight: 500,
+                                p: 2,
+                                background: "rgba(122, 42, 59, 0.1)",
+                                border: "1px solid rgba(122, 42, 59, 0.2)",
+                                borderRadius: "4px",
+                              }}
+                            >
+                              [ ล็อคข้อมูล ]
+                            </Typography>
+                          </GlassCard>
+                        </Grid>
+                      </Grid>
+                    </motion.div>
+                  )}
+
+                  {/* TAB 5: ข้อมูลอื่นๆ */}
+                  {activeTab === 5 && (
+                    <motion.div
+                      key="tab5"
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
+                    >
+                      <Grid container spacing={4}>
+                        <Grid item xs={12}>
+                          <GlassCard>
+                            <SectionHeader
+                              icon={InfoIcon}
+                              title="อื่น ๆ"
+                              subtitle="Additional Informations"
+                            />
                             <Box
                               sx={{
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 1,
+                                gap: 2,
                               }}
                             >
                               {[
-                                "การถูกครอบครัวจับได้",
-                                "การถูกมองว่าเป็นความผิดพลาด",
-                                "การสูญเสียการควบคุม",
+                                "CV : toi kuji scenes (sarazanmai) / 内山昂輝 Koki Uchiyama",
+                                "Theme Song : truth, violence, warmth",
+                                "มีฟันฉลาม",
+                                "ร่างกายของเขาแผ่ไอเย็นจางๆ ออกมาตลอดเวลา ทำให้คนที่อยู่ใกล้อาจรู้สึกเย็นวาบ ในช่วงหน้าร้อน เขาอาจจะเป็นที่ชื่นชอบของเพื่อนๆ ที่ร้อนโดยไม่รู้ตัว",
+                                "ครอบครัวส่งเงินมาให้เยอะมาก เขาจึงมักใช้ของแบรนด์เนมหรือของที่มีคุณภาพสูงมากโดยไม่รู้ตัว",
+                                "เขามักจะแอบซื้อขนมหวานมากินคนเดียวในห้องตอนดึก และด้วยความเจ้าระเบียบ เขาจะค่อยๆ บรรจงตักกินด้วยท่วงท่าที่สง่างามและคุณชายสุดๆ",
+                                "ชอบแอบไปซื้อขนมวากาชิพรีเมียมจาก ย่านการค้า",
+                                "มักจะไปเดินเล่นที่ ชายหาดมิโอริ ในตอนกลางคืน",
+                                "เมื่อใช้ความคิดหนักหรือรู้สึกกดดันมากๆ เขาจะเผลอกัดริมฝีปากตัวเองโดยไม่รู้ตัว และด้วยฟันฉลาม มักจะทำให้ริมฝีปากเขามีแผลเลือดซึมเล็กๆ อยู่บ่อยครั้ง",
+                                "ชอบแต่งตัวเรียบร้อยและถูกระเบียบเสมอ เพราะเขาคุ้นชินกับการต้องทำทุกอย่างให้สมบูรณ์แบบ เพื่อไม่ให้โดนตำหนิ",
+                                "เมื่ออาการนอนไม่หลับกำเริบหนัก เสียงรูมเมทขยับตัวทำให้เขากังวล เขาจะไม่นอนบนเตียง แต่จะหอบผ้าห่มไปขดตัวนอนในตู้เสื้อเก็บของหรือมุดลงไปนอนใต้โต๊ะ แล้วใช้เวทอาณาเขตเงาคลุมตัวเองไว้ ความแคบ มืด และการตัดเสียงรบกวน ทำให้เขารู้สึกปลอดภัย",
+                                "ในที่มืดดวงตาของเคียวระจะสะท้อนแสงวาววับเหมือนตาสัตว์",
+                                "มีเซนส์เรื่องฝน หูและเหงือกปลาของเขาไวต่อความชื้นในอากาศมาก เขาสามารถพยากรณ์ได้ล่วงหน้าว่าฝนกำลังจะตก",
+                                "นอกจากไอเย็นแล้ว ตัวเขามักจะมีกลิ่นหอมจางๆ คล้ายกลิ่นอายทะเล Sea breeze ผสมกับกลิ่นกระดาษเก่าๆ",
+                                "เขาอาจมีพฤติกรรมย้ำคิดย้ำทำ ในการเช็คว่าเครื่องรางฮามากุริยังอยู่กับตัวหรือไม่",
+                                "เก็บอาการเก่งแค่ไหน แต่เมื่อเขาได้รับคำชมจนรู้สึกดีใจอย่างมาก อาจจะเผลอกวัดแกว่งหรือกระดิกหางปลาไปมาตามอารมณ์ความรู้สึกโดยที่เจ้าตัวไม่ทันสังเกตเห็น",
+                                "เมื่อเจอของน่ารัก ดวงตาของเขาจะเบิกกว้างและเปล่งประกายวาววับขึ้นมาแวบหนึ่ง ก่อนจะรีบกระแอมไอ ดึงสติกลับมาทำหน้าตาย แล้วเดินจากไป (และแอบเดินกลับมาดูอีกทีตอนไม่มีคนเห็น)",
+                                "เมื่อถูกจับได้ว่าใช้ของน่ารัก เขาจะตีหน้านิ่งและหาข้ออ้างด้วยน้ำเสียงจริงจัง แต่ใบหูและหลังคอของเขาจะเปลี่ยนเป็นสีแดงจัดจนจับสังเกตได้ง่ายๆ",
                               ].map((item, idx) => (
-                                <Typography
+                                <Box
                                   key={idx}
-                                  variant="body2"
                                   sx={{
-                                    color: "text.secondary",
-                                    p: 1,
-                                    borderBottom:
-                                      "1px solid rgba(179, 198, 214, 0.03)",
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    p: 2,
+                                    background: "rgba(0,0,0,0.2)",
+                                    border:
+                                      "1px solid rgba(179, 198, 214, 0.05)",
+                                    borderRadius: "8px",
+                                    transition: "background 0.3s",
+                                    "&:hover": {
+                                      background: "rgba(179, 198, 214, 0.05)",
+                                    },
                                   }}
                                 >
-                                  • {item}
-                                </Typography>
+                                  <Box sx={{ minWidth: 24, pt: 0.5 }}>
+                                    <span
+                                      style={{
+                                        display: "inline-block",
+                                        width: "8px",
+                                        height: "8px",
+                                        background: "#B3C6D6",
+                                        borderRadius: "50%",
+                                      }}
+                                    ></span>
+                                  </Box>
+                                  <Typography
+                                    variant="body1"
+                                    sx={{ color: "text.secondary" }}
+                                  >
+                                    {item}
+                                  </Typography>
+                                </Box>
                               ))}
                             </Box>
                           </GlassCard>
