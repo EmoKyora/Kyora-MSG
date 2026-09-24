@@ -29,8 +29,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import InfoIcon from "@mui/icons-material/Info";
 
-const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23C5FF75' /%3E%3Cstop offset='100%25' stop-color='%23FF9EE2' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(197,255,117,0.08)' stroke='url(%23grad3)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 4px rgba(197,255,117,0.4))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
-const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%239ACD32' /%3E%3Cstop offset='100%25' stop-color='%23FF1493' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(154,205,50,0.1)' stroke='url(%23grad4)' stroke-width='4.5' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 5px rgba(154,205,50,0.45))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
+const normalCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad3' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFD1DC' /%3E%3Cstop offset='100%25' stop-color='%23FFA2B7' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(255,162,183,0.08)' stroke='url(%23grad3)' stroke-width='4' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 4px rgba(255,162,183,0.4))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 10,55 52,50' /%3E%3Cpolygon points='52,50 75,15 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, auto`;
+const pointerCraneCursor = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad4' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFA2B7' /%3E%3Cstop offset='100%25' stop-color='%23D18CE0' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='rgba(255,162,183,0.1)' stroke='url(%23grad4)' stroke-width='4.5' stroke-linejoin='round' stroke-linecap='round' filter='drop-shadow(0px 0px 5px rgba(255,162,183,0.45))'%3E%3Cpolygon points='40,65 35,25 15,40 28,40' /%3E%3Cpolygon points='40,65 15,45 52,50' /%3E%3Cpolygon points='52,50 85,25 60,70' /%3E%3Cpolygon points='60,70 90,75 52,50' /%3E%3Cpolygon points='40,65 48,85 60,70 52,50' /%3E%3Cline x1='48' y1='85' x2='52' y2='50' /%3E%3C/g%3E%3C/svg%3E") 4 12, pointer`;
 
 const theme = createTheme({
   typography: {
@@ -63,13 +63,12 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
-    background: { default: "#03050A" },
-    // ปรับสี Primary ให้มีความเป็นเวทมนตร์ (Icy Cyan / Mystic Blue)
-    primary: { main: "#8DF9FF" },
-    secondary: { main: "#9D8DF1" }, // สีเวทมนตร์ม่วง
-    info: { main: "#4073B8" },
+    background: { default: "#0A0407" },
+    primary: { main: "#FFA2B7" }, // สีหลักใหม่
+    secondary: { main: "#D18CE0" }, // สีรองเวทมนตร์ม่วงอมชมพู
+    info: { main: "#D48C9E" },
     error: { main: "#B03A58" },
-    text: { primary: "#EAEFF5", secondary: "#A3B6CC" },
+    text: { primary: "#FFF0F3", secondary: "#D4C1C7" }, // ปรับข้อความให้ติดโทนอุ่น
   },
 });
 
@@ -88,7 +87,7 @@ const staggerItem = {
 };
 
 // --- Magic Circle Component (วงเวทมนตร์) ---
-const ArcaneCircle = ({ size = 300, color = "#8DF9FF", opacity = 0.1, sx }) => (
+const ArcaneCircle = ({ size = 300, color = "#FFA2B7", opacity = 0.1, sx }) => (
   <Box
     component={motion.div}
     animate={{ rotate: 360 }}
@@ -106,19 +105,71 @@ const ArcaneCircle = ({ size = 300, color = "#8DF9FF", opacity = 0.1, sx }) => (
       ...sx,
     }}
   >
-    <Box sx={{ position: "absolute", inset: 0, border: `1px solid ${color}`, borderRadius: "50%", opacity: 0.5 }} />
-    <Box sx={{ position: "absolute", inset: "8%", border: `1px dashed ${color}`, borderRadius: "50%", opacity: 0.8 }} />
-    <Box sx={{ position: "absolute", inset: "15%", border: `1px solid ${color}`, borderRadius: "50%", opacity: 0.3 }} />
+    <Box
+      sx={{
+        position: "absolute",
+        inset: 0,
+        border: `1px solid ${color}`,
+        borderRadius: "50%",
+        opacity: 0.5,
+      }}
+    />
+    <Box
+      sx={{
+        position: "absolute",
+        inset: "8%",
+        border: `1px dashed ${color}`,
+        borderRadius: "50%",
+        opacity: 0.8,
+      }}
+    />
+    <Box
+      sx={{
+        position: "absolute",
+        inset: "15%",
+        border: `1px solid ${color}`,
+        borderRadius: "50%",
+        opacity: 0.3,
+      }}
+    />
     <Box
       component={motion.div}
       animate={{ rotate: -720 }}
       transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-      sx={{ position: "absolute", inset: "22%", border: `2px dotted ${color}`, borderRadius: "50%" }}
+      sx={{
+        position: "absolute",
+        inset: "22%",
+        border: `2px dotted ${color}`,
+        borderRadius: "50%",
+      }}
     />
-    <svg viewBox="0 0 100 100" style={{ position: "absolute", width: "100%", height: "100%", opacity: 0.4 }}>
-      <polygon points="50,5 65,35 95,50 65,65 50,95 35,65 5,50 35,35" fill="none" stroke={color} strokeWidth="0.5" />
-      <polygon points="50,15 85,85 15,85" fill="none" stroke={color} strokeWidth="0.5" />
-      <polygon points="50,85 15,15 85,15" fill="none" stroke={color} strokeWidth="0.5" />
+    <svg
+      viewBox="0 0 100 100"
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        opacity: 0.4,
+      }}
+    >
+      <polygon
+        points="50,5 65,35 95,50 65,65 50,95 35,65 5,50 35,35"
+        fill="none"
+        stroke={color}
+        strokeWidth="0.5"
+      />
+      <polygon
+        points="50,15 85,85 15,85"
+        fill="none"
+        stroke={color}
+        strokeWidth="0.5"
+      />
+      <polygon
+        points="50,85 15,15 85,15"
+        fill="none"
+        stroke={color}
+        strokeWidth="0.5"
+      />
     </svg>
   </Box>
 );
@@ -137,7 +188,7 @@ const PhantomPianoAndCrane = () => {
       }}
     >
       <ArcaneCircle size={250} top="-10%" right="-10%" opacity={0.15} />
-      
+
       {/* Animated Paper Crane */}
       <motion.div
         animate={{
@@ -157,11 +208,21 @@ const PhantomPianoAndCrane = () => {
           width: 60,
           height: 60,
           opacity: 0.5,
-          filter: "drop-shadow(0px 0px 10px rgba(141, 249, 255, 0.6))",
+          filter: "drop-shadow(0px 0px 10px rgba(255, 162, 183, 0.6))",
         }}
       >
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g stroke="url(#craneGrad)" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" fill="rgba(141, 249, 255, 0.05)">
+        <svg
+          viewBox="0 0 100 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            stroke="url(#craneGrad)"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fill="rgba(255, 162, 183, 0.05)"
+          >
             <polygon points="40,65 35,25 15,40 28,40" />
             <polygon points="40,65 10,55 52,50" />
             <polygon points="52,50 75,15 60,70" />
@@ -171,8 +232,8 @@ const PhantomPianoAndCrane = () => {
           </g>
           <defs>
             <linearGradient id="craneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8DF9FF" />
-              <stop offset="100%" stopColor="#9D8DF1" />
+              <stop offset="0%" stopColor="#FFA2B7" />
+              <stop offset="100%" stopColor="#D18CE0" />
             </linearGradient>
           </defs>
         </svg>
@@ -182,15 +243,25 @@ const PhantomPianoAndCrane = () => {
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
-          animate={{ y: [0, -50], opacity: [0, 0.6, 0], x: [0, Math.random() * 20 - 10] }}
-          transition={{ duration: 4 + Math.random() * 3, repeat: Infinity, delay: i }}
-          style={{ 
-            position: "absolute", 
-            bottom: `${10 + Math.random() * 30}%`, 
+          animate={{
+            y: [0, -50],
+            opacity: [0, 0.6, 0],
+            x: [0, Math.random() * 20 - 10],
+          }}
+          transition={{
+            duration: 4 + Math.random() * 3,
+            repeat: Infinity,
+            delay: i,
+          }}
+          style={{
+            position: "absolute",
+            bottom: `${10 + Math.random() * 30}%`,
             right: `${10 + Math.random() * 40}%`,
-            width: 4, height: 4, borderRadius: "50%",
-            backgroundColor: "#8DF9FF",
-            boxShadow: "0 0 10px 2px rgba(141, 249, 255, 0.8)"
+            width: 4,
+            height: 4,
+            borderRadius: "50%",
+            backgroundColor: "#FFA2B7",
+            boxShadow: "0 0 10px 2px rgba(255, 162, 183, 0.8)",
           }}
         />
       ))}
@@ -269,7 +340,7 @@ const LoadingScreen = ({ onComplete }) => {
         position: "fixed",
         inset: 0,
         background:
-          "linear-gradient(to bottom, #071324 0%, #02050A 50%, #000000 100%)",
+          "linear-gradient(to bottom, #170A10 0%, #0A0407 50%, #000000 100%)",
         zIndex: 9999,
         display: "flex",
         justifyContent: "center",
@@ -294,7 +365,7 @@ const LoadingScreen = ({ onComplete }) => {
           width: "150vw",
           height: "100vh",
           background:
-            "linear-gradient(180deg, rgba(64, 115, 184, 0.2) 0%, transparent 80%)",
+            "linear-gradient(180deg, rgba(209, 140, 224, 0.2) 0%, transparent 80%)",
           filter: "blur(50px)",
           transformOrigin: "top center",
           pointerEvents: "none",
@@ -315,7 +386,7 @@ const LoadingScreen = ({ onComplete }) => {
           width: "80vw",
           height: "90vh",
           background:
-            "linear-gradient(180deg, rgba(82, 142, 204, 0.15) 0%, transparent 70%)",
+            "linear-gradient(180deg, rgba(255, 162, 183, 0.15) 0%, transparent 70%)",
           filter: "blur(60px)",
           transform: "rotate(10deg)",
           pointerEvents: "none",
@@ -341,10 +412,10 @@ const LoadingScreen = ({ onComplete }) => {
             left: particle.left,
             width: particle.size,
             height: particle.size,
-            backgroundColor: particle.isBioluminescent ? "#8DF9FF" : "#B0C4DE",
+            backgroundColor: particle.isBioluminescent ? "#FFA2B7" : "#D4C1C7",
             borderRadius: "50%",
             boxShadow: particle.isBioluminescent
-              ? "0 0 12px 2px rgba(141, 249, 255, 0.6)"
+              ? "0 0 12px 2px rgba(255, 162, 183, 0.6)"
               : "none",
             filter: particle.isBioluminescent ? "blur(0.5px)" : "blur(1px)",
           }}
@@ -380,9 +451,9 @@ const LoadingScreen = ({ onComplete }) => {
               marginLeft: -80,
               marginTop: -80,
               borderRadius: "50%",
-              border: "1px solid rgba(141, 249, 255, 0.3)",
+              border: "1px solid rgba(255, 162, 183, 0.3)",
               boxShadow:
-                "inset 0 0 30px rgba(82, 142, 204, 0.15), 0 0 20px rgba(141, 249, 255, 0.1)",
+                "inset 0 0 30px rgba(209, 140, 224, 0.15), 0 0 20px rgba(255, 162, 183, 0.1)",
             }}
           />
         ))}
@@ -401,7 +472,7 @@ const LoadingScreen = ({ onComplete }) => {
               transform: "translateX(-50%) rotate(90deg)",
             }}
           >
-            <TopDownShark glowColor="#8DF9FF" delay={0} />
+            <TopDownShark glowColor="#FFA2B7" delay={0} />
           </Box>
           <Box
             sx={{
@@ -413,7 +484,7 @@ const LoadingScreen = ({ onComplete }) => {
               transform: "translateX(-50%) rotate(-90deg)",
             }}
           >
-            <TopDownShark glowColor="#3A6D8C" delay={1.5} />
+            <TopDownShark glowColor="#D18CE0" delay={1.5} />
           </Box>
         </motion.div>
       </motion.div>
@@ -437,7 +508,7 @@ const LoadingScreen = ({ onComplete }) => {
             color: "#FFFFFF",
             mb: 2,
             textShadow:
-              "0 0 30px rgba(141, 249, 255, 0.7), 0 2px 10px rgba(0,0,0,0.8)",
+              "0 0 30px rgba(255, 162, 183, 0.7), 0 2px 10px rgba(0,0,0,0.8)",
             fontFamily: "'Cinzel', serif",
             letterSpacing: 6,
           }}
@@ -447,7 +518,7 @@ const LoadingScreen = ({ onComplete }) => {
         <Typography
           variant="body1"
           sx={{
-            color: "#A9BCD0",
+            color: "#D4C1C7",
             fontStyle: "italic",
             opacity: 0.9,
             letterSpacing: 2,
@@ -484,7 +555,7 @@ const MagicalAtmosphere = () => {
       })),
     [],
   );
-  
+
   const manaParticles = useMemo(
     () =>
       Array.from({ length: 25 }).map((_, i) => ({
@@ -505,7 +576,8 @@ const MagicalAtmosphere = () => {
         inset: 0,
         pointerEvents: "none",
         zIndex: 0,
-        background: "radial-gradient(circle at center, #0B0E1A 0%, #03050A 100%)",
+        background:
+          "radial-gradient(circle at center, #1A0A10 0%, #0A0407 100%)",
       }}
     >
       {/* ฝน */}
@@ -525,20 +597,20 @@ const MagicalAtmosphere = () => {
             left: drop.left,
             width: "1px",
             height: drop.height,
-            background: `linear-gradient(to bottom, transparent, rgba(141, 249, 255, ${drop.opacity}))`,
+            background: `linear-gradient(to bottom, transparent, rgba(255, 162, 183, ${drop.opacity}))`,
           }}
         />
       ))}
-      
+
       {/* ละอองมานา */}
       {manaParticles.map((particle) => (
         <motion.div
           key={particle.id}
           initial={{ y: 0, opacity: 0 }}
-          animate={{ 
-            y: "-100vh", 
+          animate={{
+            y: "-100vh",
             x: [0, Math.random() * 50 - 25, 0],
-            opacity: [0, 0.4, 0] 
+            opacity: [0, 0.4, 0],
           }}
           transition={{
             duration: particle.duration,
@@ -553,8 +625,8 @@ const MagicalAtmosphere = () => {
             width: particle.size,
             height: particle.size,
             borderRadius: "50%",
-            backgroundColor: "#8DF9FF",
-            boxShadow: "0 0 10px 1px rgba(141, 249, 255, 0.5)",
+            backgroundColor: "#FFA2B7",
+            boxShadow: "0 0 10px 1px rgba(255, 162, 183, 0.5)",
             filter: "blur(1px)",
           }}
         />
@@ -567,19 +639,25 @@ const LuxuryCard = ({ children, sx }) => (
   <Box
     sx={{
       borderRadius: "16px",
-      background: "rgba(10, 14, 25, 0.7)",
+      background: "rgba(15, 8, 12, 0.8)",
       backdropFilter: "blur(20px)",
-      border: "1px solid rgba(141, 249, 255, 0.2)",
+      border: "1px solid rgba(255, 162, 183, 0.2)",
       boxShadow:
-        "0 30px 60px rgba(0,0,0,0.9), 0 0 30px rgba(141, 249, 255, 0.05), inset 0 0 20px rgba(141, 249, 255, 0.05)",
+        "0 30px 60px rgba(0,0,0,0.9), 0 0 30px rgba(255, 162, 183, 0.05), inset 0 0 20px rgba(255, 162, 183, 0.05)",
       overflow: "hidden",
       position: "relative",
       ...sx,
     }}
   >
     {/* Magic Arcane Background */}
-    <ArcaneCircle size={600} top="-150px" right="-150px" opacity={0.07} color="#9D8DF1" />
-    
+    <ArcaneCircle
+      size={600}
+      top="-150px"
+      right="-150px"
+      opacity={0.07}
+      color="#D18CE0"
+    />
+
     <Box
       sx={{
         position: "absolute",
@@ -588,8 +666,8 @@ const LuxuryCard = ({ children, sx }) => (
         right: 0,
         height: "2px",
         background:
-          "linear-gradient(90deg, transparent, rgba(141,249,255,0.8), transparent)",
-        boxShadow: "0 0 10px rgba(141,249,255,0.5)",
+          "linear-gradient(90deg, transparent, rgba(255,162,183,0.8), transparent)",
+        boxShadow: "0 0 10px rgba(255,162,183,0.5)",
       }}
     />
     {children}
@@ -606,23 +684,25 @@ const MagicalGlassCard = ({
     <Box
       sx={{
         background:
-          "linear-gradient(135deg, rgba(15, 20, 35, 0.6) 0%, rgba(6, 10, 18, 0.8) 100%)",
+          "linear-gradient(135deg, rgba(35, 15, 25, 0.6) 0%, rgba(15, 6, 10, 0.8) 100%)",
         backdropFilter: "blur(16px)",
-        border: "1px solid rgba(141, 249, 255, 0.1)",
+        border: "1px solid rgba(255, 162, 183, 0.1)",
         borderRadius: "12px",
         p: { xs: 3, md: 4 },
         position: "relative",
         overflow: "hidden",
         height: "100%",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(141, 249, 255, 0.02)",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 162, 183, 0.02)",
         transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
         ...(hoverEffect && {
           "&:hover": {
             transform: "translateY(-5px)",
             background:
-              "linear-gradient(135deg, rgba(22, 30, 50, 0.7) 0%, rgba(10, 15, 25, 0.9) 100%)",
-            border: "1px solid rgba(141, 249, 255, 0.4)",
-            boxShadow: "0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(141, 249, 255, 0.15), inset 0 0 20px rgba(157, 141, 241, 0.1)",
+              "linear-gradient(135deg, rgba(45, 20, 30, 0.7) 0%, rgba(20, 8, 12, 0.9) 100%)",
+            border: "1px solid rgba(255, 162, 183, 0.4)",
+            boxShadow:
+              "0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 162, 183, 0.15), inset 0 0 20px rgba(209, 140, 224, 0.1)",
           },
         }),
         ...sx,
@@ -649,21 +729,30 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
         sx={{
           p: 1.2,
           borderRadius: "10px",
-          background: "linear-gradient(135deg, rgba(141,249,255,0.15) 0%, rgba(157,141,241,0.05) 100%)",
-          border: "1px solid rgba(141, 249, 255, 0.3)",
-          boxShadow: "0 0 15px rgba(141, 249, 255, 0.2), inset 0 0 8px rgba(141, 249, 255, 0.2)",
+          background:
+            "linear-gradient(135deg, rgba(255,162,183,0.15) 0%, rgba(209,140,224,0.05) 100%)",
+          border: "1px solid rgba(255, 162, 183, 0.3)",
+          boxShadow:
+            "0 0 15px rgba(255, 162, 183, 0.2), inset 0 0 8px rgba(255, 162, 183, 0.2)",
           display: "flex",
         }}
       >
-        <Icon sx={{ color: "primary.main", fontSize: 26, filter: "drop-shadow(0 0 5px rgba(141, 249, 255, 0.8))" }} />
+        <Icon
+          sx={{
+            color: "primary.main",
+            fontSize: 26,
+            filter: "drop-shadow(0 0 5px rgba(255, 162, 183, 0.8))",
+          }}
+        />
       </Box>
       <Box>
         <Typography
           variant="h5"
-          sx={{ 
-            color: "#FFFFFF", 
-            textShadow: "0 0 10px rgba(141, 249, 255, 0.4), 0 2px 4px rgba(0,0,0,0.8)",
-            letterSpacing: 1
+          sx={{
+            color: "#FFFFFF",
+            textShadow:
+              "0 0 10px rgba(255, 162, 183, 0.4), 0 2px 4px rgba(0,0,0,0.8)",
+            letterSpacing: 1,
           }}
         >
           {title}
@@ -677,7 +766,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
               textTransform: "uppercase",
               opacity: 0.9,
               display: "block",
-              textShadow: "0 0 8px rgba(157, 141, 241, 0.5)",
+              textShadow: "0 0 8px rgba(209, 140, 224, 0.5)",
             }}
           >
             {subtitle}
@@ -691,8 +780,8 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
         height: "2px",
         width: "100%",
         background:
-          "linear-gradient(90deg, rgba(141,249,255,0.6) 0%, rgba(157,141,241,0.2) 50%, transparent 100%)",
-        boxShadow: "0 0 8px rgba(141, 249, 255, 0.4)",
+          "linear-gradient(90deg, rgba(255,162,183,0.6) 0%, rgba(209,140,224,0.2) 50%, transparent 100%)",
+        boxShadow: "0 0 8px rgba(255, 162, 183, 0.4)",
       }}
     />
   </Box>
@@ -702,10 +791,10 @@ const MysticText = ({ children, sx, variant = "h6" }) => (
   <Typography
     variant={variant}
     sx={{
-      background: "linear-gradient(180deg, #FFFFFF 0%, #8DF9FF 100%)",
+      background: "linear-gradient(180deg, #FFFFFF 0%, #FFA2B7 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
-      filter: "drop-shadow(0 0 8px rgba(141, 249, 255, 0.4))",
+      filter: "drop-shadow(0 0 8px rgba(255, 162, 183, 0.4))",
       ...sx,
     }}
   >
@@ -743,19 +832,19 @@ export default function KyoraProfile() {
         styles={{
           "body, html": {
             cursor: `${normalCraneCursor} !important`,
-            backgroundColor: "#03050A",
+            backgroundColor: "#0A0407",
           },
           "a, button, [role='button'], .MuiTab-root, .MuiIconButton-root, .MuiButtonBase-root":
             { cursor: `${pointerCraneCursor} !important` },
           "::-webkit-scrollbar": { width: "6px" },
           "::-webkit-scrollbar-track": { background: "rgba(0,0,0,0.5)" },
           "::-webkit-scrollbar-thumb": {
-            background: "rgba(141, 249, 255, 0.3)",
+            background: "rgba(255, 162, 183, 0.3)",
             borderRadius: "10px",
             boxShadow: "inset 0 0 6px rgba(0,0,0,0.5)",
           },
           "::-webkit-scrollbar-thumb:hover": {
-            background: "rgba(141, 249, 255, 0.6)",
+            background: "rgba(255, 162, 183, 0.6)",
           },
         }}
       />
@@ -782,9 +871,9 @@ export default function KyoraProfile() {
                   animate={{
                     scale: [1, 1.4, 1],
                     boxShadow: [
-                      "0 0 0px 0px rgba(141, 249, 255, 0)",
-                      "0 0 25px 12px rgba(157, 141, 241, 0.3)",
-                      "0 0 0px 0px rgba(141, 249, 255, 0)",
+                      "0 0 0px 0px rgba(255, 162, 183, 0)",
+                      "0 0 25px 12px rgba(209, 140, 224, 0.3)",
+                      "0 0 0px 0px rgba(255, 162, 183, 0)",
                     ],
                   }}
                   transition={{
@@ -804,19 +893,21 @@ export default function KyoraProfile() {
             <IconButton
               onClick={toggleMusic}
               sx={{
-                background: "rgba(6, 10, 18, 0.8)",
+                background: "rgba(15, 8, 12, 0.8)",
                 border: "1px solid",
-                borderColor: "rgba(141, 249, 255, 0.3)",
+                borderColor: "rgba(255, 162, 183, 0.3)",
                 color: isPlaying ? "primary.main" : "text.secondary",
                 backdropFilter: "blur(12px)",
-                boxShadow: isPlaying ? "0 0 15px rgba(141, 249, 255, 0.2)" : "none",
+                boxShadow: isPlaying
+                  ? "0 0 15px rgba(255, 162, 183, 0.2)"
+                  : "none",
                 p: 2,
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  background: "rgba(141, 249, 255, 0.15)",
+                  background: "rgba(255, 162, 183, 0.15)",
                   transform: "scale(1.05)",
                   borderColor: "primary.main",
-                  boxShadow: "0 0 20px rgba(141, 249, 255, 0.4)",
+                  boxShadow: "0 0 20px rgba(255, 162, 183, 0.4)",
                 },
               }}
             >
@@ -852,19 +943,28 @@ export default function KyoraProfile() {
                           padding: 1.5,
                         }}
                       >
-                        <ArcaneCircle size={240} opacity={0.3} color="#9D8DF1" sx={{ top: -10, left: -10 }} />
+                        <ArcaneCircle
+                          size={240}
+                          opacity={0.3}
+                          color="#D18CE0"
+                          sx={{ top: -10, left: -10 }}
+                        />
                         <Box
                           component={motion.div}
                           animate={{ rotate: 360 }}
-                          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                          transition={{
+                            duration: 20,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
                           sx={{
                             position: "absolute",
                             inset: 0,
                             borderRadius: "50%",
-                            border: "2px solid rgba(141, 249, 255, 0.1)",
-                            borderTop: "3px solid #8DF9FF",
-                            borderBottom: "3px solid #9D8DF1",
-                            boxShadow: "0 0 20px rgba(141, 249, 255, 0.3)",
+                            border: "2px solid rgba(255, 162, 183, 0.1)",
+                            borderTop: "3px solid #FFA2B7",
+                            borderBottom: "3px solid #D18CE0",
+                            boxShadow: "0 0 20px rgba(255, 162, 183, 0.3)",
                             opacity: 0.9,
                           }}
                         />
@@ -874,9 +974,10 @@ export default function KyoraProfile() {
                           sx={{
                             width: { xs: 180, sm: 220 },
                             height: { xs: 180, sm: 220 },
-                            border: "4px solid rgba(3, 5, 10, 0.9)",
+                            border: "4px solid rgba(15, 8, 12, 0.9)",
                             filter: "grayscale(10%) contrast(1.1)",
-                            boxShadow: "0 0 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(141,249,255,0.3)",
+                            boxShadow:
+                              "0 0 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,162,183,0.3)",
                             position: "relative",
                             zIndex: 2,
                           }}
@@ -894,7 +995,7 @@ export default function KyoraProfile() {
                           gap: 1,
                           mb: 1,
                           opacity: 0.9,
-                          textShadow: "0 0 8px rgba(141, 249, 255, 0.5)",
+                          textShadow: "0 0 8px rgba(255, 162, 183, 0.5)",
                         }}
                       >
                         <AutoAwesomeIcon sx={{ fontSize: 16 }} />
@@ -918,14 +1019,18 @@ export default function KyoraProfile() {
                           mb: 4,
                           opacity: 0.9,
                           fontSize: "1.3rem",
-                          textShadow: "0 0 10px rgba(157, 141, 241, 0.4)",
+                          textShadow: "0 0 10px rgba(209, 140, 224, 0.4)",
                         }}
                       >
                         ฮิซาเมะ เคียวระ (Hisame Kyōra)
                       </Typography>
 
                       <Divider
-                        sx={{ mb: 4, borderColor: "rgba(141, 249, 255, 0.15)", boxShadow: "0 1px 5px rgba(141,249,255,0.2)" }}
+                        sx={{
+                          mb: 4,
+                          borderColor: "rgba(255, 162, 183, 0.15)",
+                          boxShadow: "0 1px 5px rgba(255,162,183,0.2)",
+                        }}
                       />
 
                       <Grid container spacing={2}>
@@ -946,12 +1051,14 @@ export default function KyoraProfile() {
                             <Box
                               sx={{
                                 pl: 2,
-                                borderLeft: "2px solid rgba(141, 249, 255, 0.2)",
+                                borderLeft:
+                                  "2px solid rgba(255, 162, 183, 0.2)",
                                 transition: "all 0.3s",
-                                "&:hover": { 
+                                "&:hover": {
                                   borderLeftColor: "primary.main",
-                                  textShadow: "0 0 8px rgba(141, 249, 255, 0.5)",
-                                  transform: "translateX(4px)"
+                                  textShadow:
+                                    "0 0 8px rgba(255, 162, 183, 0.5)",
+                                  transform: "translateX(4px)",
                                 },
                               }}
                             >
@@ -962,14 +1069,14 @@ export default function KyoraProfile() {
                                   fontFamily: "'Cinzel', serif",
                                   display: "block",
                                   mb: 0.5,
-                                  opacity: 0.8
+                                  opacity: 0.8,
                                 }}
                               >
                                 {info.label}
                               </Typography>
                               <Typography
                                 variant="body2"
-                                sx={{ color: "#EAEFF5", fontWeight: 400 }}
+                                sx={{ color: "#FFF0F3", fontWeight: 400 }}
                               >
                                 {info.val}
                               </Typography>
@@ -1012,7 +1119,7 @@ export default function KyoraProfile() {
                         width: { md: "4px" },
                         height: { xs: "4px" },
                         borderRadius: "4px",
-                        boxShadow: "0 0 10px rgba(141, 249, 255, 0.8)",
+                        boxShadow: "0 0 10px rgba(255, 162, 183, 0.8)",
                       },
                       "& .MuiTab-root": {
                         color: "text.secondary",
@@ -1026,16 +1133,18 @@ export default function KyoraProfile() {
                         mb: { md: 1 },
                         border: "1px solid transparent",
                         "&:hover": {
-                          background: "rgba(141, 249, 255, 0.05)",
+                          background: "rgba(255, 162, 183, 0.05)",
                           color: "#FFFFFF",
-                          border: "1px solid rgba(141, 249, 255, 0.1)",
+                          border: "1px solid rgba(255, 162, 183, 0.1)",
                         },
                         "&.Mui-selected": {
                           color: "primary.main",
-                          background: "linear-gradient(90deg, rgba(141, 249, 255, 0.1) 0%, rgba(157, 141, 241, 0.05) 100%)",
-                          border: "1px solid rgba(141, 249, 255, 0.2)",
-                          boxShadow: "inset 4px 0 15px rgba(141, 249, 255, 0.1)",
-                          textShadow: "0 0 10px rgba(141, 249, 255, 0.4)",
+                          background:
+                            "linear-gradient(90deg, rgba(255, 162, 183, 0.1) 0%, rgba(209, 140, 224, 0.05) 100%)",
+                          border: "1px solid rgba(255, 162, 183, 0.2)",
+                          boxShadow:
+                            "inset 4px 0 15px rgba(255, 162, 183, 0.1)",
+                          textShadow: "0 0 10px rgba(255, 162, 183, 0.4)",
                         },
                       },
                     }}
@@ -1107,15 +1216,17 @@ export default function KyoraProfile() {
                                     sx={{
                                       p: 2.5,
                                       background:
-                                        "linear-gradient(90deg, rgba(141, 249, 255, 0.08) 0%, transparent 100%)",
-                                      borderLeft: "3px solid #8DF9FF",
+                                        "linear-gradient(90deg, rgba(255, 162, 183, 0.08) 0%, transparent 100%)",
+                                      borderLeft: "3px solid #FFA2B7",
                                       borderRadius: "0 8px 8px 0",
                                       height: "100%",
                                       transition: "all 0.3s",
                                       "&:hover": {
                                         transform: "translateX(8px)",
-                                        background: "linear-gradient(90deg, rgba(141, 249, 255, 0.15) 0%, transparent 100%)",
-                                        boxShadow: "inset 10px 0 15px rgba(141, 249, 255, 0.05)",
+                                        background:
+                                          "linear-gradient(90deg, rgba(255, 162, 183, 0.15) 0%, transparent 100%)",
+                                        boxShadow:
+                                          "inset 10px 0 15px rgba(255, 162, 183, 0.05)",
                                       },
                                     }}
                                   >
@@ -1140,22 +1251,37 @@ export default function KyoraProfile() {
                                 p: 3,
                                 background: "rgba(0,0,0,0.5)",
                                 borderRadius: "10px",
-                                border: "1px solid rgba(157, 141, 241, 0.2)",
-                                boxShadow: "inset 0 0 20px rgba(157, 141, 241, 0.05)",
+                                border: "1px solid rgba(209, 140, 224, 0.2)",
+                                boxShadow:
+                                  "inset 0 0 20px rgba(209, 140, 224, 0.05)",
                                 position: "relative",
                                 overflow: "hidden",
                               }}
                             >
-                              <ArcaneCircle size={150} color="#9D8DF1" opacity={0.1} sx={{ top: -50, right: -50 }} />
+                              <ArcaneCircle
+                                size={150}
+                                color="#D18CE0"
+                                opacity={0.1}
+                                sx={{ top: -50, right: -50 }}
+                              />
                               <Typography
                                 variant="h6"
-                                sx={{ color: "secondary.main", mb: 1.5, position: "relative", zIndex: 1 }}
+                                sx={{
+                                  color: "secondary.main",
+                                  mb: 1.5,
+                                  position: "relative",
+                                  zIndex: 1,
+                                }}
                               >
                                 Insomnia (ภาวะนอนไม่หลับ)
                               </Typography>
                               <Typography
                                 variant="body1"
-                                sx={{ color: "text.secondary", position: "relative", zIndex: 1 }}
+                                sx={{
+                                  color: "text.secondary",
+                                  position: "relative",
+                                  zIndex: 1,
+                                }}
                               >
                                 ภาวะนอนไม่หลับไม่ได้เกิดจากสภาพร่างกายเพียงอย่างเดียว
                                 แต่เป็นผลรวมของ ความเครียดทางจิตใจ +
@@ -1193,12 +1319,12 @@ export default function KyoraProfile() {
                         >
                           <span
                             style={{
-                              color: "#8DF9FF",
+                              color: "#FFA2B7",
                               fontSize: "1.8rem",
                               fontWeight: 600,
                               fontFamily: "'Cinzel', serif",
                               lineHeight: 1,
-                              textShadow: "0 0 10px rgba(141, 249, 255, 0.6)",
+                              textShadow: "0 0 10px rgba(255, 162, 183, 0.6)",
                             }}
                           >
                             เ
@@ -1232,18 +1358,23 @@ export default function KyoraProfile() {
                               flexGrow: 1,
                               height: "2px",
                               background:
-                                "linear-gradient(90deg, transparent, #9D8DF1)",
+                                "linear-gradient(90deg, transparent, #D18CE0)",
                             }}
                           />
                           <AutoAwesomeIcon
-                            sx={{ mx: 2, color: "secondary.main", fontSize: 18, filter: "drop-shadow(0 0 5px #9D8DF1)" }}
+                            sx={{
+                              mx: 2,
+                              color: "secondary.main",
+                              fontSize: 18,
+                              filter: "drop-shadow(0 0 5px #D18CE0)",
+                            }}
                           />
                           <Box
                             sx={{
                               flexGrow: 1,
                               height: "2px",
                               background:
-                                "linear-gradient(270deg, transparent, #9D8DF1)",
+                                "linear-gradient(270deg, transparent, #D18CE0)",
                             }}
                           />
                         </Box>
@@ -1274,9 +1405,9 @@ export default function KyoraProfile() {
                           sx={{
                             display: "inline-flex",
                             alignItems: "center",
-                            background: "rgba(176, 58, 88, 0.15)",
-                            border: "1px solid rgba(176, 58, 88, 0.4)",
-                            boxShadow: "0 0 10px rgba(176, 58, 88, 0.2)",
+                            background: "rgba(255, 77, 109, 0.15)",
+                            border: "1px solid rgba(255, 77, 109, 0.4)",
+                            boxShadow: "0 0 10px rgba(255, 77, 109, 0.2)",
                             borderRadius: "8px",
                             px: 2,
                             py: 1,
@@ -1285,10 +1416,10 @@ export default function KyoraProfile() {
                           <Typography
                             variant="body2"
                             sx={{
-                              color: "#FF7B93",
+                              color: "#FF4D6D",
                               fontWeight: 500,
                               letterSpacing: 1,
-                              textShadow: "0 0 8px rgba(255, 123, 147, 0.5)",
+                              textShadow: "0 0 8px rgba(255, 77, 109, 0.5)",
                             }}
                           >
                             [ ล็อคข้อมูลเพิ่มเติม ]
@@ -1386,34 +1517,46 @@ export default function KyoraProfile() {
                                       height: "100%",
                                       background: "rgba(0,0,0,0.4)",
                                       border:
-                                        "1px solid rgba(141, 249, 255, 0.1)",
+                                        "1px solid rgba(255, 162, 183, 0.1)",
                                       borderRadius: "10px",
                                       transition: "all 0.3s",
                                       position: "relative",
                                       overflow: "hidden",
                                       "&:hover": {
-                                        background: "rgba(141, 249, 255, 0.08)",
+                                        background: "rgba(255, 162, 183, 0.08)",
                                         borderColor: "primary.main",
-                                        boxShadow: "0 0 15px rgba(141, 249, 255, 0.15)",
+                                        boxShadow:
+                                          "0 0 15px rgba(255, 162, 183, 0.15)",
                                         transform: "translateY(-3px)",
                                       },
                                     }}
                                   >
-                                    <ArcaneCircle size={100} color="#8DF9FF" opacity={0.05} sx={{ top: -20, right: -20 }} />
+                                    <ArcaneCircle
+                                      size={100}
+                                      color="#FFA2B7"
+                                      opacity={0.05}
+                                      sx={{ top: -20, right: -20 }}
+                                    />
                                     <Typography
                                       variant="subtitle1"
                                       sx={{
                                         color: "primary.main",
                                         mb: 1.5,
                                         fontWeight: 600,
-                                        textShadow: "0 0 8px rgba(141, 249, 255, 0.3)",
+                                        textShadow:
+                                          "0 0 8px rgba(255, 162, 183, 0.3)",
                                       }}
                                     >
                                       {spell.name}
                                     </Typography>
                                     <Typography
                                       variant="body2"
-                                      sx={{ color: "text.secondary", mb: 2, position: "relative", zIndex: 1 }}
+                                      sx={{
+                                        color: "text.secondary",
+                                        mb: 2,
+                                        position: "relative",
+                                        zIndex: 1,
+                                      }}
                                     >
                                       {spell.desc}
                                     </Typography>
@@ -1424,7 +1567,7 @@ export default function KyoraProfile() {
                                           flexDirection: "column",
                                           gap: 1.2,
                                           position: "relative",
-                                          zIndex: 1
+                                          zIndex: 1,
                                         }}
                                       >
                                         {spell.bullets.map((bullet, idx) => (
@@ -1435,10 +1578,18 @@ export default function KyoraProfile() {
                                               color: "text.secondary",
                                               pl: 2,
                                               borderLeft:
-                                                "2px solid rgba(157, 141, 241, 0.5)",
+                                                "2px solid rgba(209, 140, 224, 0.5)",
                                             }}
                                           >
-                                            <span style={{ color: "#9D8DF1", marginRight: "4px" }}>✦</span> {bullet}
+                                            <span
+                                              style={{
+                                                color: "#D18CE0",
+                                                marginRight: "4px",
+                                              }}
+                                            >
+                                              ✦
+                                            </span>{" "}
+                                            {bullet}
                                           </Typography>
                                         ))}
                                       </Box>
@@ -1451,7 +1602,9 @@ export default function KyoraProfile() {
                         </Grid>
 
                         <Grid item xs={12}>
-                          <MagicalGlassCard sx={{ borderLeft: "4px solid #9D8DF1" }}>
+                          <MagicalGlassCard
+                            sx={{ borderLeft: "4px solid #D18CE0" }}
+                          >
                             <SectionHeader
                               icon={ShieldIcon}
                               title="ทักษะเวทมนตร์อื่นๆ"
@@ -1496,21 +1649,38 @@ export default function KyoraProfile() {
                                       background: "rgba(0,0,0,0.3)",
                                       borderRadius: "10px",
                                       border:
-                                        "1px solid rgba(157, 141, 241, 0.2)",
+                                        "1px solid rgba(209, 140, 224, 0.2)",
                                       position: "relative",
                                       overflow: "hidden",
                                     }}
                                   >
-                                    <ArcaneCircle size={200} color="#9D8DF1" opacity={0.05} sx={{ top: -50, right: -50 }} />
+                                    <ArcaneCircle
+                                      size={200}
+                                      color="#D18CE0"
+                                      opacity={0.05}
+                                      sx={{ top: -50, right: -50 }}
+                                    />
                                     <Typography
                                       variant="h6"
-                                      sx={{ color: "secondary.main", mb: 1.5, position: "relative", zIndex: 1, textShadow: "0 0 5px rgba(157,141,241,0.3)" }}
+                                      sx={{
+                                        color: "secondary.main",
+                                        mb: 1.5,
+                                        position: "relative",
+                                        zIndex: 1,
+                                        textShadow:
+                                          "0 0 5px rgba(209,140,224,0.3)",
+                                      }}
                                     >
                                       {spell.name}
                                     </Typography>
                                     <Typography
                                       variant="body1"
-                                      sx={{ color: "text.secondary", mb: 2, position: "relative", zIndex: 1 }}
+                                      sx={{
+                                        color: "text.secondary",
+                                        mb: 2,
+                                        position: "relative",
+                                        zIndex: 1,
+                                      }}
                                     >
                                       {spell.desc}
                                     </Typography>
@@ -1521,8 +1691,8 @@ export default function KyoraProfile() {
                                           flexDirection: "column",
                                           gap: 1.5,
                                           mt: 2,
-                                          position: "relative", 
-                                          zIndex: 1
+                                          position: "relative",
+                                          zIndex: 1,
                                         }}
                                       >
                                         {spell.bullets.map((bullet, idx) => (
@@ -1533,10 +1703,18 @@ export default function KyoraProfile() {
                                               color: "text.secondary",
                                               pl: 2,
                                               borderLeft:
-                                                "2px solid rgba(141, 249, 255, 0.4)",
+                                                "2px solid rgba(255, 162, 183, 0.4)",
                                             }}
                                           >
-                                            <span style={{ color: "#8DF9FF", marginRight: "6px" }}>✧</span> {bullet}
+                                            <span
+                                              style={{
+                                                color: "#FFA2B7",
+                                                marginRight: "6px",
+                                              }}
+                                            >
+                                              ✧
+                                            </span>{" "}
+                                            {bullet}
                                           </Typography>
                                         ))}
                                       </Box>
@@ -1596,19 +1774,23 @@ export default function KyoraProfile() {
                                   display: "flex",
                                   alignItems: "center",
                                   gap: 1.5,
-                                  textShadow: "0 0 5px rgba(141, 249, 255, 0.3)"
+                                  textShadow:
+                                    "0 0 5px rgba(255, 162, 183, 0.3)",
                                 }}
                               >
                                 <Box
                                   component={motion.div}
-                                  animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
+                                  animate={{
+                                    scale: [1, 1.2, 1],
+                                    opacity: [0.7, 1, 0.7],
+                                  }}
                                   transition={{ duration: 2, repeat: Infinity }}
                                   sx={{
                                     width: "8px",
                                     height: "8px",
-                                    background: "#8DF9FF",
+                                    background: "#FFA2B7",
                                     borderRadius: "50%",
-                                    boxShadow: "0 0 8px #8DF9FF"
+                                    boxShadow: "0 0 8px #FFA2B7",
                                   }}
                                 />
                                 {trait.title}
@@ -1627,9 +1809,9 @@ export default function KyoraProfile() {
                             sx={{
                               display: "inline-flex",
                               alignItems: "center",
-                              background: "rgba(176, 58, 88, 0.15)",
-                              border: "1px solid rgba(176, 58, 88, 0.4)",
-                              boxShadow: "0 0 10px rgba(176, 58, 88, 0.2)",
+                              background: "rgba(255, 77, 109, 0.15)",
+                              border: "1px solid rgba(255, 77, 109, 0.4)",
+                              boxShadow: "0 0 10px rgba(255, 77, 109, 0.2)",
                               borderRadius: "8px",
                               px: 2,
                               py: 1,
@@ -1639,10 +1821,10 @@ export default function KyoraProfile() {
                             <Typography
                               variant="body2"
                               sx={{
-                                color: "#FF7B93",
+                                color: "#FF4D6D",
                                 fontWeight: 500,
                                 letterSpacing: 1,
-                                textShadow: "0 0 8px rgba(255, 123, 147, 0.5)",
+                                textShadow: "0 0 8px rgba(255, 77, 109, 0.5)",
                               }}
                             >
                               [ ล็อคข้อมูลเพิ่มเติม ]
@@ -1697,16 +1879,16 @@ export default function KyoraProfile() {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(141, 249, 255, 0.05)",
-                                      borderColor: "rgba(141, 249, 255, 0.2)",
+                                      background: "rgba(255, 162, 183, 0.05)",
+                                      borderColor: "rgba(255, 162, 183, 0.2)",
                                     },
                                   }}
                                 >
                                   <span
                                     style={{
-                                      color: "#8DF9FF",
+                                      color: "#FFA2B7",
                                       marginTop: "2px",
-                                      textShadow: "0 0 5px #8DF9FF"
+                                      textShadow: "0 0 5px #FFA2B7",
                                     }}
                                   >
                                     ✦
@@ -1722,7 +1904,12 @@ export default function KyoraProfile() {
                             </Box>
                             <Typography
                               variant="body2"
-                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500, textShadow: "0 0 5px rgba(255, 123, 147, 0.5)" }}
+                              sx={{
+                                color: "#FF4D6D",
+                                mt: 3,
+                                fontWeight: 500,
+                                textShadow: "0 0 5px rgba(255, 77, 109, 0.5)",
+                              }}
                             >
                               [ล็อค]
                             </Typography>
@@ -1759,16 +1946,16 @@ export default function KyoraProfile() {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(157, 141, 241, 0.05)",
-                                      borderColor: "rgba(157, 141, 241, 0.2)",
+                                      background: "rgba(209, 140, 224, 0.05)",
+                                      borderColor: "rgba(209, 140, 224, 0.2)",
                                     },
                                   }}
                                 >
                                   <span
                                     style={{
-                                      color: "#9D8DF1",
+                                      color: "#D18CE0",
                                       marginTop: "2px",
-                                      textShadow: "0 0 5px #9D8DF1"
+                                      textShadow: "0 0 5px #D18CE0",
                                     }}
                                   >
                                     ✦
@@ -1784,7 +1971,12 @@ export default function KyoraProfile() {
                             </Box>
                             <Typography
                               variant="body2"
-                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500, textShadow: "0 0 5px rgba(255, 123, 147, 0.5)" }}
+                              sx={{
+                                color: "#FF4D6D",
+                                mt: 3,
+                                fontWeight: 500,
+                                textShadow: "0 0 5px rgba(255, 77, 109, 0.5)",
+                              }}
                             >
                               [ล็อค]
                             </Typography>
@@ -1801,15 +1993,16 @@ export default function KyoraProfile() {
                             <Typography
                               variant="body2"
                               sx={{
-                                color: "#FF7B93",
+                                color: "#FF4D6D",
                                 mt: 2,
                                 fontWeight: 500,
                                 p: 2.5,
-                                background: "rgba(176, 58, 88, 0.15)",
-                                border: "1px solid rgba(176, 58, 88, 0.3)",
-                                boxShadow: "inset 0 0 10px rgba(176, 58, 88, 0.1)",
+                                background: "rgba(255, 77, 109, 0.15)",
+                                border: "1px solid rgba(255, 77, 109, 0.3)",
+                                boxShadow:
+                                  "inset 0 0 10px rgba(255, 77, 109, 0.1)",
                                 borderRadius: "8px",
-                                textShadow: "0 0 5px rgba(255, 123, 147, 0.5)"
+                                textShadow: "0 0 5px rgba(255, 77, 109, 0.5)",
                               }}
                             >
                               [ ล็อคข้อมูล ]
@@ -1872,29 +2065,37 @@ export default function KyoraProfile() {
                                     p: 2.5,
                                     background: "rgba(0,0,0,0.3)",
                                     border:
-                                      "1px solid rgba(141, 249, 255, 0.1)",
+                                      "1px solid rgba(255, 162, 183, 0.1)",
                                     borderRadius: "12px",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(141, 249, 255, 0.05)",
+                                      background: "rgba(255, 162, 183, 0.05)",
                                       borderColor: "primary.main",
-                                      boxShadow: "0 5px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(141, 249, 255, 0.05)",
-                                      transform: "translateX(5px)"
+                                      boxShadow:
+                                        "0 5px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(255, 162, 183, 0.05)",
+                                      transform: "translateX(5px)",
                                     },
                                   }}
                                 >
                                   <Box sx={{ minWidth: 24, pt: 0.5 }}>
                                     <Box
                                       component={motion.div}
-                                      animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
-                                      transition={{ duration: 2, repeat: Infinity, delay: idx * 0.1 }}
+                                      animate={{
+                                        scale: [1, 1.3, 1],
+                                        opacity: [0.5, 1, 0.5],
+                                      }}
+                                      transition={{
+                                        duration: 2,
+                                        repeat: Infinity,
+                                        delay: idx * 0.1,
+                                      }}
                                       sx={{
                                         display: "inline-block",
                                         width: "8px",
                                         height: "8px",
-                                        background: "#8DF9FF",
+                                        background: "#FFA2B7",
                                         borderRadius: "50%",
-                                        boxShadow: "0 0 8px #8DF9FF",
+                                        boxShadow: "0 0 8px #FFA2B7",
                                       }}
                                     />
                                   </Box>
