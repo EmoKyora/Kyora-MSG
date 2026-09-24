@@ -63,12 +63,13 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
-    background: { default: "#040914" },
-    primary: { main: "#B3C6D6" },
-    secondary: { main: "#5C748A" },
-    info: { main: "#708A9E" },
-    error: { main: "#7A2A3B" },
-    text: { primary: "#EAEFF5", secondary: "#8A9BB0" },
+    background: { default: "#03050A" },
+    // ปรับสี Primary ให้มีความเป็นเวทมนตร์ (Icy Cyan / Mystic Blue)
+    primary: { main: "#8DF9FF" },
+    secondary: { main: "#9D8DF1" }, // สีเวทมนตร์ม่วง
+    info: { main: "#4073B8" },
+    error: { main: "#B03A58" },
+    text: { primary: "#EAEFF5", secondary: "#A3B6CC" },
   },
 });
 
@@ -86,12 +87,44 @@ const staggerItem = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-// --- Decorative Background (Piano & Crane) ---
-const PhantomPianoAndCrane = () => {
-  // สร้างคีย์เปียโนจำลอง
-  const whiteKeys = Array.from({ length: 8 });
-  const blackKeys = [1, 2, 4, 5, 6];
+// --- Magic Circle Component (วงเวทมนตร์) ---
+const ArcaneCircle = ({ size = 300, color = "#8DF9FF", opacity = 0.1, sx }) => (
+  <Box
+    component={motion.div}
+    animate={{ rotate: 360 }}
+    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+    sx={{
+      position: "absolute",
+      width: size,
+      height: size,
+      opacity,
+      pointerEvents: "none",
+      zIndex: 0,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      ...sx,
+    }}
+  >
+    <Box sx={{ position: "absolute", inset: 0, border: `1px solid ${color}`, borderRadius: "50%", opacity: 0.5 }} />
+    <Box sx={{ position: "absolute", inset: "8%", border: `1px dashed ${color}`, borderRadius: "50%", opacity: 0.8 }} />
+    <Box sx={{ position: "absolute", inset: "15%", border: `1px solid ${color}`, borderRadius: "50%", opacity: 0.3 }} />
+    <Box
+      component={motion.div}
+      animate={{ rotate: -720 }}
+      transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+      sx={{ position: "absolute", inset: "22%", border: `2px dotted ${color}`, borderRadius: "50%" }}
+    />
+    <svg viewBox="0 0 100 100" style={{ position: "absolute", width: "100%", height: "100%", opacity: 0.4 }}>
+      <polygon points="50,5 65,35 95,50 65,65 50,95 35,65 5,50 35,35" fill="none" stroke={color} strokeWidth="0.5" />
+      <polygon points="50,15 85,85 15,85" fill="none" stroke={color} strokeWidth="0.5" />
+      <polygon points="50,85 15,15 85,15" fill="none" stroke={color} strokeWidth="0.5" />
+    </svg>
+  </Box>
+);
 
+// --- Decorative Background ---
+const PhantomPianoAndCrane = () => {
   return (
     <Box
       sx={{
@@ -100,10 +133,12 @@ const PhantomPianoAndCrane = () => {
         pointerEvents: "none",
         zIndex: 0,
         overflow: "hidden",
-        opacity: 0.25,
+        opacity: 0.3,
       }}
     >
-      {/* 1. Animated Paper Crane */}
+      <ArcaneCircle size={250} top="-10%" right="-10%" opacity={0.15} />
+      
+      {/* Animated Paper Crane */}
       <motion.div
         animate={{
           y: [0, -15, 5, 0],
@@ -117,26 +152,16 @@ const PhantomPianoAndCrane = () => {
         }}
         style={{
           position: "absolute",
-          top: "10%",
-          right: "5%",
-          width: 80,
-          height: 80,
-          opacity: 0.4,
-          filter: "drop-shadow(0px 0px 8px rgba(179, 198, 214, 0.5))",
+          bottom: "10%",
+          left: "5%",
+          width: 60,
+          height: 60,
+          opacity: 0.5,
+          filter: "drop-shadow(0px 0px 10px rgba(141, 249, 255, 0.6))",
         }}
       >
-        <svg
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g
-            stroke="url(#craneGrad)"
-            strokeWidth="3"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            fill="rgba(179, 198, 214, 0.1)"
-          >
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="url(#craneGrad)" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" fill="rgba(141, 249, 255, 0.05)">
             <polygon points="40,65 35,25 15,40 28,40" />
             <polygon points="40,65 10,55 52,50" />
             <polygon points="52,50 75,15 60,70" />
@@ -146,106 +171,29 @@ const PhantomPianoAndCrane = () => {
           </g>
           <defs>
             <linearGradient id="craneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="100%" stopColor="#5C748A" />
+              <stop offset="0%" stopColor="#8DF9FF" />
+              <stop offset="100%" stopColor="#9D8DF1" />
             </linearGradient>
           </defs>
         </svg>
       </motion.div>
 
-      {/* 2. Phantom Piano Keys at the bottom */}
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: -20,
-          left: -10,
-          display: "flex",
-          transform: "rotate(-5deg)",
-          opacity: 0.3,
-        }}
-      >
-        {whiteKeys.map((_, i) => (
-          <Box key={`white-${i}`} sx={{ position: "relative" }}>
-            <motion.div
-              animate={{
-                backgroundColor: [
-                  "rgba(255,255,255,0.05)",
-                  "rgba(179, 198, 214, 0.3)",
-                  "rgba(255,255,255,0.05)",
-                ],
-                boxShadow: [
-                  "none",
-                  "0 0 15px rgba(179, 198, 214, 0.5)",
-                  "none",
-                ],
-                y: [0, Math.random() * 5 + 2, 0],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                repeatDelay: Math.random() * 5,
-                ease: "easeInOut",
-              }}
-              style={{
-                width: 30,
-                height: 120,
-                border: "1px solid rgba(179, 198, 214, 0.2)",
-                borderBottomLeftRadius: 4,
-                borderBottomRightRadius: 4,
-                marginRight: 2,
-                transformOrigin: "top",
-              }}
-            />
-            {blackKeys.includes(i) && (
-              <motion.div
-                animate={{
-                  backgroundColor: [
-                    "rgba(0,0,0,0.5)",
-                    "rgba(92, 116, 138, 0.8)",
-                    "rgba(0,0,0,0.5)",
-                  ],
-                  y: [0, Math.random() * 4 + 1, 0],
-                }}
-                transition={{
-                  duration: 1.5 + Math.random() * 2,
-                  repeat: Infinity,
-                  repeatDelay: Math.random() * 4,
-                  ease: "easeInOut",
-                }}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: -10,
-                  width: 18,
-                  height: 70,
-                  backgroundColor: "rgba(0,0,0,0.5)",
-                  border: "1px solid rgba(179, 198, 214, 0.1)",
-                  borderBottomLeftRadius: 3,
-                  borderBottomRightRadius: 3,
-                  zIndex: 1,
-                  transformOrigin: "top",
-                }}
-              />
-            )}
-          </Box>
-        ))}
-      </Box>
-
-      {/* Floating Music Notes Overlay */}
-      <motion.div
-        animate={{ y: [0, -30], opacity: [0, 0.3, 0] }}
-        transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-        style={{ position: "absolute", bottom: "20%", left: "15%" }}
-      >
-        <MusicNoteIcon sx={{ color: "primary.main", fontSize: 16 }} />
-      </motion.div>
-      <motion.div
-        animate={{ y: [0, -40], opacity: [0, 0.2, 0], x: [0, 10] }}
-        transition={{ duration: 5, repeat: Infinity, delay: 3 }}
-        style={{ position: "absolute", bottom: "30%", right: "25%" }}
-      >
-        <MusicNoteIcon sx={{ color: "secondary.main", fontSize: 20 }} />
-      </motion.div>
+      {/* Floating Magic Embers */}
+      {[...Array(5)].map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{ y: [0, -50], opacity: [0, 0.6, 0], x: [0, Math.random() * 20 - 10] }}
+          transition={{ duration: 4 + Math.random() * 3, repeat: Infinity, delay: i }}
+          style={{ 
+            position: "absolute", 
+            bottom: `${10 + Math.random() * 30}%`, 
+            right: `${10 + Math.random() * 40}%`,
+            width: 4, height: 4, borderRadius: "50%",
+            backgroundColor: "#8DF9FF",
+            boxShadow: "0 0 10px 2px rgba(141, 249, 255, 0.8)"
+          }}
+        />
+      ))}
     </Box>
   );
 };
@@ -523,7 +471,7 @@ const LoadingScreen = ({ onComplete }) => {
   );
 };
 
-const AbyssalAtmosphere = () => {
+const MagicalAtmosphere = () => {
   const rainDrops = useMemo(
     () =>
       Array.from({ length: 40 }).map((_, i) => ({
@@ -536,6 +484,20 @@ const AbyssalAtmosphere = () => {
       })),
     [],
   );
+  
+  const manaParticles = useMemo(
+    () =>
+      Array.from({ length: 25 }).map((_, i) => ({
+        id: `mana-${i}`,
+        left: `${Math.random() * 100}vw`,
+        bottom: `${Math.random() * -20}vh`,
+        duration: Math.random() * 5 + 5,
+        delay: Math.random() * 5,
+        size: Math.random() * 4 + 1,
+      })),
+    [],
+  );
+
   return (
     <Box
       sx={{
@@ -543,9 +505,10 @@ const AbyssalAtmosphere = () => {
         inset: 0,
         pointerEvents: "none",
         zIndex: 0,
-        background: "#040914",
+        background: "radial-gradient(circle at center, #0B0E1A 0%, #03050A 100%)",
       }}
     >
+      {/* ฝน */}
       {rainDrops.map((drop) => (
         <motion.div
           key={drop.id}
@@ -562,7 +525,37 @@ const AbyssalAtmosphere = () => {
             left: drop.left,
             width: "1px",
             height: drop.height,
-            background: `linear-gradient(to bottom, transparent, rgba(179, 198, 214, ${drop.opacity}))`,
+            background: `linear-gradient(to bottom, transparent, rgba(141, 249, 255, ${drop.opacity}))`,
+          }}
+        />
+      ))}
+      
+      {/* ละอองมานา */}
+      {manaParticles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          initial={{ y: 0, opacity: 0 }}
+          animate={{ 
+            y: "-100vh", 
+            x: [0, Math.random() * 50 - 25, 0],
+            opacity: [0, 0.4, 0] 
+          }}
+          transition={{
+            duration: particle.duration,
+            delay: particle.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{
+            position: "absolute",
+            left: particle.left,
+            bottom: particle.bottom,
+            width: particle.size,
+            height: particle.size,
+            borderRadius: "50%",
+            backgroundColor: "#8DF9FF",
+            boxShadow: "0 0 10px 1px rgba(141, 249, 255, 0.5)",
+            filter: "blur(1px)",
           }}
         />
       ))}
@@ -573,34 +566,37 @@ const AbyssalAtmosphere = () => {
 const LuxuryCard = ({ children, sx }) => (
   <Box
     sx={{
-      borderRadius: "12px",
-      background: "rgba(10, 15, 25, 0.65)",
-      backdropFilter: "blur(16px)",
-      border: "1px solid rgba(179, 198, 214, 0.15)",
-      borderTop: "1px solid rgba(179, 198, 214, 0.3)",
+      borderRadius: "16px",
+      background: "rgba(10, 14, 25, 0.7)",
+      backdropFilter: "blur(20px)",
+      border: "1px solid rgba(141, 249, 255, 0.2)",
       boxShadow:
-        "0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)",
+        "0 30px 60px rgba(0,0,0,0.9), 0 0 30px rgba(141, 249, 255, 0.05), inset 0 0 20px rgba(141, 249, 255, 0.05)",
       overflow: "hidden",
       position: "relative",
       ...sx,
     }}
   >
+    {/* Magic Arcane Background */}
+    <ArcaneCircle size={600} top="-150px" right="-150px" opacity={0.07} color="#9D8DF1" />
+    
     <Box
       sx={{
         position: "absolute",
         top: 0,
         left: 0,
         right: 0,
-        height: "1px",
+        height: "2px",
         background:
-          "linear-gradient(90deg, transparent, rgba(179,198,214,0.5), transparent)",
+          "linear-gradient(90deg, transparent, rgba(141,249,255,0.8), transparent)",
+        boxShadow: "0 0 10px rgba(141,249,255,0.5)",
       }}
     />
     {children}
   </Box>
 );
 
-const GlassCard = ({
+const MagicalGlassCard = ({
   children,
   sx,
   hoverEffect = false,
@@ -610,23 +606,23 @@ const GlassCard = ({
     <Box
       sx={{
         background:
-          "linear-gradient(135deg, rgba(15, 22, 35, 0.5) 0%, rgba(6, 10, 18, 0.7) 100%)",
-        backdropFilter: "blur(12px)",
-        border: "1px solid rgba(179, 198, 214, 0.08)",
-        borderRadius: "10px",
+          "linear-gradient(135deg, rgba(15, 20, 35, 0.6) 0%, rgba(6, 10, 18, 0.8) 100%)",
+        backdropFilter: "blur(16px)",
+        border: "1px solid rgba(141, 249, 255, 0.1)",
+        borderRadius: "12px",
         p: { xs: 3, md: 4 },
         position: "relative",
         overflow: "hidden",
         height: "100%",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(141, 249, 255, 0.02)",
         transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
         ...(hoverEffect && {
           "&:hover": {
-            transform: "translateY(-4px)",
+            transform: "translateY(-5px)",
             background:
-              "linear-gradient(135deg, rgba(22, 32, 50, 0.7) 0%, rgba(10, 15, 25, 0.8) 100%)",
-            border: "1px solid rgba(179, 198, 214, 0.25)",
-            boxShadow: "0 12px 40px rgba(179, 198, 214, 0.1)",
+              "linear-gradient(135deg, rgba(22, 30, 50, 0.7) 0%, rgba(10, 15, 25, 0.9) 100%)",
+            border: "1px solid rgba(141, 249, 255, 0.4)",
+            boxShadow: "0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(141, 249, 255, 0.15), inset 0 0 20px rgba(157, 141, 241, 0.1)",
           },
         }),
         ...sx,
@@ -644,26 +640,31 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 1.5,
+        gap: 2,
         position: "relative",
         zIndex: 2,
       }}
     >
       <Box
         sx={{
-          p: 1,
-          borderRadius: "8px",
-          background: "rgba(179, 198, 214, 0.1)",
-          border: "1px solid rgba(179, 198, 214, 0.2)",
+          p: 1.2,
+          borderRadius: "10px",
+          background: "linear-gradient(135deg, rgba(141,249,255,0.15) 0%, rgba(157,141,241,0.05) 100%)",
+          border: "1px solid rgba(141, 249, 255, 0.3)",
+          boxShadow: "0 0 15px rgba(141, 249, 255, 0.2), inset 0 0 8px rgba(141, 249, 255, 0.2)",
           display: "flex",
         }}
       >
-        <Icon sx={{ color: "primary.main", fontSize: 24 }} />
+        <Icon sx={{ color: "primary.main", fontSize: 26, filter: "drop-shadow(0 0 5px rgba(141, 249, 255, 0.8))" }} />
       </Box>
       <Box>
         <Typography
           variant="h5"
-          sx={{ color: "#EAEFF5", textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
+          sx={{ 
+            color: "#FFFFFF", 
+            textShadow: "0 0 10px rgba(141, 249, 255, 0.4), 0 2px 4px rgba(0,0,0,0.8)",
+            letterSpacing: 1
+          }}
         >
           {title}
         </Typography>
@@ -671,11 +672,12 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
           <Typography
             variant="caption"
             sx={{
-              color: "primary.main",
-              letterSpacing: 1.5,
+              color: "secondary.main",
+              letterSpacing: 2,
               textTransform: "uppercase",
-              opacity: 0.8,
+              opacity: 0.9,
               display: "block",
+              textShadow: "0 0 8px rgba(157, 141, 241, 0.5)",
             }}
           >
             {subtitle}
@@ -686,22 +688,24 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
     <Box
       sx={{
         mt: 2,
-        height: "1px",
+        height: "2px",
         width: "100%",
         background:
-          "linear-gradient(90deg, rgba(179,198,214,0.3) 0%, transparent 100%)",
+          "linear-gradient(90deg, rgba(141,249,255,0.6) 0%, rgba(157,141,241,0.2) 50%, transparent 100%)",
+        boxShadow: "0 0 8px rgba(141, 249, 255, 0.4)",
       }}
     />
   </Box>
 );
 
-const MetallicText = ({ children, sx, variant = "h6" }) => (
+const MysticText = ({ children, sx, variant = "h6" }) => (
   <Typography
     variant={variant}
     sx={{
-      background: "linear-gradient(180deg, #FFFFFF 0%, #8A9BB0 100%)",
+      background: "linear-gradient(180deg, #FFFFFF 0%, #8DF9FF 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
+      filter: "drop-shadow(0 0 8px rgba(141, 249, 255, 0.4))",
       ...sx,
     }}
   >
@@ -739,18 +743,19 @@ export default function KyoraProfile() {
         styles={{
           "body, html": {
             cursor: `${normalCraneCursor} !important`,
-            backgroundColor: "#040914",
+            backgroundColor: "#03050A",
           },
           "a, button, [role='button'], .MuiTab-root, .MuiIconButton-root, .MuiButtonBase-root":
             { cursor: `${pointerCraneCursor} !important` },
           "::-webkit-scrollbar": { width: "6px" },
-          "::-webkit-scrollbar-track": { background: "rgba(0,0,0,0.2)" },
+          "::-webkit-scrollbar-track": { background: "rgba(0,0,0,0.5)" },
           "::-webkit-scrollbar-thumb": {
-            background: "rgba(179, 198, 214, 0.2)",
+            background: "rgba(141, 249, 255, 0.3)",
             borderRadius: "10px",
+            boxShadow: "inset 0 0 6px rgba(0,0,0,0.5)",
           },
           "::-webkit-scrollbar-thumb:hover": {
-            background: "rgba(179, 198, 214, 0.4)",
+            background: "rgba(141, 249, 255, 0.6)",
           },
         }}
       />
@@ -765,24 +770,25 @@ export default function KyoraProfile() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
         >
-          <AbyssalAtmosphere />
+          <MagicalAtmosphere />
           <audio ref={audioRef} src="/Song.mp3" loop autoPlay />
 
+          {/* Music Toggle */}
           <Box sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 999 }}>
             <AnimatePresence>
               {isPlaying && (
                 <Box
                   component={motion.div}
                   animate={{
-                    scale: [1, 1.3, 1],
+                    scale: [1, 1.4, 1],
                     boxShadow: [
-                      "0 0 0px 0px rgba(179, 198, 214, 0)",
-                      "0 0 20px 10px rgba(179, 198, 214, 0.2)",
-                      "0 0 0px 0px rgba(179, 198, 214, 0)",
+                      "0 0 0px 0px rgba(141, 249, 255, 0)",
+                      "0 0 25px 12px rgba(157, 141, 241, 0.3)",
+                      "0 0 0px 0px rgba(141, 249, 255, 0)",
                     ],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 2.5,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
@@ -798,16 +804,19 @@ export default function KyoraProfile() {
             <IconButton
               onClick={toggleMusic}
               sx={{
-                background: "rgba(10, 15, 25, 0.8)",
+                background: "rgba(6, 10, 18, 0.8)",
                 border: "1px solid",
-                borderColor: "rgba(179, 198, 214, 0.25)",
+                borderColor: "rgba(141, 249, 255, 0.3)",
                 color: isPlaying ? "primary.main" : "text.secondary",
-                backdropFilter: "blur(10px)",
+                backdropFilter: "blur(12px)",
+                boxShadow: isPlaying ? "0 0 15px rgba(141, 249, 255, 0.2)" : "none",
                 p: 2,
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  background: "rgba(179, 198, 214, 0.15)",
+                  background: "rgba(141, 249, 255, 0.15)",
                   transform: "scale(1.05)",
+                  borderColor: "primary.main",
+                  boxShadow: "0 0 20px rgba(141, 249, 255, 0.4)",
                 },
               }}
             >
@@ -825,6 +834,7 @@ export default function KyoraProfile() {
               mx: "auto",
             }}
           >
+            {/* Header Card */}
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -834,22 +844,28 @@ export default function KyoraProfile() {
                 <Box sx={{ p: { xs: 4, md: 6 } }}>
                   <Grid container spacing={5} alignItems="center">
                     <Grid item xs={12} md={4} sx={{ textAlign: "center" }}>
+                      {/* Magical Avatar Frame */}
                       <Box
                         sx={{
                           position: "relative",
                           display: "inline-flex",
-                          padding: 1,
+                          padding: 1.5,
                         }}
                       >
+                        <ArcaneCircle size={240} opacity={0.3} color="#9D8DF1" sx={{ top: -10, left: -10 }} />
                         <Box
+                          component={motion.div}
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                           sx={{
                             position: "absolute",
                             inset: 0,
                             borderRadius: "50%",
-                            border: "1px solid rgba(179, 198, 214, 0.1)",
-                            borderTop: "2px solid #B3C6D6",
-                            borderBottom: "2px solid #5C748A",
-                            opacity: 0.7,
+                            border: "2px solid rgba(141, 249, 255, 0.1)",
+                            borderTop: "3px solid #8DF9FF",
+                            borderBottom: "3px solid #9D8DF1",
+                            boxShadow: "0 0 20px rgba(141, 249, 255, 0.3)",
+                            opacity: 0.9,
                           }}
                         />
                         <Avatar
@@ -858,9 +874,11 @@ export default function KyoraProfile() {
                           sx={{
                             width: { xs: 180, sm: 220 },
                             height: { xs: 180, sm: 220 },
-                            border: "4px solid rgba(4, 9, 20, 0.8)",
-                            filter: "grayscale(20%) contrast(1.1)",
-                            boxShadow: "0 0 30px rgba(0,0,0,0.8)",
+                            border: "4px solid rgba(3, 5, 10, 0.9)",
+                            filter: "grayscale(10%) contrast(1.1)",
+                            boxShadow: "0 0 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(141,249,255,0.3)",
+                            position: "relative",
+                            zIndex: 2,
                           }}
                         />
                       </Box>
@@ -871,37 +889,43 @@ export default function KyoraProfile() {
                         variant="overline"
                         sx={{
                           color: "primary.main",
-                          display: "block",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
                           mb: 1,
-                          opacity: 0.8,
+                          opacity: 0.9,
+                          textShadow: "0 0 8px rgba(141, 249, 255, 0.5)",
                         }}
                       >
-                        ✦ จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 | วิถี ความมืด ✦
+                        <AutoAwesomeIcon sx={{ fontSize: 16 }} />
+                        จิตวิญญาณแห่งธรรมชาติ ฤดูหนาว「道」 | วิถี ความมืด
+                        <AutoAwesomeIcon sx={{ fontSize: 16 }} />
                       </Typography>
-                      <MetallicText
+                      <MysticText
                         variant="h2"
                         sx={{
                           mb: 1,
                           fontSize: { xs: "2.5rem", md: "3.5rem" },
-                          textShadow: "0 4px 20px rgba(0,0,0,0.8)",
+                          textShadow: "0 4px 20px rgba(0,0,0,0.9)",
                         }}
                       >
                         氷雨 響羅
-                      </MetallicText>
+                      </MysticText>
                       <Typography
                         variant="h4"
                         sx={{
-                          color: "primary.main",
+                          color: "secondary.main",
                           mb: 4,
                           opacity: 0.9,
                           fontSize: "1.3rem",
+                          textShadow: "0 0 10px rgba(157, 141, 241, 0.4)",
                         }}
                       >
                         ฮิซาเมะ เคียวระ (Hisame Kyōra)
                       </Typography>
 
                       <Divider
-                        sx={{ mb: 4, borderColor: "rgba(179, 198, 214, 0.15)" }}
+                        sx={{ mb: 4, borderColor: "rgba(141, 249, 255, 0.15)", boxShadow: "0 1px 5px rgba(141,249,255,0.2)" }}
                       />
 
                       <Grid container spacing={2}>
@@ -922,19 +946,23 @@ export default function KyoraProfile() {
                             <Box
                               sx={{
                                 pl: 2,
-                                borderLeft:
-                                  "2px solid rgba(179, 198, 214, 0.2)",
-                                transition: "border-color 0.3s",
-                                "&:hover": { borderLeftColor: "primary.main" },
+                                borderLeft: "2px solid rgba(141, 249, 255, 0.2)",
+                                transition: "all 0.3s",
+                                "&:hover": { 
+                                  borderLeftColor: "primary.main",
+                                  textShadow: "0 0 8px rgba(141, 249, 255, 0.5)",
+                                  transform: "translateX(4px)"
+                                },
                               }}
                             >
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  color: "text.secondary",
+                                  color: "secondary.main",
                                   fontFamily: "'Cinzel', serif",
                                   display: "block",
                                   mb: 0.5,
+                                  opacity: 0.8
                                 }}
                               >
                                 {info.label}
@@ -955,6 +983,7 @@ export default function KyoraProfile() {
               </LuxuryCard>
             </motion.div>
 
+            {/* Main Content Area */}
             <Box
               sx={{
                 display: "flex",
@@ -962,7 +991,8 @@ export default function KyoraProfile() {
                 gap: 5,
               }}
             >
-              <Box sx={{ width: { xs: "100%", md: "260px" }, flexShrink: 0 }}>
+              {/* Magical Tabs (Spellbook Index) */}
+              <Box sx={{ width: { xs: "100%", md: "280px" }, flexShrink: 0 }}>
                 <motion.div
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -979,9 +1009,10 @@ export default function KyoraProfile() {
                     sx={{
                       "& .MuiTabs-indicator": {
                         backgroundColor: "primary.main",
-                        width: { md: "3px" },
-                        height: { xs: "3px" },
+                        width: { md: "4px" },
+                        height: { xs: "4px" },
                         borderRadius: "4px",
+                        boxShadow: "0 0 10px rgba(141, 249, 255, 0.8)",
                       },
                       "& .MuiTab-root": {
                         color: "text.secondary",
@@ -989,22 +1020,22 @@ export default function KyoraProfile() {
                         textAlign: "left",
                         py: 2.5,
                         px: 3,
-                        transition: "all 0.3s ease",
+                        transition: "all 0.4s ease",
                         fontSize: "1rem",
-                        borderRadius: "8px",
-                        borderBottom: {
-                          xs: "1px solid rgba(179, 198, 214, 0.05)",
-                          md: "none",
-                        },
+                        borderRadius: "10px",
                         mb: { md: 1 },
+                        border: "1px solid transparent",
                         "&:hover": {
-                          background: "rgba(179, 198, 214, 0.05)",
-                          color: "#EAEFF5",
+                          background: "rgba(141, 249, 255, 0.05)",
+                          color: "#FFFFFF",
+                          border: "1px solid rgba(141, 249, 255, 0.1)",
                         },
                         "&.Mui-selected": {
                           color: "primary.main",
-                          background: "rgba(179, 198, 214, 0.1)",
-                          boxShadow: "inset 4px 0 0 rgba(179, 198, 214, 0.5)",
+                          background: "linear-gradient(90deg, rgba(141, 249, 255, 0.1) 0%, rgba(157, 141, 241, 0.05) 100%)",
+                          border: "1px solid rgba(141, 249, 255, 0.2)",
+                          boxShadow: "inset 4px 0 15px rgba(141, 249, 255, 0.1)",
+                          textShadow: "0 0 10px rgba(141, 249, 255, 0.4)",
                         },
                       },
                     }}
@@ -1056,7 +1087,7 @@ export default function KyoraProfile() {
                     >
                       <Grid container spacing={4}>
                         <Grid item xs={12}>
-                          <GlassCard>
+                          <MagicalGlassCard>
                             <SectionHeader
                               icon={WarningAmberIcon}
                               title="ความผิดปกติทางร่างกาย"
@@ -1076,13 +1107,15 @@ export default function KyoraProfile() {
                                     sx={{
                                       p: 2.5,
                                       background:
-                                        "linear-gradient(90deg, rgba(179, 198, 214, 0.08) 0%, rgba(179, 198, 214, 0) 100%)",
-                                      borderLeft: "3px solid #B3C6D6",
+                                        "linear-gradient(90deg, rgba(141, 249, 255, 0.08) 0%, transparent 100%)",
+                                      borderLeft: "3px solid #8DF9FF",
                                       borderRadius: "0 8px 8px 0",
                                       height: "100%",
-                                      transition: "transform 0.3s",
+                                      transition: "all 0.3s",
                                       "&:hover": {
                                         transform: "translateX(8px)",
+                                        background: "linear-gradient(90deg, rgba(141, 249, 255, 0.15) 0%, transparent 100%)",
+                                        boxShadow: "inset 10px 0 15px rgba(141, 249, 255, 0.05)",
                                       },
                                     }}
                                   >
@@ -1093,10 +1126,10 @@ export default function KyoraProfile() {
                                 </Grid>
                               ))}
                             </Grid>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
                         <Grid item xs={12}>
-                          <GlassCard hoverEffect>
+                          <MagicalGlassCard hoverEffect>
                             <SectionHeader
                               icon={LocalHospitalIcon}
                               title="โรคประจำตัว"
@@ -1105,27 +1138,31 @@ export default function KyoraProfile() {
                             <Box
                               sx={{
                                 p: 3,
-                                background: "rgba(0,0,0,0.4)",
-                                borderRadius: "8px",
-                                border: "1px solid rgba(179, 198, 214, 0.1)",
+                                background: "rgba(0,0,0,0.5)",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(157, 141, 241, 0.2)",
+                                boxShadow: "inset 0 0 20px rgba(157, 141, 241, 0.05)",
+                                position: "relative",
+                                overflow: "hidden",
                               }}
                             >
+                              <ArcaneCircle size={150} color="#9D8DF1" opacity={0.1} sx={{ top: -50, right: -50 }} />
                               <Typography
                                 variant="h6"
-                                sx={{ color: "primary.main", mb: 1.5 }}
+                                sx={{ color: "secondary.main", mb: 1.5, position: "relative", zIndex: 1 }}
                               >
                                 Insomnia (ภาวะนอนไม่หลับ)
                               </Typography>
                               <Typography
                                 variant="body1"
-                                sx={{ color: "text.secondary" }}
+                                sx={{ color: "text.secondary", position: "relative", zIndex: 1 }}
                               >
                                 ภาวะนอนไม่หลับไม่ได้เกิดจากสภาพร่างกายเพียงอย่างเดียว
                                 แต่เป็นผลรวมของ ความเครียดทางจิตใจ +
                                 สภาพแวดล้อมที่กดดันตั้งแต่วัยเด็ก
                               </Typography>
                             </Box>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
                       </Grid>
                     </motion.div>
@@ -1140,7 +1177,7 @@ export default function KyoraProfile() {
                       animate="show"
                       exit="hidden"
                     >
-                      <GlassCard>
+                      <MagicalGlassCard>
                         <SectionHeader
                           icon={MenuBookIcon}
                           title="ประวัติความเป็นมา"
@@ -1156,11 +1193,12 @@ export default function KyoraProfile() {
                         >
                           <span
                             style={{
-                              color: "#EAEFF5",
-                              fontSize: "1.6rem",
-                              fontWeight: 500,
+                              color: "#8DF9FF",
+                              fontSize: "1.8rem",
+                              fontWeight: 600,
                               fontFamily: "'Cinzel', serif",
                               lineHeight: 1,
+                              textShadow: "0 0 10px rgba(141, 249, 255, 0.6)",
                             }}
                           >
                             เ
@@ -1186,26 +1224,26 @@ export default function KyoraProfile() {
                             my: 4,
                             display: "flex",
                             alignItems: "center",
-                            opacity: 0.5,
+                            opacity: 0.7,
                           }}
                         >
                           <Box
                             sx={{
                               flexGrow: 1,
-                              height: "1px",
+                              height: "2px",
                               background:
-                                "linear-gradient(90deg, transparent, #B3C6D6)",
+                                "linear-gradient(90deg, transparent, #9D8DF1)",
                             }}
                           />
                           <AutoAwesomeIcon
-                            sx={{ mx: 2, color: "primary.main", fontSize: 16 }}
+                            sx={{ mx: 2, color: "secondary.main", fontSize: 18, filter: "drop-shadow(0 0 5px #9D8DF1)" }}
                           />
                           <Box
                             sx={{
                               flexGrow: 1,
-                              height: "1px",
+                              height: "2px",
                               background:
-                                "linear-gradient(270deg, transparent, #B3C6D6)",
+                                "linear-gradient(270deg, transparent, #9D8DF1)",
                             }}
                           />
                         </Box>
@@ -1236,9 +1274,10 @@ export default function KyoraProfile() {
                           sx={{
                             display: "inline-flex",
                             alignItems: "center",
-                            background: "rgba(122, 42, 59, 0.1)",
-                            border: "1px solid rgba(122, 42, 59, 0.3)",
-                            borderRadius: "6px",
+                            background: "rgba(176, 58, 88, 0.15)",
+                            border: "1px solid rgba(176, 58, 88, 0.4)",
+                            boxShadow: "0 0 10px rgba(176, 58, 88, 0.2)",
+                            borderRadius: "8px",
                             px: 2,
                             py: 1,
                           }}
@@ -1249,12 +1288,13 @@ export default function KyoraProfile() {
                               color: "#FF7B93",
                               fontWeight: 500,
                               letterSpacing: 1,
+                              textShadow: "0 0 8px rgba(255, 123, 147, 0.5)",
                             }}
                           >
                             [ ล็อคข้อมูลเพิ่มเติม ]
                           </Typography>
                         </Box>
-                      </GlassCard>
+                      </MagicalGlassCard>
                     </motion.div>
                   )}
 
@@ -1269,7 +1309,7 @@ export default function KyoraProfile() {
                     >
                       <Grid container spacing={4}>
                         <Grid item xs={12}>
-                          <GlassCard>
+                          <MagicalGlassCard>
                             <SectionHeader
                               icon={AutoAwesomeIcon}
                               title="เวทมนตร์พื้นฐาน"
@@ -1344,30 +1384,36 @@ export default function KyoraProfile() {
                                     sx={{
                                       p: 3,
                                       height: "100%",
-                                      background: "rgba(0,0,0,0.3)",
+                                      background: "rgba(0,0,0,0.4)",
                                       border:
-                                        "1px solid rgba(179, 198, 214, 0.1)",
-                                      borderRadius: "8px",
+                                        "1px solid rgba(141, 249, 255, 0.1)",
+                                      borderRadius: "10px",
                                       transition: "all 0.3s",
+                                      position: "relative",
+                                      overflow: "hidden",
                                       "&:hover": {
-                                        background: "rgba(179, 198, 214, 0.05)",
+                                        background: "rgba(141, 249, 255, 0.08)",
                                         borderColor: "primary.main",
+                                        boxShadow: "0 0 15px rgba(141, 249, 255, 0.15)",
+                                        transform: "translateY(-3px)",
                                       },
                                     }}
                                   >
+                                    <ArcaneCircle size={100} color="#8DF9FF" opacity={0.05} sx={{ top: -20, right: -20 }} />
                                     <Typography
                                       variant="subtitle1"
                                       sx={{
                                         color: "primary.main",
                                         mb: 1.5,
-                                        fontWeight: 500,
+                                        fontWeight: 600,
+                                        textShadow: "0 0 8px rgba(141, 249, 255, 0.3)",
                                       }}
                                     >
                                       {spell.name}
                                     </Typography>
                                     <Typography
                                       variant="body2"
-                                      sx={{ color: "text.secondary", mb: 2 }}
+                                      sx={{ color: "text.secondary", mb: 2, position: "relative", zIndex: 1 }}
                                     >
                                       {spell.desc}
                                     </Typography>
@@ -1376,7 +1422,9 @@ export default function KyoraProfile() {
                                         sx={{
                                           display: "flex",
                                           flexDirection: "column",
-                                          gap: 1,
+                                          gap: 1.2,
+                                          position: "relative",
+                                          zIndex: 1
                                         }}
                                       >
                                         {spell.bullets.map((bullet, idx) => (
@@ -1385,12 +1433,12 @@ export default function KyoraProfile() {
                                             variant="body2"
                                             sx={{
                                               color: "text.secondary",
-                                              pl: 1.5,
+                                              pl: 2,
                                               borderLeft:
-                                                "2px solid rgba(179, 198, 214, 0.3)",
+                                                "2px solid rgba(157, 141, 241, 0.5)",
                                             }}
                                           >
-                                            - {bullet}
+                                            <span style={{ color: "#9D8DF1", marginRight: "4px" }}>✦</span> {bullet}
                                           </Typography>
                                         ))}
                                       </Box>
@@ -1399,11 +1447,11 @@ export default function KyoraProfile() {
                                 </Grid>
                               ))}
                             </Grid>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
 
                         <Grid item xs={12}>
-                          <GlassCard sx={{ borderLeft: "4px solid #5C748A" }}>
+                          <MagicalGlassCard sx={{ borderLeft: "4px solid #9D8DF1" }}>
                             <SectionHeader
                               icon={ShieldIcon}
                               title="ทักษะเวทมนตร์อื่นๆ"
@@ -1444,22 +1492,25 @@ export default function KyoraProfile() {
                                 <Grid item xs={12} key={i}>
                                   <Box
                                     sx={{
-                                      p: 2.5,
-                                      background: "rgba(0,0,0,0.2)",
-                                      borderRadius: "8px",
+                                      p: 3,
+                                      background: "rgba(0,0,0,0.3)",
+                                      borderRadius: "10px",
                                       border:
-                                        "1px solid rgba(179, 198, 214, 0.05)",
+                                        "1px solid rgba(157, 141, 241, 0.2)",
+                                      position: "relative",
+                                      overflow: "hidden",
                                     }}
                                   >
+                                    <ArcaneCircle size={200} color="#9D8DF1" opacity={0.05} sx={{ top: -50, right: -50 }} />
                                     <Typography
                                       variant="h6"
-                                      sx={{ color: "#EAEFF5", mb: 1.5 }}
+                                      sx={{ color: "secondary.main", mb: 1.5, position: "relative", zIndex: 1, textShadow: "0 0 5px rgba(157,141,241,0.3)" }}
                                     >
                                       {spell.name}
                                     </Typography>
                                     <Typography
                                       variant="body1"
-                                      sx={{ color: "text.secondary", mb: 2 }}
+                                      sx={{ color: "text.secondary", mb: 2, position: "relative", zIndex: 1 }}
                                     >
                                       {spell.desc}
                                     </Typography>
@@ -1468,8 +1519,10 @@ export default function KyoraProfile() {
                                         sx={{
                                           display: "flex",
                                           flexDirection: "column",
-                                          gap: 1,
-                                          mt: 1,
+                                          gap: 1.5,
+                                          mt: 2,
+                                          position: "relative", 
+                                          zIndex: 1
                                         }}
                                       >
                                         {spell.bullets.map((bullet, idx) => (
@@ -1478,12 +1531,12 @@ export default function KyoraProfile() {
                                             variant="body2"
                                             sx={{
                                               color: "text.secondary",
-                                              pl: 1.5,
+                                              pl: 2,
                                               borderLeft:
-                                                "2px solid rgba(92, 116, 138, 0.5)",
+                                                "2px solid rgba(141, 249, 255, 0.4)",
                                             }}
                                           >
-                                            - {bullet}
+                                            <span style={{ color: "#8DF9FF", marginRight: "6px" }}>✧</span> {bullet}
                                           </Typography>
                                         ))}
                                       </Box>
@@ -1492,7 +1545,7 @@ export default function KyoraProfile() {
                                 </Grid>
                               ))}
                             </Grid>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
                       </Grid>
                     </motion.div>
@@ -1531,7 +1584,7 @@ export default function KyoraProfile() {
                           },
                         ].map((trait, index) => (
                           <Grid item xs={12} md={6} key={index}>
-                            <GlassCard
+                            <MagicalGlassCard
                               hoverEffect
                               sx={{ height: "100%", p: 3 }}
                             >
@@ -1542,17 +1595,22 @@ export default function KyoraProfile() {
                                   mb: 2,
                                   display: "flex",
                                   alignItems: "center",
-                                  gap: 1,
+                                  gap: 1.5,
+                                  textShadow: "0 0 5px rgba(141, 249, 255, 0.3)"
                                 }}
                               >
-                                <span
-                                  style={{
+                                <Box
+                                  component={motion.div}
+                                  animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
+                                  transition={{ duration: 2, repeat: Infinity }}
+                                  sx={{
                                     width: "8px",
                                     height: "8px",
-                                    background: "#B3C6D6",
+                                    background: "#8DF9FF",
                                     borderRadius: "50%",
+                                    boxShadow: "0 0 8px #8DF9FF"
                                   }}
-                                ></span>
+                                />
                                 {trait.title}
                               </Typography>
                               <Typography
@@ -1561,7 +1619,7 @@ export default function KyoraProfile() {
                               >
                                 {trait.desc}
                               </Typography>
-                            </GlassCard>
+                            </MagicalGlassCard>
                           </Grid>
                         ))}
                         <Grid item xs={12}>
@@ -1569,9 +1627,10 @@ export default function KyoraProfile() {
                             sx={{
                               display: "inline-flex",
                               alignItems: "center",
-                              background: "rgba(122, 42, 59, 0.1)",
-                              border: "1px solid rgba(122, 42, 59, 0.3)",
-                              borderRadius: "6px",
+                              background: "rgba(176, 58, 88, 0.15)",
+                              border: "1px solid rgba(176, 58, 88, 0.4)",
+                              boxShadow: "0 0 10px rgba(176, 58, 88, 0.2)",
+                              borderRadius: "8px",
                               px: 2,
                               py: 1,
                               mt: 2,
@@ -1583,6 +1642,7 @@ export default function KyoraProfile() {
                                 color: "#FF7B93",
                                 fontWeight: 500,
                                 letterSpacing: 1,
+                                textShadow: "0 0 8px rgba(255, 123, 147, 0.5)",
                               }}
                             >
                               [ ล็อคข้อมูลเพิ่มเติม ]
@@ -1604,7 +1664,7 @@ export default function KyoraProfile() {
                     >
                       <Grid container spacing={4}>
                         <Grid item xs={12} md={4}>
-                          <GlassCard sx={{ height: "100%" }}>
+                          <MagicalGlassCard sx={{ height: "100%" }}>
                             <SectionHeader
                               icon={FavoriteIcon}
                               title="สิ่งที่ชอบ"
@@ -1632,17 +1692,21 @@ export default function KyoraProfile() {
                                     display: "flex",
                                     alignItems: "flex-start",
                                     gap: 1.5,
-                                    p: 1,
-                                    borderRadius: "4px",
+                                    p: 1.5,
+                                    borderRadius: "8px",
+                                    border: "1px solid transparent",
+                                    transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(179, 198, 214, 0.05)",
+                                      background: "rgba(141, 249, 255, 0.05)",
+                                      borderColor: "rgba(141, 249, 255, 0.2)",
                                     },
                                   }}
                                 >
                                   <span
                                     style={{
-                                      color: "#B3C6D6",
+                                      color: "#8DF9FF",
                                       marginTop: "2px",
+                                      textShadow: "0 0 5px #8DF9FF"
                                     }}
                                   >
                                     ✦
@@ -1658,15 +1722,15 @@ export default function KyoraProfile() {
                             </Box>
                             <Typography
                               variant="body2"
-                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500 }}
+                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500, textShadow: "0 0 5px rgba(255, 123, 147, 0.5)" }}
                             >
                               [ล็อค]
                             </Typography>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
 
                         <Grid item xs={12} md={4}>
-                          <GlassCard sx={{ height: "100%" }}>
+                          <MagicalGlassCard sx={{ height: "100%" }}>
                             <SectionHeader
                               icon={CancelIcon}
                               title="สิ่งที่ไม่ชอบ"
@@ -1690,17 +1754,21 @@ export default function KyoraProfile() {
                                     display: "flex",
                                     alignItems: "flex-start",
                                     gap: 1.5,
-                                    p: 1,
-                                    borderRadius: "4px",
+                                    p: 1.5,
+                                    borderRadius: "8px",
+                                    border: "1px solid transparent",
+                                    transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(179, 198, 214, 0.05)",
+                                      background: "rgba(157, 141, 241, 0.05)",
+                                      borderColor: "rgba(157, 141, 241, 0.2)",
                                     },
                                   }}
                                 >
                                   <span
                                     style={{
-                                      color: "#5C748A",
+                                      color: "#9D8DF1",
                                       marginTop: "2px",
+                                      textShadow: "0 0 5px #9D8DF1"
                                     }}
                                   >
                                     ✦
@@ -1716,15 +1784,15 @@ export default function KyoraProfile() {
                             </Box>
                             <Typography
                               variant="body2"
-                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500 }}
+                              sx={{ color: "#FF7B93", mt: 3, fontWeight: 500, textShadow: "0 0 5px rgba(255, 123, 147, 0.5)" }}
                             >
                               [ล็อค]
                             </Typography>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
 
                         <Grid item xs={12} md={4}>
-                          <GlassCard sx={{ height: "100%" }}>
+                          <MagicalGlassCard sx={{ height: "100%" }}>
                             <SectionHeader
                               icon={WarningAmberIcon}
                               title="สิ่งที่กลัว"
@@ -1736,15 +1804,17 @@ export default function KyoraProfile() {
                                 color: "#FF7B93",
                                 mt: 2,
                                 fontWeight: 500,
-                                p: 2,
-                                background: "rgba(122, 42, 59, 0.1)",
-                                border: "1px solid rgba(122, 42, 59, 0.2)",
-                                borderRadius: "4px",
+                                p: 2.5,
+                                background: "rgba(176, 58, 88, 0.15)",
+                                border: "1px solid rgba(176, 58, 88, 0.3)",
+                                boxShadow: "inset 0 0 10px rgba(176, 58, 88, 0.1)",
+                                borderRadius: "8px",
+                                textShadow: "0 0 5px rgba(255, 123, 147, 0.5)"
                               }}
                             >
                               [ ล็อคข้อมูล ]
                             </Typography>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
                       </Grid>
                     </motion.div>
@@ -1761,7 +1831,7 @@ export default function KyoraProfile() {
                     >
                       <Grid container spacing={4}>
                         <Grid item xs={12}>
-                          <GlassCard>
+                          <MagicalGlassCard>
                             <SectionHeader
                               icon={InfoIcon}
                               title="อื่น ๆ"
@@ -1799,27 +1869,34 @@ export default function KyoraProfile() {
                                   sx={{
                                     display: "flex",
                                     alignItems: "flex-start",
-                                    p: 2,
-                                    background: "rgba(0,0,0,0.2)",
+                                    p: 2.5,
+                                    background: "rgba(0,0,0,0.3)",
                                     border:
-                                      "1px solid rgba(179, 198, 214, 0.05)",
-                                    borderRadius: "8px",
-                                    transition: "background 0.3s",
+                                      "1px solid rgba(141, 249, 255, 0.1)",
+                                    borderRadius: "12px",
+                                    transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(179, 198, 214, 0.05)",
+                                      background: "rgba(141, 249, 255, 0.05)",
+                                      borderColor: "primary.main",
+                                      boxShadow: "0 5px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(141, 249, 255, 0.05)",
+                                      transform: "translateX(5px)"
                                     },
                                   }}
                                 >
                                   <Box sx={{ minWidth: 24, pt: 0.5 }}>
-                                    <span
-                                      style={{
+                                    <Box
+                                      component={motion.div}
+                                      animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+                                      transition={{ duration: 2, repeat: Infinity, delay: idx * 0.1 }}
+                                      sx={{
                                         display: "inline-block",
                                         width: "8px",
                                         height: "8px",
-                                        background: "#B3C6D6",
+                                        background: "#8DF9FF",
                                         borderRadius: "50%",
+                                        boxShadow: "0 0 8px #8DF9FF",
                                       }}
-                                    ></span>
+                                    />
                                   </Box>
                                   <Typography
                                     variant="body1"
@@ -1830,7 +1907,7 @@ export default function KyoraProfile() {
                                 </Box>
                               ))}
                             </Box>
-                          </GlassCard>
+                          </MagicalGlassCard>
                         </Grid>
                       </Grid>
                     </motion.div>
