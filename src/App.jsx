@@ -63,12 +63,12 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
-    background: { default: "#0d0023" },  
-    primary: { main: "#FFA2B7" }, // สีหลัก FFA2B7
-    secondary: { main: "#a6a7b1" }, // สีรองปรับให้อ่านง่ายขึ้นบนพื้นหลังกรมท่า
+    background: { default: "#16151A" }, // สีท้องฟ้ามืดๆ ครึ้มๆ
+    primary: { main: "#FFA2B7" },
+    secondary: { main: "#B8A7B1" }, // สีรองเทาอมชมพูหม่น
     info: { main: "#494a52" },
     error: { main: "#B03A58" },
-    text: { primary: "#FFFFFF", secondary: "#C4C6DE" },
+    text: { primary: "#FFFFFF", secondary: "#D4C4CD" }, // เทาอมชมพูอ่อนๆ
   },
 });
 
@@ -577,9 +577,9 @@ const MagicalAtmosphere = () => {
         inset: 0,
         pointerEvents: "none",
         zIndex: 0,
-        // พื้นหลังแบบทึบตามธีมใหม่ (#060930)
+        // พื้นหลังท้องฟ้าฝนตก โทนดำอมม่วง/ชมพูหม่น
         background:
-          "radial-gradient(circle at center, #1E1F42 0%, #060930 100%)",
+          "radial-gradient(circle at center, #262228 0%, #16151A 100%)",
       }}
     >
       {/* ฝน */}
@@ -641,9 +641,9 @@ const LuxuryCard = ({ children, sx }) => (
   <Box
     sx={{
       borderRadius: "16px",
-      background: "#333456", // สีพื้นผิวทึบแทนความโปร่งใส
+      background: "#241E25", // สีเทาอมชมพูหม่น
       border: "1px solid rgba(255, 162, 183, 0.3)",
-      boxShadow: "0 20px 40px rgba(0,0,0,0.6)", // เงาหนักขึ้นเพื่อมิติ
+      boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
       overflow: "hidden",
       position: "relative",
       ...sx,
@@ -681,7 +681,7 @@ const MagicalGlassCard = ({
   <motion.div variants={staggerItem} style={{ height: "100%" }}>
     <Box
       sx={{
-        background: "linear-gradient(135deg, #3D3E61 0%, #333456 100%)", // สีทึบไล่ระดับ
+        background: "linear-gradient(135deg, #322A33 0%, #241E25 100%)", // ไล่ระดับสีครึ้มๆ
         border: "1px solid rgba(255, 162, 183, 0.2)",
         borderRadius: "12px",
         p: { xs: 3, md: 4 },
@@ -693,7 +693,7 @@ const MagicalGlassCard = ({
         ...(hoverEffect && {
           "&:hover": {
             transform: "translateY(-5px)",
-            background: "linear-gradient(135deg, #464870 0%, #393A5E 100%)", // สว่างขึ้นนิดหน่อยตอนโฮเวอร์
+            background: "linear-gradient(135deg, #3F3540 0%, #2B242C 100%)", // สว่างขึ้นนิดหน่อย
             borderColor: "#FFA2B7",
             boxShadow:
               "0 15px 30px rgba(0,0,0,0.6), 0 0 15px rgba(255, 162, 183, 0.3)",
@@ -723,7 +723,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
         sx={{
           p: 1.2,
           borderRadius: "10px",
-          background: "#060930", // พื้นหลังไอคอนสีทึบ
+          background: "#1A181E", // พื้นหลังไอคอนสีดาร์ก
           border: "1px solid #FFA2B7",
           boxShadow: "0 0 15px rgba(255, 162, 183, 0.4)",
           display: "flex",
@@ -770,7 +770,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
         height: "2px",
         width: "100%",
         background:
-          "linear-gradient(90deg, #FFA2B7 0%, #333456 50%, transparent 100%)",
+          "linear-gradient(90deg, #FFA2B7 0%, #241E25 50%, transparent 100%)",
         boxShadow: "0 0 8px rgba(255, 162, 183, 0.5)",
       }}
     />
@@ -822,14 +822,14 @@ export default function KyoraProfile() {
         styles={{
           "body, html": {
             cursor: `${normalCraneCursor} !important`,
-            backgroundColor: "#060930",
+            backgroundColor: "#16151A",
           },
           "a, button, [role='button'], .MuiTab-root, .MuiIconButton-root, .MuiButtonBase-root":
             { cursor: `${pointerCraneCursor} !important` },
           "::-webkit-scrollbar": { width: "6px" },
-          "::-webkit-scrollbar-track": { background: "#060930" },
+          "::-webkit-scrollbar-track": { background: "#16151A" },
           "::-webkit-scrollbar-thumb": {
-            background: "#333456",
+            background: "#322A33",
             borderRadius: "10px",
             border: "1px solid #FFA2B7",
           },
@@ -883,7 +883,7 @@ export default function KyoraProfile() {
             <IconButton
               onClick={toggleMusic}
               sx={{
-                background: "#333456", // สีทึบ
+                background: "#241E25",
                 border: "1px solid",
                 borderColor: "rgba(255, 162, 183, 0.4)",
                 color: isPlaying ? "primary.main" : "text.secondary",
@@ -893,7 +893,7 @@ export default function KyoraProfile() {
                 p: 2,
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  background: "#060930",
+                  background: "#1A181E",
                   transform: "scale(1.05)",
                   borderColor: "primary.main",
                   boxShadow: "0 0 20px rgba(255, 162, 183, 0.6)",
@@ -963,7 +963,7 @@ export default function KyoraProfile() {
                           sx={{
                             width: { xs: 180, sm: 220 },
                             height: { xs: 180, sm: 220 },
-                            border: "4px solid #060930", // สีทึบ
+                            border: "4px solid #16151A",
                             filter: "grayscale(10%) contrast(1.1)",
                             boxShadow: "0 0 40px rgba(0,0,0,0.9)",
                             position: "relative",
@@ -1119,13 +1119,13 @@ export default function KyoraProfile() {
                         mb: { md: 1 },
                         border: "1px solid transparent",
                         "&:hover": {
-                          background: "#333456", // สีทึบ
+                          background: "#241E25",
                           color: "#FFFFFF",
                           border: "1px solid rgba(255, 162, 183, 0.2)",
                         },
                         "&.Mui-selected": {
                           color: "primary.main",
-                          background: "#333456", // สีทึบ
+                          background: "#241E25",
                           border: "1px solid rgba(255, 162, 183, 0.4)",
                           boxShadow:
                             "inset 4px 0 15px rgba(255, 162, 183, 0.1)",
@@ -1200,14 +1200,14 @@ export default function KyoraProfile() {
                                   <Box
                                     sx={{
                                       p: 2.5,
-                                      background: "#060930", // สีทึบ
+                                      background: "#1A181E",
                                       borderLeft: "3px solid #FFA2B7",
                                       borderRadius: "0 8px 8px 0",
                                       height: "100%",
                                       transition: "all 0.3s",
                                       "&:hover": {
                                         transform: "translateX(8px)",
-                                        background: "#1C1D3A", // สีทึบ
+                                        background: "#28242A",
                                         boxShadow:
                                           "inset 10px 0 15px rgba(255, 162, 183, 0.05)",
                                       },
@@ -1232,7 +1232,7 @@ export default function KyoraProfile() {
                             <Box
                               sx={{
                                 p: 3,
-                                background: "#060930", // สีทึบ
+                                background: "#1A181E",
                                 borderRadius: "10px",
                                 border: "1px solid rgba(255, 162, 183, 0.2)",
                                 position: "relative",
@@ -1386,7 +1386,7 @@ export default function KyoraProfile() {
                           sx={{
                             display: "inline-flex",
                             alignItems: "center",
-                            background: "#060930", // สีทึบ
+                            background: "#1A181E",
                             border: "1px solid #FF4D6D",
                             borderRadius: "8px",
                             px: 2,
@@ -1495,7 +1495,7 @@ export default function KyoraProfile() {
                                     sx={{
                                       p: 3,
                                       height: "100%",
-                                      background: "#060930", // สีทึบ
+                                      background: "#1A181E",
                                       border:
                                         "1px solid rgba(255, 162, 183, 0.2)",
                                       borderRadius: "10px",
@@ -1503,7 +1503,7 @@ export default function KyoraProfile() {
                                       position: "relative",
                                       overflow: "hidden",
                                       "&:hover": {
-                                        background: "#1A1B38", // สีทึบสว่างขึ้น
+                                        background: "#28242A",
                                         borderColor: "primary.main",
                                         boxShadow:
                                           "0 0 15px rgba(255, 162, 183, 0.2)",
@@ -1625,7 +1625,7 @@ export default function KyoraProfile() {
                                   <Box
                                     sx={{
                                       p: 3,
-                                      background: "#060930", // สีทึบ
+                                      background: "#1A181E",
                                       borderRadius: "10px",
                                       border:
                                         "1px solid rgba(255, 162, 183, 0.3)",
@@ -1787,7 +1787,7 @@ export default function KyoraProfile() {
                             sx={{
                               display: "inline-flex",
                               alignItems: "center",
-                              background: "#060930", // สีทึบ
+                              background: "#1A181E",
                               border: "1px solid #FF4D6D",
                               borderRadius: "8px",
                               px: 2,
@@ -1856,7 +1856,7 @@ export default function KyoraProfile() {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "#1E1F42", // สีทึบ
+                                      background: "#262228",
                                       borderColor: "rgba(255, 162, 183, 0.4)",
                                     },
                                   }}
@@ -1923,7 +1923,7 @@ export default function KyoraProfile() {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "#1E1F42", // สีทึบ
+                                      background: "#262228",
                                       borderColor: "rgba(255, 162, 183, 0.4)",
                                     },
                                   }}
@@ -1974,7 +1974,7 @@ export default function KyoraProfile() {
                                 mt: 2,
                                 fontWeight: 500,
                                 p: 2.5,
-                                background: "#060930", // สีทึบ
+                                background: "#1A181E",
                                 border: "1px solid #FF4D6D",
                                 borderRadius: "8px",
                                 textShadow: "0 0 5px rgba(255, 77, 109, 0.5)",
@@ -2038,13 +2038,13 @@ export default function KyoraProfile() {
                                     display: "flex",
                                     alignItems: "flex-start",
                                     p: 2.5,
-                                    background: "#060930", // สีทึบ
+                                    background: "#1A181E",
                                     border:
                                       "1px solid rgba(255, 162, 183, 0.2)",
                                     borderRadius: "12px",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "#1A1B38", // สีทึบสว่างขึ้น
+                                      background: "#28242A",
                                       borderColor: "primary.main",
                                       boxShadow: "0 5px 15px rgba(0,0,0,0.5)",
                                       transform: "translateX(5px)",
