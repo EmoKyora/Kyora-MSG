@@ -63,12 +63,12 @@ const theme = createTheme({
   },
   palette: {
     mode: "dark",
-    background: { default: "#0A0407" },
-    primary: { main: "#FFA2B7" }, // สีหลักใหม่
-    secondary: { main: "#D18CE0" }, // สีรองเวทมนตร์ม่วงอมชมพู
-    info: { main: "#D48C9E" },
+    background: { default: "#0d0023" },  
+    primary: { main: "#FFA2B7" }, // สีหลัก FFA2B7
+    secondary: { main: "#a6a7b1" }, // สีรองปรับให้อ่านง่ายขึ้นบนพื้นหลังกรมท่า
+    info: { main: "#494a52" },
     error: { main: "#B03A58" },
-    text: { primary: "#FFF0F3", secondary: "#D4C1C7" }, // ปรับข้อความให้ติดโทนอุ่น
+    text: { primary: "#FFFFFF", secondary: "#C4C6DE" },
   },
 });
 
@@ -184,7 +184,7 @@ const PhantomPianoAndCrane = () => {
         pointerEvents: "none",
         zIndex: 0,
         overflow: "hidden",
-        opacity: 0.3,
+        opacity: 0.5,
       }}
     >
       <ArcaneCircle size={250} top="-10%" right="-10%" opacity={0.15} />
@@ -207,8 +207,8 @@ const PhantomPianoAndCrane = () => {
           left: "5%",
           width: 60,
           height: 60,
-          opacity: 0.5,
-          filter: "drop-shadow(0px 0px 10px rgba(255, 162, 183, 0.6))",
+          opacity: 0.6,
+          filter: "drop-shadow(0px 0px 10px rgba(255, 162, 183, 0.8))",
         }}
       >
         <svg
@@ -221,7 +221,7 @@ const PhantomPianoAndCrane = () => {
             strokeWidth="2.5"
             strokeLinejoin="round"
             strokeLinecap="round"
-            fill="rgba(255, 162, 183, 0.05)"
+            fill="transparent"
           >
             <polygon points="40,65 35,25 15,40 28,40" />
             <polygon points="40,65 10,55 52,50" />
@@ -233,7 +233,7 @@ const PhantomPianoAndCrane = () => {
           <defs>
             <linearGradient id="craneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#FFA2B7" />
-              <stop offset="100%" stopColor="#D18CE0" />
+              <stop offset="100%" stopColor="#FFFFFF" />
             </linearGradient>
           </defs>
         </svg>
@@ -245,7 +245,7 @@ const PhantomPianoAndCrane = () => {
           key={i}
           animate={{
             y: [0, -50],
-            opacity: [0, 0.6, 0],
+            opacity: [0, 0.8, 0],
             x: [0, Math.random() * 20 - 10],
           }}
           transition={{
@@ -261,7 +261,7 @@ const PhantomPianoAndCrane = () => {
             height: 4,
             borderRadius: "50%",
             backgroundColor: "#FFA2B7",
-            boxShadow: "0 0 10px 2px rgba(255, 162, 183, 0.8)",
+            boxShadow: "0 0 10px 2px rgba(255, 162, 183, 1)",
           }}
         />
       ))}
@@ -312,6 +312,7 @@ const TopDownShark = ({ glowColor, fillCol = "#FFFFFF", delay = 0 }) => {
   );
 };
 
+// --- LOADING SCREEN (คงไว้ตามเดิมทุกประการ 100%) ---
 const LoadingScreen = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => onComplete(), 5000);
@@ -550,7 +551,7 @@ const MagicalAtmosphere = () => {
         left: `${Math.random() * 100}vw`,
         duration: Math.random() * 0.5 + 0.8,
         delay: Math.random() * 2,
-        opacity: Math.random() * 0.2 + 0.05,
+        opacity: Math.random() * 0.3 + 0.1,
         height: `${Math.random() * 15 + 10}vh`,
       })),
     [],
@@ -576,8 +577,9 @@ const MagicalAtmosphere = () => {
         inset: 0,
         pointerEvents: "none",
         zIndex: 0,
+        // พื้นหลังแบบทึบตามธีมใหม่ (#060930)
         background:
-          "radial-gradient(circle at center, #1A0A10 0%, #0A0407 100%)",
+          "radial-gradient(circle at center, #1E1F42 0%, #060930 100%)",
       }}
     >
       {/* ฝน */}
@@ -610,7 +612,7 @@ const MagicalAtmosphere = () => {
           animate={{
             y: "-100vh",
             x: [0, Math.random() * 50 - 25, 0],
-            opacity: [0, 0.4, 0],
+            opacity: [0, 0.6, 0],
           }}
           transition={{
             duration: particle.duration,
@@ -626,7 +628,7 @@ const MagicalAtmosphere = () => {
             height: particle.size,
             borderRadius: "50%",
             backgroundColor: "#FFA2B7",
-            boxShadow: "0 0 10px 1px rgba(255, 162, 183, 0.5)",
+            boxShadow: "0 0 10px 1px rgba(255, 162, 183, 0.8)",
             filter: "blur(1px)",
           }}
         />
@@ -639,23 +641,20 @@ const LuxuryCard = ({ children, sx }) => (
   <Box
     sx={{
       borderRadius: "16px",
-      background: "rgba(15, 8, 12, 0.8)",
-      backdropFilter: "blur(20px)",
-      border: "1px solid rgba(255, 162, 183, 0.2)",
-      boxShadow:
-        "0 30px 60px rgba(0,0,0,0.9), 0 0 30px rgba(255, 162, 183, 0.05), inset 0 0 20px rgba(255, 162, 183, 0.05)",
+      background: "#333456", // สีพื้นผิวทึบแทนความโปร่งใส
+      border: "1px solid rgba(255, 162, 183, 0.3)",
+      boxShadow: "0 20px 40px rgba(0,0,0,0.6)", // เงาหนักขึ้นเพื่อมิติ
       overflow: "hidden",
       position: "relative",
       ...sx,
     }}
   >
-    {/* Magic Arcane Background */}
     <ArcaneCircle
       size={600}
       top="-150px"
       right="-150px"
       opacity={0.07}
-      color="#D18CE0"
+      color="#FFA2B7"
     />
 
     <Box
@@ -664,10 +663,9 @@ const LuxuryCard = ({ children, sx }) => (
         top: 0,
         left: 0,
         right: 0,
-        height: "2px",
-        background:
-          "linear-gradient(90deg, transparent, rgba(255,162,183,0.8), transparent)",
-        boxShadow: "0 0 10px rgba(255,162,183,0.5)",
+        height: "3px",
+        background: "linear-gradient(90deg, transparent, #FFA2B7, transparent)",
+        boxShadow: "0 0 15px #FFA2B7",
       }}
     />
     {children}
@@ -683,26 +681,22 @@ const MagicalGlassCard = ({
   <motion.div variants={staggerItem} style={{ height: "100%" }}>
     <Box
       sx={{
-        background:
-          "linear-gradient(135deg, rgba(35, 15, 25, 0.6) 0%, rgba(15, 6, 10, 0.8) 100%)",
-        backdropFilter: "blur(16px)",
-        border: "1px solid rgba(255, 162, 183, 0.1)",
+        background: "linear-gradient(135deg, #3D3E61 0%, #333456 100%)", // สีทึบไล่ระดับ
+        border: "1px solid rgba(255, 162, 183, 0.2)",
         borderRadius: "12px",
         p: { xs: 3, md: 4 },
         position: "relative",
         overflow: "hidden",
         height: "100%",
-        boxShadow:
-          "0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 162, 183, 0.02)",
+        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4)",
         transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
         ...(hoverEffect && {
           "&:hover": {
             transform: "translateY(-5px)",
-            background:
-              "linear-gradient(135deg, rgba(45, 20, 30, 0.7) 0%, rgba(20, 8, 12, 0.9) 100%)",
-            border: "1px solid rgba(255, 162, 183, 0.4)",
+            background: "linear-gradient(135deg, #464870 0%, #393A5E 100%)", // สว่างขึ้นนิดหน่อยตอนโฮเวอร์
+            borderColor: "#FFA2B7",
             boxShadow:
-              "0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 162, 183, 0.15), inset 0 0 20px rgba(209, 140, 224, 0.1)",
+              "0 15px 30px rgba(0,0,0,0.6), 0 0 15px rgba(255, 162, 183, 0.3)",
           },
         }),
         ...sx,
@@ -729,11 +723,9 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
         sx={{
           p: 1.2,
           borderRadius: "10px",
-          background:
-            "linear-gradient(135deg, rgba(255,162,183,0.15) 0%, rgba(209,140,224,0.05) 100%)",
-          border: "1px solid rgba(255, 162, 183, 0.3)",
-          boxShadow:
-            "0 0 15px rgba(255, 162, 183, 0.2), inset 0 0 8px rgba(255, 162, 183, 0.2)",
+          background: "#060930", // พื้นหลังไอคอนสีทึบ
+          border: "1px solid #FFA2B7",
+          boxShadow: "0 0 15px rgba(255, 162, 183, 0.4)",
           display: "flex",
         }}
       >
@@ -741,7 +733,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
           sx={{
             color: "primary.main",
             fontSize: 26,
-            filter: "drop-shadow(0 0 5px rgba(255, 162, 183, 0.8))",
+            filter: "drop-shadow(0 0 5px #FFA2B7)",
           }}
         />
       </Box>
@@ -750,8 +742,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
           variant="h5"
           sx={{
             color: "#FFFFFF",
-            textShadow:
-              "0 0 10px rgba(255, 162, 183, 0.4), 0 2px 4px rgba(0,0,0,0.8)",
+            textShadow: "0 2px 4px rgba(0,0,0,0.8)",
             letterSpacing: 1,
           }}
         >
@@ -761,12 +752,11 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
           <Typography
             variant="caption"
             sx={{
-              color: "secondary.main",
+              color: "primary.main",
               letterSpacing: 2,
               textTransform: "uppercase",
               opacity: 0.9,
               display: "block",
-              textShadow: "0 0 8px rgba(209, 140, 224, 0.5)",
             }}
           >
             {subtitle}
@@ -780,8 +770,8 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
         height: "2px",
         width: "100%",
         background:
-          "linear-gradient(90deg, rgba(255,162,183,0.6) 0%, rgba(209,140,224,0.2) 50%, transparent 100%)",
-        boxShadow: "0 0 8px rgba(255, 162, 183, 0.4)",
+          "linear-gradient(90deg, #FFA2B7 0%, #333456 50%, transparent 100%)",
+        boxShadow: "0 0 8px rgba(255, 162, 183, 0.5)",
       }}
     />
   </Box>
@@ -832,19 +822,19 @@ export default function KyoraProfile() {
         styles={{
           "body, html": {
             cursor: `${normalCraneCursor} !important`,
-            backgroundColor: "#0A0407",
+            backgroundColor: "#060930",
           },
           "a, button, [role='button'], .MuiTab-root, .MuiIconButton-root, .MuiButtonBase-root":
             { cursor: `${pointerCraneCursor} !important` },
           "::-webkit-scrollbar": { width: "6px" },
-          "::-webkit-scrollbar-track": { background: "rgba(0,0,0,0.5)" },
+          "::-webkit-scrollbar-track": { background: "#060930" },
           "::-webkit-scrollbar-thumb": {
-            background: "rgba(255, 162, 183, 0.3)",
+            background: "#333456",
             borderRadius: "10px",
-            boxShadow: "inset 0 0 6px rgba(0,0,0,0.5)",
+            border: "1px solid #FFA2B7",
           },
           "::-webkit-scrollbar-thumb:hover": {
-            background: "rgba(255, 162, 183, 0.6)",
+            background: "#FFA2B7",
           },
         }}
       />
@@ -872,7 +862,7 @@ export default function KyoraProfile() {
                     scale: [1, 1.4, 1],
                     boxShadow: [
                       "0 0 0px 0px rgba(255, 162, 183, 0)",
-                      "0 0 25px 12px rgba(209, 140, 224, 0.3)",
+                      "0 0 25px 12px rgba(255, 162, 183, 0.4)",
                       "0 0 0px 0px rgba(255, 162, 183, 0)",
                     ],
                   }}
@@ -893,21 +883,20 @@ export default function KyoraProfile() {
             <IconButton
               onClick={toggleMusic}
               sx={{
-                background: "rgba(15, 8, 12, 0.8)",
+                background: "#333456", // สีทึบ
                 border: "1px solid",
-                borderColor: "rgba(255, 162, 183, 0.3)",
+                borderColor: "rgba(255, 162, 183, 0.4)",
                 color: isPlaying ? "primary.main" : "text.secondary",
-                backdropFilter: "blur(12px)",
                 boxShadow: isPlaying
-                  ? "0 0 15px rgba(255, 162, 183, 0.2)"
+                  ? "0 0 15px rgba(255, 162, 183, 0.4)"
                   : "none",
                 p: 2,
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  background: "rgba(255, 162, 183, 0.15)",
+                  background: "#060930",
                   transform: "scale(1.05)",
                   borderColor: "primary.main",
-                  boxShadow: "0 0 20px rgba(255, 162, 183, 0.4)",
+                  boxShadow: "0 0 20px rgba(255, 162, 183, 0.6)",
                 },
               }}
             >
@@ -946,7 +935,7 @@ export default function KyoraProfile() {
                         <ArcaneCircle
                           size={240}
                           opacity={0.3}
-                          color="#D18CE0"
+                          color="#FFA2B7"
                           sx={{ top: -10, left: -10 }}
                         />
                         <Box
@@ -961,10 +950,10 @@ export default function KyoraProfile() {
                             position: "absolute",
                             inset: 0,
                             borderRadius: "50%",
-                            border: "2px solid rgba(255, 162, 183, 0.1)",
+                            border: "2px solid rgba(255, 162, 183, 0.2)",
                             borderTop: "3px solid #FFA2B7",
-                            borderBottom: "3px solid #D18CE0",
-                            boxShadow: "0 0 20px rgba(255, 162, 183, 0.3)",
+                            borderBottom: "3px solid #FFA2B7",
+                            boxShadow: "0 0 20px rgba(255, 162, 183, 0.4)",
                             opacity: 0.9,
                           }}
                         />
@@ -974,10 +963,9 @@ export default function KyoraProfile() {
                           sx={{
                             width: { xs: 180, sm: 220 },
                             height: { xs: 180, sm: 220 },
-                            border: "4px solid rgba(15, 8, 12, 0.9)",
+                            border: "4px solid #060930", // สีทึบ
                             filter: "grayscale(10%) contrast(1.1)",
-                            boxShadow:
-                              "0 0 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,162,183,0.3)",
+                            boxShadow: "0 0 40px rgba(0,0,0,0.9)",
                             position: "relative",
                             zIndex: 2,
                           }}
@@ -1019,7 +1007,6 @@ export default function KyoraProfile() {
                           mb: 4,
                           opacity: 0.9,
                           fontSize: "1.3rem",
-                          textShadow: "0 0 10px rgba(209, 140, 224, 0.4)",
                         }}
                       >
                         ฮิซาเมะ เคียวระ (Hisame Kyōra)
@@ -1028,8 +1015,7 @@ export default function KyoraProfile() {
                       <Divider
                         sx={{
                           mb: 4,
-                          borderColor: "rgba(255, 162, 183, 0.15)",
-                          boxShadow: "0 1px 5px rgba(255,162,183,0.2)",
+                          borderColor: "rgba(255, 162, 183, 0.2)",
                         }}
                       />
 
@@ -1052,7 +1038,7 @@ export default function KyoraProfile() {
                               sx={{
                                 pl: 2,
                                 borderLeft:
-                                  "2px solid rgba(255, 162, 183, 0.2)",
+                                  "2px solid rgba(255, 162, 183, 0.3)",
                                 transition: "all 0.3s",
                                 "&:hover": {
                                   borderLeftColor: "primary.main",
@@ -1076,7 +1062,7 @@ export default function KyoraProfile() {
                               </Typography>
                               <Typography
                                 variant="body2"
-                                sx={{ color: "#FFF0F3", fontWeight: 400 }}
+                                sx={{ color: "#FFFFFF", fontWeight: 400 }}
                               >
                                 {info.val}
                               </Typography>
@@ -1133,15 +1119,14 @@ export default function KyoraProfile() {
                         mb: { md: 1 },
                         border: "1px solid transparent",
                         "&:hover": {
-                          background: "rgba(255, 162, 183, 0.05)",
+                          background: "#333456", // สีทึบ
                           color: "#FFFFFF",
-                          border: "1px solid rgba(255, 162, 183, 0.1)",
+                          border: "1px solid rgba(255, 162, 183, 0.2)",
                         },
                         "&.Mui-selected": {
                           color: "primary.main",
-                          background:
-                            "linear-gradient(90deg, rgba(255, 162, 183, 0.1) 0%, rgba(209, 140, 224, 0.05) 100%)",
-                          border: "1px solid rgba(255, 162, 183, 0.2)",
+                          background: "#333456", // สีทึบ
+                          border: "1px solid rgba(255, 162, 183, 0.4)",
                           boxShadow:
                             "inset 4px 0 15px rgba(255, 162, 183, 0.1)",
                           textShadow: "0 0 10px rgba(255, 162, 183, 0.4)",
@@ -1215,16 +1200,14 @@ export default function KyoraProfile() {
                                   <Box
                                     sx={{
                                       p: 2.5,
-                                      background:
-                                        "linear-gradient(90deg, rgba(255, 162, 183, 0.08) 0%, transparent 100%)",
+                                      background: "#060930", // สีทึบ
                                       borderLeft: "3px solid #FFA2B7",
                                       borderRadius: "0 8px 8px 0",
                                       height: "100%",
                                       transition: "all 0.3s",
                                       "&:hover": {
                                         transform: "translateX(8px)",
-                                        background:
-                                          "linear-gradient(90deg, rgba(255, 162, 183, 0.15) 0%, transparent 100%)",
+                                        background: "#1C1D3A", // สีทึบ
                                         boxShadow:
                                           "inset 10px 0 15px rgba(255, 162, 183, 0.05)",
                                       },
@@ -1249,25 +1232,23 @@ export default function KyoraProfile() {
                             <Box
                               sx={{
                                 p: 3,
-                                background: "rgba(0,0,0,0.5)",
+                                background: "#060930", // สีทึบ
                                 borderRadius: "10px",
-                                border: "1px solid rgba(209, 140, 224, 0.2)",
-                                boxShadow:
-                                  "inset 0 0 20px rgba(209, 140, 224, 0.05)",
+                                border: "1px solid rgba(255, 162, 183, 0.2)",
                                 position: "relative",
                                 overflow: "hidden",
                               }}
                             >
                               <ArcaneCircle
                                 size={150}
-                                color="#D18CE0"
+                                color="#FFA2B7"
                                 opacity={0.1}
                                 sx={{ top: -50, right: -50 }}
                               />
                               <Typography
                                 variant="h6"
                                 sx={{
-                                  color: "secondary.main",
+                                  color: "primary.main",
                                   mb: 1.5,
                                   position: "relative",
                                   zIndex: 1,
@@ -1358,15 +1339,15 @@ export default function KyoraProfile() {
                               flexGrow: 1,
                               height: "2px",
                               background:
-                                "linear-gradient(90deg, transparent, #D18CE0)",
+                                "linear-gradient(90deg, transparent, #FFA2B7)",
                             }}
                           />
                           <AutoAwesomeIcon
                             sx={{
                               mx: 2,
-                              color: "secondary.main",
+                              color: "primary.main",
                               fontSize: 18,
-                              filter: "drop-shadow(0 0 5px #D18CE0)",
+                              filter: "drop-shadow(0 0 5px #FFA2B7)",
                             }}
                           />
                           <Box
@@ -1374,7 +1355,7 @@ export default function KyoraProfile() {
                               flexGrow: 1,
                               height: "2px",
                               background:
-                                "linear-gradient(270deg, transparent, #D18CE0)",
+                                "linear-gradient(270deg, transparent, #FFA2B7)",
                             }}
                           />
                         </Box>
@@ -1405,9 +1386,8 @@ export default function KyoraProfile() {
                           sx={{
                             display: "inline-flex",
                             alignItems: "center",
-                            background: "rgba(255, 77, 109, 0.15)",
-                            border: "1px solid rgba(255, 77, 109, 0.4)",
-                            boxShadow: "0 0 10px rgba(255, 77, 109, 0.2)",
+                            background: "#060930", // สีทึบ
+                            border: "1px solid #FF4D6D",
                             borderRadius: "8px",
                             px: 2,
                             py: 1,
@@ -1515,18 +1495,18 @@ export default function KyoraProfile() {
                                     sx={{
                                       p: 3,
                                       height: "100%",
-                                      background: "rgba(0,0,0,0.4)",
+                                      background: "#060930", // สีทึบ
                                       border:
-                                        "1px solid rgba(255, 162, 183, 0.1)",
+                                        "1px solid rgba(255, 162, 183, 0.2)",
                                       borderRadius: "10px",
                                       transition: "all 0.3s",
                                       position: "relative",
                                       overflow: "hidden",
                                       "&:hover": {
-                                        background: "rgba(255, 162, 183, 0.08)",
+                                        background: "#1A1B38", // สีทึบสว่างขึ้น
                                         borderColor: "primary.main",
                                         boxShadow:
-                                          "0 0 15px rgba(255, 162, 183, 0.15)",
+                                          "0 0 15px rgba(255, 162, 183, 0.2)",
                                         transform: "translateY(-3px)",
                                       },
                                     }}
@@ -1577,13 +1557,12 @@ export default function KyoraProfile() {
                                             sx={{
                                               color: "text.secondary",
                                               pl: 2,
-                                              borderLeft:
-                                                "2px solid rgba(209, 140, 224, 0.5)",
+                                              borderLeft: "2px solid #FFA2B7",
                                             }}
                                           >
                                             <span
                                               style={{
-                                                color: "#D18CE0",
+                                                color: "#FFA2B7",
                                                 marginRight: "4px",
                                               }}
                                             >
@@ -1603,7 +1582,7 @@ export default function KyoraProfile() {
 
                         <Grid item xs={12}>
                           <MagicalGlassCard
-                            sx={{ borderLeft: "4px solid #D18CE0" }}
+                            sx={{ borderLeft: "4px solid #FFA2B7" }}
                           >
                             <SectionHeader
                               icon={ShieldIcon}
@@ -1646,29 +1625,29 @@ export default function KyoraProfile() {
                                   <Box
                                     sx={{
                                       p: 3,
-                                      background: "rgba(0,0,0,0.3)",
+                                      background: "#060930", // สีทึบ
                                       borderRadius: "10px",
                                       border:
-                                        "1px solid rgba(209, 140, 224, 0.2)",
+                                        "1px solid rgba(255, 162, 183, 0.3)",
                                       position: "relative",
                                       overflow: "hidden",
                                     }}
                                   >
                                     <ArcaneCircle
                                       size={200}
-                                      color="#D18CE0"
+                                      color="#FFA2B7"
                                       opacity={0.05}
                                       sx={{ top: -50, right: -50 }}
                                     />
                                     <Typography
                                       variant="h6"
                                       sx={{
-                                        color: "secondary.main",
+                                        color: "primary.main",
                                         mb: 1.5,
                                         position: "relative",
                                         zIndex: 1,
                                         textShadow:
-                                          "0 0 5px rgba(209,140,224,0.3)",
+                                          "0 0 5px rgba(255,162,183,0.3)",
                                       }}
                                     >
                                       {spell.name}
@@ -1702,8 +1681,7 @@ export default function KyoraProfile() {
                                             sx={{
                                               color: "text.secondary",
                                               pl: 2,
-                                              borderLeft:
-                                                "2px solid rgba(255, 162, 183, 0.4)",
+                                              borderLeft: "2px solid #FFA2B7",
                                             }}
                                           >
                                             <span
@@ -1809,9 +1787,8 @@ export default function KyoraProfile() {
                             sx={{
                               display: "inline-flex",
                               alignItems: "center",
-                              background: "rgba(255, 77, 109, 0.15)",
-                              border: "1px solid rgba(255, 77, 109, 0.4)",
-                              boxShadow: "0 0 10px rgba(255, 77, 109, 0.2)",
+                              background: "#060930", // สีทึบ
+                              border: "1px solid #FF4D6D",
                               borderRadius: "8px",
                               px: 2,
                               py: 1,
@@ -1879,8 +1856,8 @@ export default function KyoraProfile() {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(255, 162, 183, 0.05)",
-                                      borderColor: "rgba(255, 162, 183, 0.2)",
+                                      background: "#1E1F42", // สีทึบ
+                                      borderColor: "rgba(255, 162, 183, 0.4)",
                                     },
                                   }}
                                 >
@@ -1946,16 +1923,16 @@ export default function KyoraProfile() {
                                     border: "1px solid transparent",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(209, 140, 224, 0.05)",
-                                      borderColor: "rgba(209, 140, 224, 0.2)",
+                                      background: "#1E1F42", // สีทึบ
+                                      borderColor: "rgba(255, 162, 183, 0.4)",
                                     },
                                   }}
                                 >
                                   <span
                                     style={{
-                                      color: "#D18CE0",
+                                      color: "#FFA2B7",
                                       marginTop: "2px",
-                                      textShadow: "0 0 5px #D18CE0",
+                                      textShadow: "0 0 5px #FFA2B7",
                                     }}
                                   >
                                     ✦
@@ -1997,10 +1974,8 @@ export default function KyoraProfile() {
                                 mt: 2,
                                 fontWeight: 500,
                                 p: 2.5,
-                                background: "rgba(255, 77, 109, 0.15)",
-                                border: "1px solid rgba(255, 77, 109, 0.3)",
-                                boxShadow:
-                                  "inset 0 0 10px rgba(255, 77, 109, 0.1)",
+                                background: "#060930", // สีทึบ
+                                border: "1px solid #FF4D6D",
                                 borderRadius: "8px",
                                 textShadow: "0 0 5px rgba(255, 77, 109, 0.5)",
                               }}
@@ -2063,16 +2038,15 @@ export default function KyoraProfile() {
                                     display: "flex",
                                     alignItems: "flex-start",
                                     p: 2.5,
-                                    background: "rgba(0,0,0,0.3)",
+                                    background: "#060930", // สีทึบ
                                     border:
-                                      "1px solid rgba(255, 162, 183, 0.1)",
+                                      "1px solid rgba(255, 162, 183, 0.2)",
                                     borderRadius: "12px",
                                     transition: "all 0.3s",
                                     "&:hover": {
-                                      background: "rgba(255, 162, 183, 0.05)",
+                                      background: "#1A1B38", // สีทึบสว่างขึ้น
                                       borderColor: "primary.main",
-                                      boxShadow:
-                                        "0 5px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(255, 162, 183, 0.05)",
+                                      boxShadow: "0 5px 15px rgba(0,0,0,0.5)",
                                       transform: "translateX(5px)",
                                     },
                                   }}
